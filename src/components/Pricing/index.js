@@ -9,7 +9,7 @@ const Pricing = () => {
   const listData = [
     {
       title: "1 Bulan",
-      subPrice: "",
+      subPrice: null,
       price: 150000,
       recomendation: false,
     },
@@ -35,34 +35,25 @@ const Pricing = () => {
   console.log("cek listdata", listData);
   return (
     <div
-      className="d-flex flex-column justify-content-center align-items-center text-center"
+      className="d-flex flex-column justify-content-center align-items-center text-center paddingComponentRight paddingComponentLeft"
       style={{
         paddingTop: 72,
         paddingBottom: 72,
-        paddingLeft: 52,
-        paddingRight: 52,
       }}
+      id="package"
     >
       <div>
         <span style={{ color: "#53F60F" }}>Harga Paket Membership</span>
       </div>
       <div>
-        <span
-          className="text-white"
-          style={{ fontSize: 32, fontWeight: "bold" }}
-        >
+        <span className="text-white text-title" style={{ fontWeight: "bold" }}>
           Harga membership Flex Gym and Cafe
         </span>
       </div>
-      <div
-        style={{
-          paddingLeft: 96,
-          paddingRight: 96,
-        }}
-      >
+      <div className="paddingComponentRight paddingComponentLeft">
         <span
+          className="text-desc-title"
           style={{
-            fontSize: 18,
             color: "#999999",
           }}
         >
@@ -75,24 +66,20 @@ const Pricing = () => {
         className="d-flex flex-row justify-content-center mt-4"
         style={{ gap: 10 }}
       >
-        <Button size="md">
-          <span>Umum</span>
+        <Button color="transparent" size="md">
+          <span style={{ color: "#53F60F" }}>Umum</span>
         </Button>
-        <Button size="md">
-          <span>Pelajar</span>
+        <Button color="transparent" size="md">
+          <span className="text-white">Pelajar</span>
         </Button>
       </div>
-      <div
-        className="d-flex flex-row justify-content-between h-auto mt-4 w-100"
-        style={{ gap: 25 }}
-      >
+      <div className="d-flex flex-row flex-wrap flex-md-nowrap justify-content-center h-auto mt-4 w-100 gap-md-25 gap-4">
         {listData.map((item, i) => (
           <div
-            className="d-flex flex-column"
+            className="d-flex flex-column w-md-25 w-auto"
             style={{
               backgroundColor: item?.recomendation ? "#53F60F" : "transparent",
               borderRadius: 10,
-              width: "25%",
             }}
             key={i}
           >
@@ -112,10 +99,10 @@ const Pricing = () => {
                 marginTop: item?.recomendation ? 0 : 24,
               }}
             >
-              <div className="d-flex flex-column">
+              <div className="d-none d-md-flex flex-column">
                 <span
-                  className="text-white"
-                  style={{ fontSize: 24, fontWeight: "bold" }}
+                  className="text-white text-title"
+                  style={{ fontWeight: "bold" }}
                 >
                   {item?.title}
                 </span>
@@ -123,25 +110,36 @@ const Pricing = () => {
                   style={{
                     fontSize: 20,
                     fontWeight: "bold",
-                    color: item?.subPrice ? "white" : "black",
+                    color: item?.subPrice ? "white" : "transparent",
                   }}
                 >
                   {item?.subPrice ? item?.subPrice : 0}
                   {item?.subPrice && (
-                    <small style={{ color: "#999999", fontSize: 16 }}>
+                    <small
+                      className="text-desc-title"
+                      style={{ color: "#999999" }}
+                    >
                       /bulan
                     </small>
                   )}
                 </span>
               </div>
               <div
-                className="d-flex h-100 align-items-end justify-content-center"
+                className="d-none d-md-flex h-100 align-items-end justify-content-center"
                 style={{ marginTop: 56 }}
               >
                 <div className="d-flex flex-column ">
                   <div className="d-flex flex-column">
-                    <span style={{ color: "#999999" }}>Harga</span>
-                    <span style={{ color: "#53F60F", fontSize: 24 }}>
+                    <span
+                      className="text-sm text-md-base"
+                      style={{ color: "#999999" }}
+                    >
+                      Harga
+                    </span>
+                    <span
+                      className="text-sm text-md-base"
+                      style={{ color: "#53F60F" }}
+                    >
                       {item?.price}
                     </span>
                   </div>
@@ -158,6 +156,48 @@ const Pricing = () => {
                         }}
                       >
                         <span
+                          className="text-desc-title"
+                          style={{
+                            color: item?.recomendation ? "black" : "#53F60F",
+                          }}
+                        >
+                          Daftar Membership
+                        </span>
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="d-flex d-md-none h-100 align-items-end justify-content-center">
+                <div className="d-flex flex-column">
+                  <div className="d-flex flex-column">
+                    <span
+                      className="text-sm text-md-base"
+                      style={{ color: "#999999" }}
+                    >
+                      Harga
+                    </span>
+                    <span
+                      className="text-sm text-md-base"
+                      style={{ color: "#53F60F" }}
+                    >
+                      {item?.price}
+                    </span>
+                  </div>
+                  <div className="d-flex" style={{ marginTop: 56 }}>
+                    <div>
+                      <Button
+                        style={{
+                          backgroundColor: item?.recomendation
+                            ? "#53F60F"
+                            : "black",
+                          borderColor: item?.recomendation
+                            ? "black"
+                            : "#53F60F",
+                        }}
+                      >
+                        <span
+                          className="text-desc-title"
                           style={{
                             color: item?.recomendation ? "black" : "#53F60F",
                           }}

@@ -13,7 +13,7 @@ import Homepage from "./pages/Homepage";
 function App() {
   return (
     <Router>
-      <div className="flex max-h-screen flex-col w-screen overflow-hidden">
+      <div className="flex max-h-screen flex-col w-screen overflow-auto bg-black">
         <Routes>
           <Route path="/" exact element={<Homepage />} />
         </Routes>

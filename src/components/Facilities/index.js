@@ -38,34 +38,24 @@ const Facilities = () => {
   console.log("cek listdata", listData);
   return (
     <div
-      className="d-flex flex-column justify-content-center align-items-center text-center"
+      className="d-flex flex-column justify-content-center align-items-center text-center paddingComponentRight paddingComponentLeft"
       style={{
         paddingTop: 72,
         paddingBottom: 72,
-        paddingLeft: 52,
-        paddingRight: 52,
       }}
     >
       <div>
         <span style={{ color: "#53F60F" }}>Fasilitas Kami</span>
       </div>
       <div>
-        <span
-          className="text-white"
-          style={{ fontSize: 32, fontWeight: "bold" }}
-        >
+        <span className="text-white text-title" style={{ fontWeight: "bold" }}>
           Fasilitas di Flex Gym and Cafe
         </span>
       </div>
-      <div
-        style={{
-          paddingLeft: 96,
-          paddingRight: 96,
-        }}
-      >
+      <div className="paddingComponentLeft paddingComponentRight">
         <span
+          className="text-desc-title"
           style={{
-            fontSize: 18,
             color: "#999999",
           }}
         >
@@ -75,7 +65,7 @@ const Facilities = () => {
         </span>
       </div>
       <div
-        className="d-flex flex-row justify-content-between h-auto mt-4"
+        className="d-md-flex d-none flex-row justify-content-between h-auto mt-4"
         style={{ gap: 25 }}
       >
         {listData.map((item, i) => (
@@ -97,12 +87,43 @@ const Facilities = () => {
               />
             </div>
             <span
-              className="text-white"
-              style={{ fontSize: 24, fontWeight: "bold" }}
+              className="text-white text-title"
+              style={{ fontWeight: "bold" }}
             >
               {item?.title}
             </span>
-            <span style={{ color: "#999999" }}>{item?.description}</span>
+            <span className="text-desc-title" style={{ color: "#999999" }}>
+              {item?.description}
+            </span>
+          </div>
+        ))}
+      </div>
+      <div
+        className="d-flex d-md-none flex-row justify-content-between mt-4 overflow-scroll"
+        style={{ width: "100%", gap: 10 }}
+      >
+        {listData.map((item, i) => (
+          <div
+            key={item?.id}
+            className="d-flex flex-column justify-content-center p-4 h-auto"
+            style={{
+              backgroundColor: "#18181C",
+              minWidth: "100%",
+              borderRadius: 10,
+            }}
+          >
+            <div className="d-flex justify-content-center">
+              <img src={item?.icon} alt={`icon-facilities + ${i}`} />
+            </div>
+            <span
+              className="text-white text-title"
+              style={{ fontWeight: "bold" }}
+            >
+              {item?.title}
+            </span>
+            <span className="text-desc-title" style={{ color: "#999999" }}>
+              {item?.description}
+            </span>
           </div>
         ))}
       </div>

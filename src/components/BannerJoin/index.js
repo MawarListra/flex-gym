@@ -5,14 +5,16 @@ import bannerJoinIc from "../../assets/bannerjoin.png";
 const BannerJoin = () => {
   return (
     <div
-      className="d-flex flex-row"
+      className="d-flex flex-md-row flex-column"
       style={{
         paddingTop: 72,
-        // paddingBottom: 72,
       }}
     >
+      <div className="d-flex d-md-none">
+        <img src={bannerJoinIc} className="w-100" alt="banner-join" />
+      </div>
       <div
-        className="d-flex flex-column align-items-center justify-content-center w-50"
+        className="d-flex flex-column justify-content-center w-md-50 w-full"
         style={{
           paddingLeft: 32,
           paddingRight: 32,
@@ -23,19 +25,22 @@ const BannerJoin = () => {
       >
         <div style={{ paddingRight: 44 }}>
           <span
-            className="text-white"
-            style={{ fontSize: 44, lineHeight: 1, fontWeight: "bold" }}
+            className="text-white text-banner"
+            style={{ lineHeight: 1, fontWeight: "bold" }}
           >
             Daftar membership Flex Gym and Cafe
           </span>
         </div>
         <div className="mt-1">
-          <span className="text-white" style={{ fontSize: 14 }}>
+          <span className="text-white text-desc-title">
             Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
             egestas amet id pretium.{" "}
           </span>
         </div>
-        <div className="d-flex w-100" style={{ marginTop: 32 }}>
+        <div
+          className="d-flex w-100 justify-content-md-start justify-content-center"
+          style={{ marginTop: 32 }}
+        >
           <Button
             className="px-4 py-2"
             style={{ backgroundColor: "#fff", borderColor: "#fff" }}
@@ -46,8 +51,8 @@ const BannerJoin = () => {
           </Button>
         </div>
       </div>
-      <div className="d-flex w-50">
-        <img src={bannerJoinIc} alt="banner-join" />
+      <div className="d-md-flex d-none w-50">
+        <img src={bannerJoinIc} className="w-100" alt="banner-join" />
       </div>
     </div>
   );

@@ -41,14 +41,6 @@ body {
   font-family: "Nunito Sans", sans-serif;
 }
 
-.hero-background {
-  background-image: url("./assets/HeroImage.png");
-  background-size: auto;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  height: fit-content;
-}
-
 .text-outline {
   font-size: 48px;
   color: #000; /* Set the primary text color */
@@ -69,4 +61,105 @@ body {
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background-color: black;
+}
+
+@media (min-width: 768px) {
+  .paddingComponentRight {
+    padding-right: 52px;
+  }
+  .paddingComponentLeft {
+    padding-left: 52px;
+  }
+
+  .text-title {
+    font-size: 32px;
+  }
+  .text-desc-title {
+    font-size: 18px;
+  }
+  .text-banner {
+    font-size: 44px;
+  }
+  .width-why-us {
+    width: 60%;
+  }
+  .width-location {
+    width: 40%;
+  }
+
+  .hero-background {
+    background-image: url("./assets/HeroImage.png");
+    background-size: auto;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    height: fit-content;
+  }
+  .hero-title {
+    font-size: 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px; /* Decrease font size for smaller screens */
+  }
+  .paddingComponentRight {
+    padding-right: 0px;
+  }
+  .paddingComponentLeft {
+    padding-left: 0px;
+  }
+
+  .container {
+    width: 90%; /* Adjust container width for smaller screens */
+    margin: 0 auto; /* Center the container */
+  }
+
+  .menu {
+    display: none; /* Hide the menu on smaller screens */
+  }
+
+  .mobile-menu {
+    display: block; /* Show a mobile-friendly menu on smaller screens */
+  }
+
+  .card {
+    width: 100%; /* Make cards fill the width of the container on smaller screens */
+    margin-bottom: 20px; /* Add spacing between cards */
+  }
+
+  .text-title {
+    font-size: 24px;
+  }
+  .text-desc-title {
+    font-size: 12px;
+  }
+  .text-banner {
+    font-size: 32px;
+  }
+  .width-why-us {
+    width: 100%;
+  }
+  .width-location {
+    width: 100%;
+  }
+  .hero-background {
+  }
+  .hero-title {
+    font-size: 56px;
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9); /* Semi-transparent black overlay */
+  z-index: 9999;
+}
+
+.overlay.active {
+  display: block; /* Show the overlay when it has the 'active' class */
 }

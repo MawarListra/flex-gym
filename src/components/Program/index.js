@@ -35,29 +35,24 @@ const Program = () => {
   console.log("cek listdata", listData);
   return (
     <div
-      className="d-flex flex-column"
+      className="d-flex flex-column paddingComponentRight paddingComponentLeft"
       style={{
         paddingTop: 72,
         paddingBottom: 72,
-        paddingLeft: 52,
-        paddingRight: 52,
       }}
+      id="program"
     >
       <div>
         <span style={{ color: "#53F60F" }}>Program terbaik dari kami</span>
       </div>
       <div>
-        <span
-          className="text-white"
-          style={{ fontSize: 32, fontWeight: "bold" }}
-        >
+        <span className="text-white text-title" style={{ fontWeight: "bold" }}>
           Fasilitas di Flex Gym and Cafe
         </span>
       </div>
-      <div className="w-50">
+      <div className="w-md-50 w-full text-desc-title">
         <span
           style={{
-            fontSize: 18,
             color: "#999999",
           }}
         >
@@ -76,7 +71,7 @@ const Program = () => {
         {listData.map((item, i) => (
           <div
             key={item?.id}
-            className="d-flex flex-column justify-content-center p-4"
+            className="d-flex flex-column justify-content-center p-md-4 p-0"
             style={{
               backgroundColor: "#18181C",
               width: "auto",
@@ -85,18 +80,27 @@ const Program = () => {
           >
             <div className="d-flex justify-content-center">
               <img
+                className="d-none d-md-flex"
                 style={{ width: 278, height: 375 }}
+                src={item?.icon}
+                alt={`icon-facilities + ${i}`}
+              />
+              <img
+                className="d-flex d-md-none"
                 src={item?.icon}
                 alt={`icon-facilities + ${i}`}
               />
             </div>
             <span
-              className="text-white mt-4"
-              style={{ fontSize: 24, fontWeight: "bold" }}
+              className="text-white mt-4 text-title d-none d-md-flex"
+              style={{ fontWeight: "bold" }}
             >
               {item?.title}
             </span>
-            <span className="mt-2" style={{ color: "#999999" }}>
+            <span
+              className="mt-2 text-desc-title d-none d-md-flex"
+              style={{ color: "#999999" }}
+            >
               {item?.description}
             </span>
           </div>
