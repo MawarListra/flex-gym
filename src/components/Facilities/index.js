@@ -66,7 +66,7 @@ const Facilities = () => {
       </div>
       <div
         className="d-md-flex d-none flex-row justify-content-between h-auto mt-4"
-        style={{ gap: 25 }}
+        style={{ gap: 20 }}
       >
         {listData.map((item, i) => (
           <div
@@ -76,18 +76,18 @@ const Facilities = () => {
               backgroundColor: "#18181C",
               width: "25%",
               borderRadius: 10,
-              height: 288,
+              maxHeight: 400,
             }}
           >
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center w-100">
               <img
-                style={{ width: 40, height: 73 }}
+                className="d-flex w-auto h-auto"
                 src={item?.icon}
                 alt={`icon-facilities + ${i}`}
               />
             </div>
             <span
-              className="text-white text-title"
+              className="text-white text-title-card"
               style={{ fontWeight: "bold" }}
             >
               {item?.title}

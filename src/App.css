@@ -74,6 +74,9 @@ body {
   .text-title {
     font-size: 32px;
   }
+  .text-title-card {
+    font-size: 24px;
+  }
   .text-desc-title {
     font-size: 18px;
   }
@@ -130,6 +133,9 @@ body {
 
   .text-title {
     font-size: 24px;
+  }
+  .text-title-card {
+    font-size: 18px;
   }
   .text-desc-title {
     font-size: 12px;
