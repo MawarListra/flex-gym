@@ -62,8 +62,12 @@ const SendOTP = () => {
                 marginBottom: 16,
               }}
             >
-              Kode OTP telah dikirimkan ke email rei***@gmail.com. Demi
-              keamanan, jangan berikan kodenya ke siapapun termasuk pihak GPI.
+              Kode OTP telah dikirimkan ke email{" "}
+              <span className="text-white" style={{ fontWeight: "bold" }}>
+                rei***@gmail.com
+              </span>
+              . Demi keamanan, jangan berikan kodenya ke siapapun termasuk pihak
+              GPI.
             </span>
             <div className="d-flex w-100">
               <OtpInput
