@@ -15,14 +15,14 @@ const Navbar = ({
       className="d-flex flex-row justify-content-between align-items-center py-2 paddingComponentRight paddingComponentLeft"
       style={{ backgroundColor: "black" }}
     >
-      <div className="d-flex align-items-center" style={{ width: "30%" }}>
+      <div className="d-flex align-items-center" style={{ width: "25%" }}>
         <div>
           <img src={Logo} alt="logo" />
         </div>
       </div>
       <div
-        className="d-none d-md-flex flex-row justify-content-between align-items-center "
-        style={{ width: "70%" }}
+        className="d-none d-md-flex flex-row justify-content-between align-items-center gap-5"
+        style={{ width: "75%" }}
       >
         <div className="d-flex flex-row justify-content-between align-items-center gap-5">
           {listMenu.map((e) => (
@@ -58,6 +58,7 @@ const Navbar = ({
                   borderBottomRightRadius: 0,
                   borderColor: e?.textColor,
                 }}
+                onClick={e?.onClick}
               >
                 <span style={{ color: e?.textColor }}>{e?.label}</span>
               </Button>
@@ -108,6 +109,7 @@ const Navbar = ({
                       borderBottomRightRadius: 0,
                       borderColor: e?.textColor,
                     }}
+                    onClick={e?.onClick}
                   >
                     <span style={{ color: e?.textColor }}>{e?.label}</span>
                   </Button>

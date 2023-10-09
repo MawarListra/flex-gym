@@ -9,15 +9,25 @@ import {
 } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import Homepage from "./pages/Homepage";
+import Registrasi from "./pages/Register";
+import Login from "./pages/Login";
+import ChangePassword from "./pages/ChangePassword";
+import SendOTP from "./pages/Verification/SendOTP";
+import SuccessOTP from "./pages/Verification/Success";
 
 function App() {
   return (
     <Router>
-      <div className="flex max-h-screen flex-col w-screen overflow-auto bg-black">
-        <Routes>
-          <Route path="/" exact element={<Homepage />} />
-        </Routes>
-      </div>
+      {/* <div className="flex max-h-screen flex-col w-screen overflow-auto bg-black"> */}
+      <Routes>
+        <Route path="/" exact element={<Homepage />} />
+        <Route path="/registration" exact element={<Registrasi />} />
+        <Route path="/login" exact element={<Login />} />
+        <Route path="/change-password" exac element={<ChangePassword />} />
+        <Route path="/verif-account" exac element={<SendOTP />} />
+        <Route path="/otp-success" exac element={<SuccessOTP />} />
+      </Routes>
+      {/* </div> */}
     </Router>
   );
 }

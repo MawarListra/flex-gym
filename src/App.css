@@ -48,21 +48,6 @@ body {
     /* Top-right */ -1px 1px 0 #fff, /* Bottom-left */ 1px 1px 0 #fff; /* Bottom-right */
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-  width: 0px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: #53f60f; /* Change to your desired color */
-  border-radius: 5px;
-  width: 8px; /* Adjust the width of the scrollbar thumb */
-  height: 10px; /* Adjust the height of the scrollbar thumb */
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-  background-color: black;
-}
-
 @media (min-width: 768px) {
   .paddingComponentRight {
     padding-right: 52px;
@@ -72,16 +57,54 @@ body {
   }
 
   .text-title {
-    font-size: 32px;
+    color: var(--White, #fff);
+
+    /* Bold/Heading 2 */
+    font-family: Nunito Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.3px;
   }
   .text-title-card {
     font-size: 24px;
   }
   .text-desc-title {
+    color: #9999;
+
+    /* Regular/Medium */
+    display: flex;
+    font-family: Nunito Sans;
     font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
   }
   .text-banner {
-    font-size: 44px;
+    color: var(--White, #fff);
+
+    /* Bold/Heading 2 */
+    font-family: Nunito Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.3px;
+  }
+  .text-desc-banner {
+    overflow: hidden;
+    color: var(--White, #fff);
+    text-overflow: ellipsis;
+
+    /* Regular/Medium */
+    font-family: Nunito Sans;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
   }
   .width-why-us {
     width: 60%;
@@ -99,6 +122,138 @@ body {
   }
   .hero-title {
     font-size: 72px;
+  }
+  .text-title-green {
+    font-size: 18px;
+    color: #53f60f;
+  }
+  .text-title-hero {
+    font-family: Nunito Sans;
+    font-size: 72px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 75px; /* 104.167% */
+    letter-spacing: 0.3px;
+  }
+  .title-hero-box {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    justify-content: left;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .btnRegister {
+    display: flex;
+    width: 141px;
+    height: 48px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .btnContact {
+    display: flex;
+    width: 141px;
+    height: 48px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 5px;
+  }
+  .box-image-location {
+    width: 100%;
+    min-width: 474px;
+    height: 459px;
+    flex-shrink: 0;
+    border-top-right-radius: 135px;
+  }
+  .box-radius-image-location {
+    border-top-right-radius: 135px;
+  }
+  .box-desc-title {
+    display: flex;
+    width: 50%;
+  }
+  .box-facilities-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .box-facilities-card-categories {
+    display: flex;
+    flex-direction: column;
+    width: 278px;
+    height: 288px;
+    flex-shrink: 0;
+    background-color: #18181c;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+  }
+  .text-desc-title-categories {
+    color: var(--Secondary, #999);
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Regular/Small */
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .text-title-pricing {
+    color: var(--White, #fff);
+
+    /* Bold/XXL */
+    font-family: Nunito Sans;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.3px;
+  }
+  .box-pricing {
+    display: flex;
+    flex-direction: column;
+    width: 278px;
+    height: 282px;
+    flex-shrink: 0;
+    background-color: #18181c;
+    border: 1px solid #999;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding: 24px;
+  }
+  .text-daftar-member {
+    text-align: center;
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px;
+  }
+  .text-recomenation {
+    color: var(--Black, #030304);
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Bold/Small */
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .box-title-banner {
+    padding: 32px 32px 32px 56px;
   }
 }
 
@@ -132,16 +287,55 @@ body {
   }
 
   .text-title {
-    font-size: 24px;
+    color: var(--White, #fff);
+
+    /* Bold/XXL */
+    font-family: Nunito Sans;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.3px;
   }
   .text-title-card {
     font-size: 18px;
   }
   .text-desc-title {
-    font-size: 12px;
+    color: #9999;
+
+    /* Regular/Medium */
+    display: flex;
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
   }
   .text-banner {
-    font-size: 32px;
+    color: var(--White, #fff);
+    text-align: center;
+
+    /* Bold/XXL */
+    font-family: Nunito Sans;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.3px;
+  }
+  .text-desc-banner {
+    color: var(--White, #fff);
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Regular/Small */
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
   }
   .width-why-us {
     width: 100%;
@@ -153,6 +347,144 @@ body {
   }
   .hero-title {
     font-size: 56px;
+  }
+  .text-title-green {
+    font-size: 12px;
+    color: #53f60f;
+  }
+  .text-title-hero {
+    font-family: Nunito Sans;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .title-hero-box {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .btnRegister {
+    display: flex;
+    width: 162px;
+    height: 48px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .btnContact {
+    display: flex;
+    width: 162px;
+    height: 48px;
+    padding: 8px;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    border-radius: 5px;
+  }
+  .box-image-location {
+    width: 100%;
+    min-width: 343px;
+    height: 332px;
+    flex-shrink: 0;
+    border-top-right-radius: 135px;
+  }
+
+  .box-radius-image-location {
+    border-top-right-radius: 135px;
+  }
+  .box-desc-title {
+    display: flex;
+    width: 100%;
+  }
+  .box-facilities-card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: scroll;
+    gap: 10px;
+    width: 100%;
+  }
+  .box-facilities-card-categories {
+    display: flex;
+    flex-direction: column;
+    width: 343px;
+    height: 288px;
+    flex-shrink: 0;
+    background-color: #18181c;
+    border-radius: 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 32px;
+    /* padding-right: 32px;
+    padding-top: 24px;
+    padding-bottom: 24px; */
+  }
+  .text-desc-title-categories {
+    color: var(--Secondary, #999);
+    text-align: center;
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Regular/Small */
+    font-family: Nunito Sans;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .text-title-pricing {
+    color: var(--White, #fff);
+
+    /* Bold/Medium */
+    font-family: Nunito Sans;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .box-pricing {
+    display: flex;
+    flex-direction: column;
+    width: 163px;
+    height: 225px;
+    flex-shrink: 0;
+    background-color: #18181c;
+    border: 1px solid #999;
+    border-radius: 10px;
+    justify-content: space-between;
+    padding: 16px;
+  }
+  .text-daftar-member {
+    text-align: center;
+    font-family: Nunito Sans;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px;
+  }
+  .text-recomenation {
+    color: var(--Black, #030304);
+    font-feature-settings: "clig" off, "liga" off;
+
+    /* Bold/Small */
+    font-family: Nunito Sans;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    letter-spacing: 0.5px;
+  }
+  .box-title-banner {
+    padding: 32px;
   }
 }
 
@@ -168,4 +500,44 @@ body {
 
 .overlay.active {
   display: block; /* Show the overlay when it has the 'active' class */
+}
+
+.max-w-screen-sm {
+  max-width: 375px !important;
+  padding: auto;
+}
+.text-primary {
+  color: #53f60f;
+}
+.text-secondary {
+  color: #999999;
+}
+.text-danger {
+  color: #f15c59;
+}
+.otpContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.otpContainer div {
+}
+.otpContainer input {
+  display: flex;
+  color: var(--White, #fff);
+  text-align: center;
+
+  /* Bold/Extra Large */
+  font-family: Nunito Sans;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.3px;
+  min-width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid var(--Secondary, #999);
+  background-color: transparent;
 }

@@ -45,40 +45,23 @@ const Facilities = () => {
       }}
     >
       <div>
-        <span style={{ color: "#53F60F" }}>Fasilitas Kami</span>
+        <span className="text-title-green">Fasilitas Kami</span>
       </div>
       <div>
         <span className="text-white text-title" style={{ fontWeight: "bold" }}>
           Fasilitas di Flex Gym and Cafe
         </span>
       </div>
-      <div className="paddingComponentLeft paddingComponentRight">
-        <span
-          className="text-desc-title"
-          style={{
-            color: "#999999",
-          }}
-        >
+      <div className="box-desc-title">
+        <span className="text-desc-title">
           Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
           egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
           blandit risus porttitor.
         </span>
       </div>
-      <div
-        className="d-md-flex d-none flex-row justify-content-between h-auto mt-4"
-        style={{ gap: 20 }}
-      >
+      <div className="box-facilities-card mt-4">
         {listData.map((item, i) => (
-          <div
-            key={item?.id}
-            className="d-flex flex-column justify-content-center p-4"
-            style={{
-              backgroundColor: "#18181C",
-              width: "25%",
-              borderRadius: 10,
-              maxHeight: 400,
-            }}
-          >
+          <div key={item?.id} className="box-facilities-card-categories">
             <div className="d-flex justify-content-center w-100">
               <img
                 className="d-flex w-auto h-auto"
@@ -92,36 +75,10 @@ const Facilities = () => {
             >
               {item?.title}
             </span>
-            <span className="text-desc-title" style={{ color: "#999999" }}>
-              {item?.description}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div
-        className="d-flex d-md-none flex-row justify-content-between mt-4 overflow-scroll"
-        style={{ width: "100%", gap: 10 }}
-      >
-        {listData.map((item, i) => (
-          <div
-            key={item?.id}
-            className="d-flex flex-column justify-content-center p-4 h-auto"
-            style={{
-              backgroundColor: "#18181C",
-              minWidth: "100%",
-              borderRadius: 10,
-            }}
-          >
-            <div className="d-flex justify-content-center">
-              <img src={item?.icon} alt={`icon-facilities + ${i}`} />
-            </div>
             <span
-              className="text-white text-title"
-              style={{ fontWeight: "bold" }}
+              className="text-desc-title-categories"
+              style={{ color: "#999999" }}
             >
-              {item?.title}
-            </span>
-            <span className="text-desc-title" style={{ color: "#999999" }}>
               {item?.description}
             </span>
           </div>

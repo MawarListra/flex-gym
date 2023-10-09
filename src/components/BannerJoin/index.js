@@ -14,16 +14,12 @@ const BannerJoin = () => {
         <img src={bannerJoinIc} className="w-100" alt="banner-join" />
       </div>
       <div
-        className="d-flex flex-column justify-content-center w-md-50 w-full"
+        className="d-flex flex-column justify-content-center w-md-50 w-full box-title-banner"
         style={{
-          paddingLeft: 32,
-          paddingRight: 32,
-          paddingTop: 32,
-          paddingBottom: 32,
           background: "linear-gradient(120deg,#3D821F,#53F60F)",
         }}
       >
-        <div style={{ paddingRight: 44 }}>
+        <div className="d-flex paddingComponentRight justify-content-center justify-content-md-start ">
           <span
             className="text-white text-banner"
             style={{ lineHeight: 1, fontWeight: "bold" }}
@@ -31,10 +27,10 @@ const BannerJoin = () => {
             Daftar membership Flex Gym and Cafe
           </span>
         </div>
-        <div className="mt-1">
-          <span className="text-white text-desc-title">
+        <div className="d-flex mt-1 justify-content-center justify-content-md-start justify-content-center">
+          <span className="text-white text-desc-banner">
             Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-            egestas amet id pretium.{" "}
+            egestas amet id pretium.
           </span>
         </div>
         <div
@@ -45,7 +41,18 @@ const BannerJoin = () => {
             className="px-4 py-2"
             style={{ backgroundColor: "#fff", borderColor: "#fff" }}
           >
-            <span className="text-black " style={{ fontWeight: "bold" }}>
+            <span
+              style={{
+                color: "#030304",
+                fontFeatureSettings: "clig off liga off",
+                fontSamily: "Nunito Sans",
+                fontSize: 14,
+                fontStyle: "normal",
+                fontWeight: 700,
+                lineHeight: "normal",
+                letterSpacing: 0.5,
+              }}
+            >
               Gabung Sekarang
             </span>
           </Button>

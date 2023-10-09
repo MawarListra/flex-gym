@@ -1,7 +1,7 @@
 import React from "react";
 import ProgramIc from "../../assets/program.png";
 
-const Program = () => {
+const Program = ({ id }) => {
   const listData = [
     {
       id: "cardio",
@@ -31,6 +31,20 @@ const Program = () => {
       description:
         "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
     },
+    {
+      id: "boxing",
+      icon: ProgramIc,
+      title: "BOXING AREA",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+    },
+    {
+      id: "yoga",
+      icon: ProgramIc,
+      title: "YOGA AREA",
+      description:
+        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+    },
   ];
   console.log("cek listdata", listData);
   return (
@@ -40,22 +54,18 @@ const Program = () => {
         paddingTop: 72,
         paddingBottom: 72,
       }}
-      id="program"
+      id={id}
     >
       <div>
-        <span style={{ color: "#53F60F" }}>Program terbaik dari kami</span>
+        <span className="text-title-green">Program terbaik dari kami</span>
       </div>
       <div>
         <span className="text-white text-title" style={{ fontWeight: "bold" }}>
-          Fasilitas di Flex Gym and Cafe
+          Program terbaik dari kami
         </span>
       </div>
-      <div className="w-md-50 w-full text-desc-title">
-        <span
-          style={{
-            color: "#999999",
-          }}
-        >
+      <div className="box-desc-title">
+        <span className="text-desc-title">
           Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
           egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
           blandit risus porttitor.
@@ -65,20 +75,22 @@ const Program = () => {
         className="d-flex flex-row justify-content-between h-auto mt-4 "
         style={{
           overflow: "scroll",
-          gap: 20,
+          gap: 10,
         }}
       >
         {listData.map((item, i) => (
           <div
             key={item?.id}
-            className="d-flex flex-column justify-content-center p-md-4 p-0"
+            className="d-flex flex-column justify-content-center"
             style={{
-              backgroundColor: "#18181C",
-              width: "auto",
+              width: 278,
               borderRadius: 10,
             }}
           >
-            <div className="d-flex justify-content-center">
+            <div
+              className="d-flex justify-content-center"
+              style={{ width: 278, height: 375, flexShrink: 0 }}
+            >
               <img
                 className="d-none d-md-flex"
                 style={{ width: 278, height: 375 }}
@@ -92,14 +104,32 @@ const Program = () => {
               />
             </div>
             <span
-              className="text-white mt-4 text-title d-none d-md-flex"
-              style={{ fontWeight: "bold" }}
+              className="text-white mt-4 d-none d-md-flex"
+              style={{
+                fontWeight: "bold",
+                fontSize: 24,
+                color: "#FFFF",
+                fontFamily: "Nunito Sans",
+                fontStyle: "normal",
+                fontWeight: 700,
+                lineHeight: "normal",
+                letterspacing: 0.3,
+              }}
             >
               {item?.title}
             </span>
             <span
               className="mt-2 text-desc-title d-none d-md-flex"
-              style={{ color: "#999999" }}
+              style={{
+                color: "#999",
+                fontFeatureSettings: "clig off liga off",
+                fontFamily: "Nunito Sans",
+                fontSize: 14,
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                letterSpacing: 0.5,
+              }}
             >
               {item?.description}
             </span>

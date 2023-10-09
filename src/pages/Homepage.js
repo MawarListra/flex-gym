@@ -10,8 +10,10 @@ import {
   Footer,
 } from "../components";
 import { animateScroll as scroll } from "react-scroll";
+import { useNavigate } from "react-router-dom";
 
 const Homepage = () => {
+  const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
   const listMenu = [
     {
@@ -38,12 +40,18 @@ const Homepage = () => {
       label: "Masuk",
       color: "black",
       textColor: "#53F60F",
+      onClick: () => {
+        navigate("/login");
+      },
     },
     {
       id: "register",
       label: "Daftar",
       color: "#53F60F",
       textColor: "black",
+      onClick: () => {
+        navigate("/registration");
+      },
     },
   ];
 
@@ -76,7 +84,7 @@ const Homepage = () => {
   }, [openMenu]);
 
   return (
-    <div className="container d-flex flex-column bg-black">
+    <div className="d-flex flex-column bg-black">
       <Navbar
         listMenu={listMenu}
         listAction={listAction}
@@ -84,11 +92,11 @@ const Homepage = () => {
         openMenu={openMenu}
         setOpenMenu={setOpenMenu}
       />
-      <Hero />
-      <Location />
+      <Hero id="home" />
+      <Location id="contact" />
       <Facilities />
-      <Program />
-      <Pricing />
+      <Program id="program" />
+      <Pricing id="package" />
       <BannerJoin />
       <Footer scrollToDiv={scrollToDiv} />
     </div>

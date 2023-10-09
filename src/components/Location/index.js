@@ -5,7 +5,7 @@ import GymIc from "../../assets/gym.png";
 import Image1 from "../../assets/image1.png";
 import { MapPin } from "react-feather";
 
-const Location = () => {
+const Location = ({ id }) => {
   const listData = [
     {
       title: "Tempat Luas & Nyaman",
@@ -59,7 +59,7 @@ const Location = () => {
             zIndex: 1, // Ensure it's above the second column
           }}
         >
-          <span style={{ color: "#53F60F" }}>Mengapa memilih kami</span>
+          <span className="text-title-green">Mengapa memilih kami</span>
         </div>
         <div
           className="d-flex flex-column w-100 paddingComponentLeft"
@@ -185,10 +185,32 @@ const Location = () => {
         >
           <div className="d-flex d-md-none flex-column text-white justify-content-start text-left mt-4">
             <div className="d-flex justify-content-start align-items-center">
-              <span style={{ fontSize: 20 }}>LOCATION</span>
+              <span
+                style={{
+                  color: "#FFFF",
+                  fontFamily: "Nunito Sans",
+                  fontSize: 28,
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "normal",
+                  letterSpacing: 0.3,
+                }}
+              >
+                LOCATION
+              </span>
             </div>
             <div>
-              <span style={{ fontSize: 12, color: "#999999" }}>
+              <span
+                style={{
+                  color: "#999",
+                  fontFamily: "Nunito Sans",
+                  fontSize: 14,
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "normal",
+                  letterSpacing: 0.5,
+                }}
+              >
                 Ngebel, Tamantirto, Kec. Kasihan, Kabupaten Bantul, Daerah
                 Istimewa Yogyakarta 55184
               </span>
@@ -219,26 +241,62 @@ const Location = () => {
                 <MapPin style={{ transform: "rotate(315deg)" }} />
               </div>
             </div>
-            <div className="d-flex h-full" style={{ borderTopRightRadius: 40 }}>
+            <div
+              className="d-flex box-image-location"
+              style={{ position: "relative" }}
+            >
               <img
+                className="box-radius-image-location"
+                style={{
+                  width: "100%" /* Make the image fill the width of the div */,
+                  height:
+                    "100%" /* Make the image fill the height of the div */,
+                  objectFit:
+                    "cover" /* This property ensures the image covers the area of the div without stretching */,
+                  position:
+                    "absolute" /* Position the image absolutely within the div */,
+                  top: 0 /* Align the image to the top of the div */,
+                  left: 0 /* Align the image to the left of the div */,
+                }}
                 src={GymIc}
-                className="d-flex img-fluid"
+                // className="d-flex cover"
                 alt="gym-building"
               />
             </div>
           </div>
         </div>
-        <div className="d-md-flex d-none flex-row text-white gap-2">
+        <div className="d-md-flex d-none flex-row text-white gap-4">
           <div
             className="d-flex justify-content-center align-items-center  p-2"
             style={{ width: "30%" }}
           >
-            <span className="text-center" style={{ fontSize: 20 }}>
+            <span
+              className="text-center"
+              style={{
+                color: "#FFFF",
+                fontFamily: "Nunito Sans",
+                fontSize: 28,
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                letterSpacing: 0.3,
+              }}
+            >
               LOCATION
             </span>
           </div>
           <div style={{ width: "70%" }}>
-            <span style={{ fontSize: 12, color: "#999999" }}>
+            <span
+              style={{
+                color: "#999",
+                fontFamily: "Nunito Sans",
+                fontSize: 18,
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "normal",
+                letterSpacing: 0.5,
+              }}
+            >
               Ngebel, Tamantirto, Kec. Kasihan, Kabupaten Bantul, Daerah
               Istimewa Yogyakarta 55184
             </span>
