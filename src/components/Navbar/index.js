@@ -22,7 +22,7 @@ const Navbar = ({
       </div>
       <div
         className="d-none d-md-flex flex-row justify-content-between align-items-center gap-5"
-        style={{ width: "75%" }}
+        // style={{ width: "75%" }}
       >
         <div className="d-flex flex-row justify-content-between align-items-center gap-5">
           {listMenu.map((e) => (
@@ -45,7 +45,7 @@ const Navbar = ({
           <span className="text-white">|</span>
         </div>
         <div
-          className="d-flex flex-row justify-content-between gap-4"
+          className="d-flex flex-row justify-content-between gap-5"
           // style={{ width: "25%" }}
         >
           {listAction.map((e) => (

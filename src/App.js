@@ -14,6 +14,7 @@ import Login from "./pages/Login";
 import ChangePassword from "./pages/ChangePassword";
 import SendOTP from "./pages/Verification/SendOTP";
 import SuccessOTP from "./pages/Verification/Success";
+import HomepageProfile from "./pages/Account/Homepage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/change-password" exac element={<ChangePassword />} />
         <Route path="/verif-account" exac element={<SendOTP />} />
         <Route path="/otp-success" exac element={<SuccessOTP />} />
+        <Route path="/account" exac element={<HomepageProfile />} />
       </Routes>
       {/* </div> */}
     </Router>

@@ -84,7 +84,7 @@ const Homepage = () => {
   }, [openMenu]);
 
   return (
-    <div className="d-flex flex-column bg-black mx-3 mx-md-0">
+    <div className="container d-flex w-100 flex-column bg-black px-3 px-md-0">
       <Navbar
         listMenu={listMenu}
         listAction={listAction}

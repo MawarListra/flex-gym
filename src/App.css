@@ -183,6 +183,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     gap: 20px;
+    /* width: 100%; */
   }
   .box-facilities-card-categories {
     display: flex;
@@ -540,4 +541,8 @@ body {
   border-radius: 5px;
   border: 1px solid var(--Secondary, #999);
   background-color: transparent;
+}
+.container {
+  max-width: 1920;
+  min-width: auto;
 }
