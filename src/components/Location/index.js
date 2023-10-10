@@ -33,6 +33,14 @@ const Location = ({ id }) => {
     },
   ];
   const [currIdx, setCurrIdx] = useState(0);
+  // const scrollToDiv = (myDiv) => {
+  //   console.log("cek myDiv", myDiv);
+  //   // Replace 'myDiv' with the ID of the div you want to scroll to
+  //   scroll.scrollTo(myDiv, {
+  //     duration: 800, // Scroll duration in milliseconds
+  //     smooth: "easeInOutQuart", // Scroll animation easing function
+  //   });
+  // };
   return (
     <div
       className="d-flex flex-column flex-md-row paddingComponentRight md-paddingComponentLeft"
@@ -88,19 +96,42 @@ const Location = ({ id }) => {
               <ChevronLeft
                 className="cursor-pointer"
                 color="white"
-                onClick={() =>
-                  currIdx === 0 ? undefined : setCurrIdx(currIdx - 1)
-                }
+                onClick={() => {
+                  if (currIdx === 0) {
+                    return undefined;
+                  } else {
+                    console.log("cek here");
+                    const targetIndex = currIdx - 1;
+                    const item = document.getElementById(
+                      "imageScroll-" + targetIndex
+                    );
+                    item.scrollIntoView({
+                      behavior: "smooth",
+                      inline: "center",
+                    });
+                    return setCurrIdx(currIdx - 1);
+                  }
+                }}
                 style={{ cursor: "pointer" }}
               />
               <ChevronRight
                 className="cursor-pointer"
                 color="white"
-                onClick={() =>
-                  currIdx === listData?.length - 1
-                    ? undefined
-                    : setCurrIdx(currIdx + 1)
-                }
+                onClick={() => {
+                  if (currIdx === listData?.length - 1) {
+                    return undefined;
+                  } else {
+                    const targetIndex = currIdx + 1;
+                    const item = document.getElementById(
+                      "imageScroll-" + targetIndex
+                    );
+                    item.scrollIntoView({
+                      behavior: "smooth",
+                      inline: "center",
+                    });
+                    return setCurrIdx(currIdx + 1);
+                  }
+                }}
                 style={{ cursor: "pointer" }}
               />
             </div>
@@ -163,16 +194,21 @@ const Location = ({ id }) => {
           </div>
         </div>
         <div
-          className="d-md-flex d-none gap-4"
-          style={{ marginTop: 32, overflowX: "scroll" }}
+          className="d-md-flex d-none gap-4 container-image-scroll w-100"
+          style={{ marginTop: 32 }}
         >
           {listData.map((e, i) => (
-            <div key={i} className="d-flex" style={{ height: 360 }}>
+            <div
+              key={i}
+              className="d-flex imageScroll"
+              style={{ height: 360, width: "100%" }}
+              id={`imageScroll-` + i}
+            >
               <img
                 src={e?.photo}
-                className="d-flex"
+                className="d-flex cover"
                 alt={`image-loc-${e?.photo}`}
-                style={{ height: "100%", objectFit: "cover" }}
+                style={{ height: "100%" }}
               />
             </div>
           ))}

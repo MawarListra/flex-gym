@@ -546,3 +546,24 @@ body {
   max-width: 1920;
   min-width: auto;
 }
+.imageScroll {
+  scroll-snap-align: center;
+}
+.scroll-animation {
+  animation: scroll 5s linear infinite; /* Apply the scroll animation to the specific image */
+}
+@keyframes scroll {
+  0% {
+    transform: translateX(
+      100%
+    ); /* Start scrolling from the right edge of the image */
+  }
+  100% {
+    transform: translateX(-100%); /* Scroll to the left edge of the image */
+  }
+}
+.container-image-scroll {
+  overflow: scroll;
+  /* white-space: nowrap; */
+  scroll-snap-type: x mandatory;
+}
