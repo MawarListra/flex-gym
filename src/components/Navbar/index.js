@@ -22,18 +22,34 @@ const Navbar = ({
       </div>
       <div
         className="d-none d-md-flex flex-row justify-content-between align-items-center gap-5"
+
         // style={{ width: "75%" }}
       >
-        <div className="d-flex flex-row justify-content-between align-items-center gap-5">
-          {listMenu.map((e) => (
+        <div
+          className="d-flex flex-row justify-content-between align-items-center gap-5"
+          id="container-button-menu"
+        >
+          {listMenu.map((e, i) => (
             <div key={e?.id}>
               <Button
                 color="transparent"
                 onClick={() => {
                   scrollToDiv(e?.id);
+                  var menuItems = document.querySelectorAll(
+                    "#container-button-menu div button span"
+                  );
+                  menuItems.forEach(function (item) {
+                    item.classList.remove("active-menu-item");
+                    item.classList.add("text-white");
+                  });
+                  const element = document.getElementById("button-menu-" + i);
+                  element.classList.remove("text-white");
+                  element.classList.add("active-menu-item");
                 }}
               >
-                <span className="text-white">{e?.label}</span>
+                <span className="text-white" id={`button-menu-` + i}>
+                  {e?.label}
+                </span>
               </Button>
             </div>
           ))}
@@ -83,17 +99,34 @@ const Navbar = ({
             />
           </div>
           <div className="d-flex flex-column gap-5">
-            <div className="d-flex flex-column justify-content-between align-items-center gap-5">
-              {listMenu.map((e) => (
+            <div
+              className="d-flex flex-column justify-content-between align-items-center gap-5"
+              id="container-button-menu"
+            >
+              {listMenu.map((e, i) => (
                 <div key={e?.id}>
                   <Button
                     color="transparent"
                     onClick={() => {
                       scrollToDiv(e?.id);
                       setOpenMenu(!openMenu);
+                      var menuItems = document.querySelectorAll(
+                        "#container-button-menu div button span"
+                      );
+                      menuItems.forEach(function (item) {
+                        item.classList.remove("active-menu-item");
+                        item.classList.add("text-white");
+                      });
+                      const element = document.getElementById(
+                        "button-menu-" + i
+                      );
+                      element.classList.remove("text-white");
+                      element.classList.add("active-menu-item");
                     }}
                   >
-                    <span className="text-white">{e?.label}</span>
+                    <span className="text-white" id={`button-menu-` + i}>
+                      {e?.label}
+                    </span>
                   </Button>
                 </div>
               ))}

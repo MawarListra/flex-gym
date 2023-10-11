@@ -88,7 +88,7 @@ const Location = ({ id }) => {
           </div>
           <div className="d-flex flex-row">
             <div className="mt-1">
-              <span className="text-white text-desc-title">
+              <span className="text-desc-title">
                 {listData?.[currIdx]?.description}
               </span>
             </div>
@@ -274,7 +274,15 @@ const Location = ({ id }) => {
                   borderBottomLeftRadius: 20,
                 }}
               >
-                <MapPin style={{ transform: "rotate(315deg)" }} />
+                <MapPin
+                  style={{ transform: "rotate(315deg)", cursor: "pointer" }}
+                  onClick={() =>
+                    window.open(
+                      "https://www.google.com/maps/place/FLEX+GYM+AND+CAFE/@-7.8159361,110.3139033,17z/data=!4m14!1m7!3m6!1s0x2e7af964d4c8c8dd:0x5a705b858219d429!2sFLEX+GYM+AND+CAFE!8m2!3d-7.8159414!4d110.3164782!16s%2Fg%2F11v6swk33s!3m5!1s0x2e7af964d4c8c8dd:0x5a705b858219d429!8m2!3d-7.8159414!4d110.3164782!16s%2Fg%2F11v6swk33s?entry=ttu",
+                      "_blank"
+                    )
+                  }
+                />
               </div>
             </div>
             <div

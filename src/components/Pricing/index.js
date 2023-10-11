@@ -51,12 +51,7 @@ const Pricing = ({ id }) => {
         </span>
       </div>
       <div className="paddingComponentRight paddingComponentLeft">
-        <span
-          className="text-desc-title"
-          style={{
-            color: "#999999",
-          }}
-        >
+        <span className="text-desc-title">
           Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
           egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
           blandit risus porttitor.
@@ -164,10 +159,7 @@ const Pricing = ({ id }) => {
                 >
                   {item?.subPrice ? item?.subPrice : undefined}
                   {item?.subPrice && (
-                    <small
-                      className="text-desc-title"
-                      style={{ color: "#999999", fontSize: 14 }}
-                    >
+                    <small className="text-desc-title" style={{ fontSize: 14 }}>
                       /bulan
                     </small>
                   )}

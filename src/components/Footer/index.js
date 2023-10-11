@@ -12,14 +12,31 @@ const Footer = ({ scrollToDiv }) => {
         <div className="d-flex w-25">
           <img src={Logo} alt="logo" />
         </div>
-        <div className="d-none d-md-flex justify-content-between px-4 w-50">
+        <div
+          className="d-none d-md-flex justify-content-between px-4 w-50"
+          id="container-button-menu"
+        >
           <Button
             color="transparent"
             onClick={() => {
               scrollToDiv("home");
+              var menuItems = document.querySelectorAll(
+                "#container-button-menu button span"
+              );
+              menuItems.forEach(function (item) {
+                item.classList.remove("active-menu-item");
+                item.classList.add("text-white");
+              });
+              const element = document.getElementById("footer-home");
+              element.classList.remove("text-white");
+              element.classList.add("active-menu-item");
             }}
           >
-            <span className="text-white" style={{ fontSize: 14 }}>
+            <span
+              className="text-white"
+              id="footer-home"
+              style={{ fontSize: 14 }}
+            >
               HOME
             </span>
           </Button>
@@ -27,9 +44,23 @@ const Footer = ({ scrollToDiv }) => {
             color="transparent"
             onClick={() => {
               scrollToDiv("program");
+              var menuItems = document.querySelectorAll(
+                "#container-button-menu button span"
+              );
+              menuItems.forEach(function (item) {
+                item.classList.remove("active-menu-item");
+                item.classList.add("text-white");
+              });
+              const element = document.getElementById("footer-program");
+              element.classList.remove("text-white");
+              element.classList.add("active-menu-item");
             }}
           >
-            <span className="text-white" style={{ fontSize: 14 }}>
+            <span
+              className="text-white"
+              id="footer-program"
+              style={{ fontSize: 14 }}
+            >
               PROGRAM
             </span>
           </Button>
@@ -37,9 +68,24 @@ const Footer = ({ scrollToDiv }) => {
             color="transparent"
             onClick={() => {
               scrollToDiv("package");
+
+              var menuItems = document.querySelectorAll(
+                "#container-button-menu button span"
+              );
+              menuItems.forEach(function (item) {
+                item.classList.remove("active-menu-item");
+                item.classList.add("text-white");
+              });
+              const element = document.getElementById("footer-paket");
+              element.classList.remove("text-white");
+              element.classList.add("active-menu-item");
             }}
           >
-            <span className="text-white" style={{ fontSize: 14 }}>
+            <span
+              className="text-white"
+              id="footer-paket"
+              style={{ fontSize: 14 }}
+            >
               PAKET
             </span>
           </Button>
@@ -52,14 +98,32 @@ const Footer = ({ scrollToDiv }) => {
           </Button>
         </div>
       </div>
-      <div className="d-flex d-md-none justify-content-between w-100 px-4">
+      <div
+        className="d-flex d-md-none justify-content-between w-100 px-4"
+        id="container-button-menu"
+      >
         <Button
           color="transparent"
           onClick={() => {
             scrollToDiv("home");
+
+            var menuItems = document.querySelectorAll(
+              "#container-button-menu button span"
+            );
+            menuItems.forEach(function (item) {
+              item.classList.remove("active-menu-item");
+              item.classList.add("text-white");
+            });
+            const element = document.getElementById("footer-home");
+            element.classList.remove("text-white");
+            element.classList.add("active-menu-item");
           }}
         >
-          <span className="text-white" style={{ fontSize: 14 }}>
+          <span
+            className="text-white"
+            id="footer-home"
+            style={{ fontSize: 14 }}
+          >
             HOME
           </span>
         </Button>
@@ -67,9 +131,23 @@ const Footer = ({ scrollToDiv }) => {
           color="transparent"
           onClick={() => {
             scrollToDiv("program");
+            var menuItems = document.querySelectorAll(
+              "#container-button-menu button span"
+            );
+            menuItems.forEach(function (item) {
+              item.classList.remove("active-menu-item");
+              item.classList.add("text-white");
+            });
+            const element = document.getElementById("footer-program");
+            element.classList.remove("text-white");
+            element.classList.add("active-menu-item");
           }}
         >
-          <span className="text-white" style={{ fontSize: 14 }}>
+          <span
+            className="text-white"
+            id="footer-program"
+            style={{ fontSize: 14 }}
+          >
             PROGRAM
           </span>
         </Button>
@@ -77,9 +155,23 @@ const Footer = ({ scrollToDiv }) => {
           color="transparent"
           onClick={() => {
             scrollToDiv("package");
+            var menuItems = document.querySelectorAll(
+              "#container-button-menu button span"
+            );
+            menuItems.forEach(function (item) {
+              item.classList.remove("active-menu-item");
+              item.classList.add("text-white");
+            });
+            const element = document.getElementById("footer-paket");
+            element.classList.remove("text-white");
+            element.classList.add("active-menu-item");
           }}
         >
-          <span className="text-white" style={{ fontSize: 14 }}>
+          <span
+            className="text-white"
+            id="footer-paket"
+            style={{ fontSize: 14 }}
+          >
             PAKET
           </span>
         </Button>

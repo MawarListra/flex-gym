@@ -75,10 +75,7 @@ const Facilities = () => {
             >
               {item?.title}
             </span>
-            <span
-              className="text-desc-title-categories"
-              style={{ color: "#999999" }}
-            >
+            <span className="text-desc-title-categories">
               {item?.description}
             </span>
           </div>

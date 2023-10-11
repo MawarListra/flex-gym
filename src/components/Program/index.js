@@ -76,6 +76,7 @@ const Program = ({ id }) => {
         style={{
           overflow: "scroll",
           gap: 10,
+          scrollbarColor: "#53F60F",
         }}
       >
         {listData.map((item, i) => (
@@ -121,7 +122,6 @@ const Program = ({ id }) => {
             <span
               className="mt-2 text-desc-title d-none d-md-flex"
               style={{
-                color: "#999",
                 fontFeatureSettings: "clig off liga off",
                 fontFamily: "Nunito Sans",
                 fontSize: 14,

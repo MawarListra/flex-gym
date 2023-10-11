@@ -58,12 +58,12 @@ const Homepage = () => {
   ];
 
   const scrollToDiv = (myDiv) => {
-    console.log("cek myDiv", myDiv);
-    // Replace 'myDiv' with the ID of the div you want to scroll to
-    scroll.scrollTo(myDiv, {
-      duration: 800, // Scroll duration in milliseconds
-      smooth: "easeInOutQuart", // Scroll animation easing function
-    });
+    var element = document.getElementById(myDiv); // Replace 'your-div-id' with the actual ID of your div
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth", // Use 'auto' for instant scroll or 'smooth' for smooth scrolling
+      });
+    }
   };
 
   useEffect(() => {

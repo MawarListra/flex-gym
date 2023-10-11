@@ -1,8 +1,10 @@
 import React from "react";
 import { Button } from "reactstrap";
 import HeroIc from "../../assets/HeroImage.png";
+import { useNavigate } from "react-router-dom";
 
 const Hero = ({ id }) => {
+  const navigate = useNavigate();
   return (
     <div
       className="hero-background d-flex flex-column paddingComponentRight paddingComponentLeft"
@@ -44,6 +46,7 @@ const Hero = ({ id }) => {
             borderColor: "#53F60F",
             fontSize: 14,
           }}
+          onClick={() => navigate("/registration")}
         >
           <span className="text-black">Daftar Sekarang</span>
         </Button>
