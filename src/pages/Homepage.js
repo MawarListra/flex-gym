@@ -40,6 +40,7 @@ const Homepage = () => {
       label: "Masuk",
       color: "black",
       textColor: "#53F60F",
+      borderColor: "#53F60F",
       onClick: () => {
         navigate("/login");
       },
@@ -49,6 +50,7 @@ const Homepage = () => {
       label: "Daftar",
       color: "#53F60F",
       textColor: "black",
+      borderColor: "#53F60F",
       onClick: () => {
         navigate("/registration");
       },
@@ -84,7 +86,7 @@ const Homepage = () => {
   }, [openMenu]);
 
   return (
-    <div className="container d-flex w-100 flex-column bg-black px-3 px-md-0">
+    <div className="container-fluid d-flex w-100 flex-column bg-black px-3 px-md-0">
       <Navbar
         listMenu={listMenu}
         listAction={listAction}

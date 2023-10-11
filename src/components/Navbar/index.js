@@ -56,7 +56,7 @@ const Navbar = ({
                   backgroundColor: e?.color,
                   borderTopLeftRadius: 0,
                   borderBottomRightRadius: 0,
-                  borderColor: e?.textColor,
+                  borderColor: e?.borderColor,
                 }}
                 onClick={e?.onClick}
               >
@@ -107,7 +107,7 @@ const Navbar = ({
                       backgroundColor: e?.color,
                       borderTopLeftRadius: 0,
                       borderBottomRightRadius: 0,
-                      borderColor: e?.textColor,
+                      borderColor: e?.borderColor,
                     }}
                     onClick={e?.onClick}
                   >
