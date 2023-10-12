@@ -13,7 +13,7 @@ const Navbar = ({
   return (
     <div
       className="d-flex flex-row justify-content-between align-items-center py-2 paddingComponentRight paddingComponentLeft"
-      style={{ backgroundColor: "black" }}
+      style={{ backgroundColor: "black", position: "relative" }}
     >
       <div className="d-flex align-items-center" style={{ width: "25%" }}>
         <div>
@@ -21,8 +21,7 @@ const Navbar = ({
         </div>
       </div>
       <div
-        className="d-none d-md-flex flex-row justify-content-between align-items-center gap-5"
-
+        className="d-none d-md-flex flex-row justify-content-between align-items-center gap-4"
         // style={{ width: "75%" }}
       >
         <div
@@ -56,12 +55,13 @@ const Navbar = ({
         </div>
         <div
           className="d-flex justify-content-center align-items-center"
+          style={{ marginRight: 8 }}
           // style={{ width: "10%" }}
         >
           <span className="text-white">|</span>
         </div>
         <div
-          className="d-flex flex-row justify-content-between gap-5"
+          className="d-flex flex-row justify-content-between gap-3 ml-4"
           // style={{ width: "25%" }}
         >
           {listAction.map((e) => (
@@ -83,7 +83,10 @@ const Navbar = ({
         </div>
       </div>
       {!openMenu && (
-        <div className="d-flex d-md-none">
+        <div
+          className="d-flex d-md-none"
+          style={{ zIndex: 999, position: "sticky" }}
+        >
           <Menu
             style={{ color: "#53F60F", cursor: "pointer" }}
             onClick={() => setOpenMenu(!openMenu)}

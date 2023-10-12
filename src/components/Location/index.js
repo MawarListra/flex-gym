@@ -185,10 +185,10 @@ const Location = ({ id }) => {
               />
             </div>
           </div>
-          <div className="d-flex w-100">
+          <div className="d-flex w-100" style={{ height: 192 }}>
             <img
               src={listData?.[currIdx]?.photo}
-              className="d-flex cover w-100 h-100"
+              className="d-flex img-fluid w-100 h-100"
               alt={`image-loc-${currIdx}`}
             />
           </div>

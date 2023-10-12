@@ -36,7 +36,7 @@ const Hero = ({ id }) => {
           blandit risus porttitor.
         </span>
       </div>
-      <div className="title-hero-box flex-row gap-3 gap-md-5">
+      <div className="title-hero-box flex-row gap-3 gap-md-3">
         <Button
           className="btnRegister"
           style={{

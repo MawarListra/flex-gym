@@ -123,7 +123,7 @@ const Pricing = ({ id }) => {
           </span>
         </Button>
       </div>
-      <div className="d-flex flex-row flex-wrap flex-md-nowrap justify-content-center h-auto mt-4 w-100 gap-md-25 gap-4">
+      <div className="d-flex flex-row flex-wrap flex-md-nowrap justify-content-center h-auto mt-4 w-100 gap-md-25 gap-3">
         {listData.map((item, i) => (
           <div
             className="d-flex flex-column w-md-25 w-auto"
