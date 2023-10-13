@@ -85,8 +85,34 @@ const Homepage = () => {
     }
   }, [openMenu]);
 
+  document.addEventListener("DOMContentLoaded", function () {
+    // Number of circles you want to create
+    const numberOfCircles = 4;
+
+    for (let i = 0; i < numberOfCircles; i++) {
+      createCircle();
+    }
+
+    function createCircle() {
+      const circle = document.createElement("div");
+      circle.className = "circle";
+
+      // Set random position for the circle
+      const randomX = Math.random() * window.innerWidth;
+      const randomY = Math.random() * window.innerHeight;
+
+      circle.style.left = `${randomX}px`;
+      circle.style.top = `${randomY}px`;
+
+      document.body.appendChild(circle);
+    }
+  });
+
   return (
-    <div className="container-fluid d-flex w-100 flex-column bg-black px-3 px-md-0">
+    <div
+      className="container-fluid d-flex w-100 flex-column bg-black px-3 px-md-0"
+      style={{ position: "relative", overflowX: "hidden" }}
+    >
       <Navbar
         listMenu={listMenu}
         listAction={listAction}
@@ -95,9 +121,14 @@ const Homepage = () => {
         setOpenMenu={setOpenMenu}
       />
       <Hero id="home" />
+      <div className="dot" id="dot1"></div>
       <Location id="contact" />
+
+      <div className="dot" id="dot2"></div>
       <Facilities />
       <Program id="program" />
+
+      <div className="dot" id="dot3"></div>
       <Pricing id="package" />
       <BannerJoin />
       <Footer scrollToDiv={scrollToDiv} />

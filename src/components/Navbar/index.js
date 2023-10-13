@@ -11,10 +11,7 @@ const Navbar = ({
   setOpenMenu,
 }) => {
   return (
-    <div
-      className="d-flex flex-row justify-content-between align-items-center py-2 paddingComponentRight paddingComponentLeft"
-      style={{ backgroundColor: "black", position: "relative" }}
-    >
+    <div className=" d-flex flex-row justify-content-between align-items-center py-2 paddingComponentRight paddingComponentLeft">
       <div className="d-flex align-items-center" style={{ width: "25%" }}>
         <div>
           <img src={Logo} alt="logo" />

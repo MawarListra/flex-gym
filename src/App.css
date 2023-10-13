@@ -256,16 +256,40 @@ body {
   .box-title-banner {
     padding: 32px 32px 32px 56px;
   }
-  /* .container {
-    max-width: 1920;
-    min-width: auto;
-    width: 100vh;
-  } */
+  .dot {
+    width: 200px; /* Adjust the size of the dot */
+    height: 200px;
+    background-color: #508f35; /* Color of the dot */
+    border-radius: 50%; /* Makes the element a circle */
+    position: absolute;
+  }
+
+  #dot1 {
+    top: 430px; /* Adjust the vertical position of the first dot */
+    left: -70px; /* Adjust the horizontal position of the first dot */
+    filter: blur(150px);
+  }
+
+  #dot2 {
+    top: 1200px; /* Adjust the vertical position of the second dot */
+    right: -70px; /* Adjust the horizontal position of the second dot */
+    filter: blur(150px);
+  }
+
+  #dot3 {
+    top: 2700px; /* Adjust the vertical position of the third dot */
+    left: -70px; /* Adjust the horizontal position of the third dot */
+    filter: blur(125px);
+  }
+  .navbar {
+  }
 }
 
 @media (max-width: 768px) {
   body {
     font-size: 14px; /* Decrease font size for smaller screens */
+    margin: 0;
+    padding: 0;
   }
   .paddingComponentRight {
     padding-right: 0px;
@@ -490,6 +514,36 @@ body {
   .box-title-banner {
     padding: 32px;
   }
+  .dot {
+    width: 151px; /* Adjust the size of the dot */
+    height: 151px;
+    background-color: #508f35; /* Color of the dot */
+    border-radius: 50%; /* Makes the element a circle */
+    position: absolute;
+    filter: blur(100px);
+  }
+
+  #dot1 {
+    top: 600px; /* Adjust the vertical position of the first dot */
+    left: -70px; /* Adjust the horizontal position of the first dot */
+  }
+
+  #dot2 {
+    top: 1600px; /* Adjust the vertical position of the second dot */
+    right: -70px; /* Adjust the horizontal position of the second dot */
+  }
+
+  #dot3 {
+    top: 3000px; /* Adjust the vertical position of the third dot */
+    left: -70px; /* Adjust the horizontal position of the third dot */
+  }
+
+  .navbar {
+    position: fixed;
+    width: 100%;
+    z-index: 99999;
+    top: 0;
+  }
 }
 
 .overlay {
@@ -608,7 +662,8 @@ body {
 
 /* width */
 div::-webkit-scrollbar {
-  width: 1px;
+  height: 5px;
+  width: 0px;
 }
 
 /* Track */
