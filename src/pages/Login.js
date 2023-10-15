@@ -2,7 +2,7 @@ import React from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { Input } from "../components/Input";
+import { TextInput } from "../components";
 import Logo from "../assets/Logo.png";
 
 const Login = () => {
@@ -10,15 +10,15 @@ const Login = () => {
 
   const dataUser = [
     {
-      value: "email",
+      name: "email",
       label: "Email",
-      mandatory: true,
-      type: "email",
+      isRequired: true,
+      type: "text",
     },
     {
-      value: "password",
+      name: "password",
       label: "Password",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
   ];
@@ -28,7 +28,7 @@ const Login = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-4 justify-content-between w-100 gap-2"
+        className="d-flex flex-column p-3 justify-content-between w-100 gap-2"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column">
@@ -82,11 +82,12 @@ const Login = () => {
             </div>
             <div className="d-flex flex-column gap-2">
               {dataUser.map((e) => (
-                <Input
+                <TextInput
+                  name={e?.name}
                   label={e?.label}
-                  required={e?.mandatory}
                   placeholder={e?.label}
                   type={e?.type}
+                  {...e}
                 />
               ))}
             </div>

@@ -2,27 +2,27 @@ import React from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { Input } from "../components/Input";
+import { TextInput } from "../components";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
   const dataUser = [
     {
-      value: "used-password",
+      name: "used-password",
       label: "Password lama",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
     {
-      value: "new-password",
+      name: "new-password",
       label: "Password baru",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
     {
-      value: "confirm-pass",
+      name: "confirm-pass",
       label: "Masukkan ulang Password",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
   ];
@@ -32,7 +32,7 @@ const ChangePassword = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-4 justify-content-between w-100 gap-4"
+        className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column gap-4">
@@ -87,11 +87,12 @@ const ChangePassword = () => {
             </span>
             <div className="d-flex flex-column gap-2">
               {dataUser.map((e) => (
-                <Input
+                <TextInput
+                  name={e?.name}
                   label={e?.label}
-                  required={e?.mandatory}
                   placeholder={e?.label}
                   type={e?.type}
+                  {...e}
                 />
               ))}
             </div>

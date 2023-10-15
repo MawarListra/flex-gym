@@ -15,6 +15,9 @@ import ChangePassword from "./pages/ChangePassword";
 import SendOTP from "./pages/Verification/SendOTP";
 import SuccessOTP from "./pages/Verification/Success";
 import HomepageProfile from "./pages/Account/Homepage";
+import Transaction from "./pages/Account/Transaction";
+import Profile from "./pages/Account/Profile";
+import EditProfile from "./pages/Account/EditProfile";
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
         <Route path="/verif-account" exac element={<SendOTP />} />
         <Route path="/otp-success" exac element={<SuccessOTP />} />
         <Route path="/account" exac element={<HomepageProfile />} />
+        <Route path="/detail-transaction/:id" exac element={<Transaction />} />
+        <Route path="/profile" exac element={<Profile />} />
+        <Route path="/update-profile" exac element={<EditProfile />} />
       </Routes>
       {/* </div> */}
     </Router>

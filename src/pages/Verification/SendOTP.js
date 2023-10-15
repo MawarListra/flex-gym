@@ -12,7 +12,7 @@ const SendOTP = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-4 justify-content-between w-100 gap-4"
+        className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column gap-4">

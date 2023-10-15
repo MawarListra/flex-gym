@@ -6,3 +6,4 @@ export { default as Pricing } from "./Pricing";
 export { default as BannerJoin } from "./BannerJoin";
 export { default as Location } from "./Location";
 export { default as Footer } from "./Footer";
+export { default as TextInput } from "./TextInput";

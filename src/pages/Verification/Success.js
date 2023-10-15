@@ -13,12 +13,12 @@ const SuccessOTP = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-4 w-100 h-100 gap-4 justify-content-center"
+        className="d-flex flex-column p-3 w-100 h-100 gap-4 justify-content-between"
         style={{ minHeight: "100vh" }}
       >
         <div
           className="d-flex flex-column gap-4 justify-content-end align-items-center"
-          style={{ height: "50%" }}
+          style={{ height: "50vh" }}
         >
           <div className="">
             <img src={SuccessIc} alt="success-verif" />

@@ -2,52 +2,56 @@ import React from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
-import { Input } from "../components/Input";
+import { TextInput } from "../components";
 
 const Registrasi = () => {
   const navigate = useNavigate();
   const dataUser = [
     {
-      value: "email",
+      name: "email",
       label: "Email",
-      mandatory: true,
-      type: "email",
+      isRequired: true,
+      type: "text",
     },
     {
-      value: "password",
+      name: "password",
       label: "Password",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
     {
-      value: "confirm-pass",
+      name: "confirm-pass",
       label: "Masukkan ulang Password",
-      mandatory: true,
+      isRequired: true,
       type: "password",
     },
     {
-      value: "name",
+      name: "name",
       label: "Nama Panjang",
-      mandatory: true,
+      isRequired: true,
       type: "text",
     },
     {
-      value: "phoneNumber",
+      name: "phoneNumber",
       label: "Nomor Handphone",
-      mandatory: true,
+      isRequired: true,
       type: "text",
     },
     {
-      value: "bornDate",
+      name: "bornDate",
       label: "Tanggal Lahir",
-      mandatory: true,
-      type: "date",
+      isRequired: true,
+      type: "dateWithPrepend",
     },
     {
-      value: "gender",
+      name: "gender",
       label: "Jenis Kelamin",
-      mandatory: true,
-      type: "option",
+      isRequired: true,
+      type: "select",
+      selectOption: [
+        { id: "male", name: "Laki-laki" },
+        { id: "female", name: "Perempuan" },
+      ],
     },
   ];
   return (
@@ -56,7 +60,7 @@ const Registrasi = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-4 justify-content-between w-100 gap-4"
+        className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}
       >
         <div
@@ -109,11 +113,12 @@ const Registrasi = () => {
             egestas amet id pretium.
           </span>
           {dataUser.map((e) => (
-            <Input
+            <TextInput
+              name={e?.name}
               label={e?.label}
-              required={e?.mandatory}
               placeholder={e?.label}
               type={e?.type}
+              {...e}
             />
           ))}
         </div>
