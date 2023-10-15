@@ -25,9 +25,9 @@ const Hero = ({ id }) => {
       </div>
       <div className="title-hero-box mb-2">
         <span className="text-white text-title-hero">
-          <span className="text-outline text-title-hero">SHAPE</span> YOUR
+          <span className="text-outline text-title-hero">BUILD</span> YOUR BODY
         </span>
-        <span className="text-white text-title-hero">IDEAL BODY</span>
+        <span className="text-white text-title-hero">AND THEN FLEX IT</span>
       </div>
       <div className="title-hero-box mb-4">
         <span className="text-desc-title">
@@ -58,6 +58,12 @@ const Hero = ({ id }) => {
             borderColor: "#53F60F",
             color: "#53F60F",
           }}
+          onClick={() =>
+            window.open(
+              "https://api.whatsapp.com/send?phone=+62895378229030&text=Halo%20min!%20saya%20berminat%20untuk%20mendaftar%20member%20di%20Flex%20Gym%20and%20Cafe",
+              "_blank"
+            )
+          }
         >
           Kontak Kami
         </Button>

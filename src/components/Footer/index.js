@@ -91,7 +91,15 @@ const Footer = ({ scrollToDiv }) => {
           </Button>
         </div>
         <div className="d-flex w-25 text-right justify-content-end">
-          <Button color="transparent" onClick={() => {}}>
+          <Button
+            color="transparent"
+            onClick={() =>
+              window.open(
+                "https://api.whatsapp.com/send?phone=+62895378229030&text=Halo%20min!%20saya%20berminat%20untuk%20mendaftar%20member%20di%20Flex%20Gym%20and%20Cafe",
+                "_blank"
+              )
+            }
+          >
             <span style={{ color: "#53F60F", fontSize: 14 }}>
               WHATSAPP FLEX
             </span>
