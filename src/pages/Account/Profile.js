@@ -24,9 +24,9 @@ const Profile = () => {
       onClick: () => navigate("/account-payment"),
     },
     {
-      id: "extend-membership",
+      id: "renew-membership",
       label: "Perpanjang Member",
-      onClick: () => navigate("/update-profile"),
+      onClick: () => navigate("/renew-membership"),
     },
     {
       id: "change-password",
@@ -52,7 +52,7 @@ const Profile = () => {
         <div
           className="d-flex flex-row justify-content-start gap-2 align-items-center h-auto"
           style={{ cursor: "pointer" }}
-          onClick={() => navigate("/account")}
+          onClick={() => navigate(-1)}
         >
           <ChevronLeft color="white" style={{ width: 24, height: 24 }} />
           <span

@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "react-feather";
+import { ChevronLeft, ChevronRight, Upload } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
 import bcaIc from "../../assets/bca-removebg-preview 1.png";
 import buktiTransfer from "../../assets/Text Field.png";
-import { Button } from "reactstrap";
 import ProfPic from "../../assets/sporty girl workout.png";
 import { TextInput } from "../../components";
 import Edit from "../../assets/icon/edit.svg";
 import ModalPaymentType from "./ModalPaymentType";
+import { Input, Button } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PaymentForm = () => {
   const navigate = useNavigate();
@@ -18,6 +19,24 @@ const PaymentForm = () => {
   let isEditData = path.includes("edit-detail-transaction") ? true : false;
   const [dataPayment, setDataPayment] = useState({});
   const [openModal, setOpenModal] = useState(false);
+
+  const [ktp, setKtp] = useState({
+    foto: useRef(null),
+  });
+  const [bukti, setBukti] = useState({
+    foto: useRef(null),
+  });
+  const [imageKtp, setImageKtp] = useState({
+    preview: null,
+    raw: null,
+    fileName: null,
+  });
+
+  const [imageBuktiTransfer, setImageBukiTransfer] = useState({
+    preview: null,
+    raw: null,
+    fileName: null,
+  });
   const packageOption = [
     {
       id: "1month",
@@ -52,7 +71,89 @@ const PaymentForm = () => {
     },
   ];
   let data = dataTransaksi.find((e) => e?.id === parseInt(id));
-  console.log("cek data", dataPayment);
+
+  const handleUpload = (type) => {
+    let temp = null;
+    if (type === "ktp") {
+      temp = ktp.foto;
+    } else {
+      temp = bukti.foto;
+    }
+    temp.current.click();
+  };
+
+  const handleChangeImage = (e, type) => {
+    console.log("cek here", type);
+    let file = e.target.files[0];
+    // if (file?.size > 2097152) {
+    //   setOverSize(true);
+    //   setImage({
+    //     ...image,
+    //     preview: null,
+    //     raw: null,
+    //     fileName: null,
+    //   });
+    // } else {
+    //   setOverSize(false);
+    // }
+
+    // if (
+    //   file?.type !== 'application/pdf' &&
+    //   file?.type !== 'image/png' &&
+    //   file?.type !== 'image/jpeg' &&
+    //   file?.type !== 'image/jpg'
+    // ) {
+    //   setWrongFormat(true);
+    //   setImage({
+    //     ...image,
+    //     preview: null,
+    //     raw: null,
+    //     fileName: null,
+    //   });
+    // } else {
+    //   setWrongFormat(false);
+    // }
+
+    // if (
+    //   file?.size <= 2097152 &&
+    //   (file?.type === 'application/pdf' ||
+    //     file?.type === 'image/png' ||
+    //     file?.type === 'image/jpeg' ||
+    //     file?.type === 'image/jpg')
+    // ) {
+    //   setOverSize(false);
+    //   setWrongFormat(false);
+    if (type === "ktp") {
+      setImageKtp({
+        ...imageKtp,
+        preview: URL.createObjectURL(e.target.files[0]),
+        raw: Object.assign(e.target.files[0]),
+        fileName: e.target.files[0].name,
+      });
+    } else {
+      setImageBukiTransfer({
+        ...buktiTransfer,
+        preview: URL.createObjectURL(e.target.files[0]),
+        raw: Object.assign(e.target.files[0]),
+        fileName: e.target.files[0].name,
+      });
+    }
+    // uploadTransactionProof({
+    //   filename: `${moment().format('X')}_${e.target.files[0].name}`,
+    //   file: Object.assign(e.target.files[0], {
+    //     preview: URL.createObjectURL(e.target.files[0]),
+    //   }),
+    // });
+    // }
+
+    e.target.value = "";
+  };
+
+  useEffect(() => {
+    console.log("cek imageBuktiTransfer", imageBuktiTransfer);
+    console.log("cek imageKtp", imageKtp);
+  }, [imageBuktiTransfer, imageKtp]);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -75,7 +176,7 @@ const PaymentForm = () => {
         <div
           className="d-flex flex-row justify-content-start gap-2 align-items-center h-auto"
           style={{ cursor: "pointer" }}
-          onClick={() => navigate("/account")}
+          onClick={() => navigate(-1)}
         >
           <ChevronLeft color="white" style={{ width: 24, height: 24 }} />
           <span
@@ -245,6 +346,79 @@ const PaymentForm = () => {
             />
             {/* upload ktp */}
 
+            <div style={{ marginBottom: "24px" }}>
+              <input
+                type="file"
+                id="file"
+                ref={ktp?.foto}
+                onChange={(e) => handleChangeImage(e, "ktp")}
+                style={{ display: "none" }}
+                accept="image/jpg, image/jpeg, image/png, application/pdf"
+              />
+              <div className="d-flex flex-column justify-content-between">
+                <div
+                  className="upload-file-container"
+                  onClick={() => handleUpload("ktp")}
+                >
+                  {imageKtp?.fileName ? (
+                    <img
+                      className="d-flex cover"
+                      style={{ width: "191px", height: "93px" }}
+                      src={imageKtp?.preview}
+                    />
+                  ) : (
+                    <div className="d-flex flex-row gap-2 row-100 align-items-center">
+                      <Upload width={"24px"} height={"24px"} color="white" />
+                      <span
+                        style={{
+                          color: "#71747D",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        Upload Foto Identitas
+                      </span>
+                    </div>
+                  )}
+                </div>
+                {imageKtp?.fileName && imageKtp?.fileName !== "" && (
+                  <div>
+                    <span
+                      style={{
+                        color: "#999",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "0.5px",
+                      }}
+                    >
+                      {imageKtp?.fileName}
+                    </span>
+                  </div>
+                )}
+              </div>
+              {/* <div className="d-flex flex-column">
+                    {wrongFormat && (
+                      <span
+                        className="font-size-sm mt-2"
+                        style={{ color: '#F83245' }}>
+                        Jenis File harus PDF, JPEG, JPG, Or PNG
+                      </span>
+                    )}
+                    {overSize && (
+                      <span
+                        className="font-size-sm mt-2"
+                        style={{ color: '#F83245' }}>
+                        Maksimal ukuran file 2 MB
+                      </span>
+                    )}
+                  </div> */}
+            </div>
+
             {dataPayment?.paymentType?.accountId ? (
               <div className="d-flex flex-column gap-2 mt-2">
                 <span
@@ -323,6 +497,80 @@ const PaymentForm = () => {
               />
             )}
             {/* upload bukti pembayaran */}
+
+            <div style={{ marginBottom: "24px" }}>
+              <input
+                type="file"
+                id="file"
+                ref={bukti?.foto}
+                onChange={(e) => handleChangeImage(e, "bukti")}
+                style={{ display: "none" }}
+                accept="image/jpg, image/jpeg, image/png, application/pdf"
+              />
+              <div className="d-flex flex-column justify-content-between">
+                <div
+                  className="upload-file-container"
+                  onClick={() => handleUpload("bukti")}
+                >
+                  {imageBuktiTransfer?.fileName ? (
+                    <img
+                      className="d-flex cover"
+                      style={{ width: "191px", height: "93px" }}
+                      src={imageBuktiTransfer?.preview}
+                    />
+                  ) : (
+                    <div className="d-flex flex-row gap-2 row-100 align-items-center">
+                      <Upload width={"24px"} height={"24px"} color="white" />
+                      <span
+                        style={{
+                          color: "#71747D",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        Upload Files
+                      </span>
+                    </div>
+                  )}
+                </div>
+                {imageBuktiTransfer?.fileName &&
+                  imageBuktiTransfer?.fileName !== "" && (
+                    <div>
+                      <span
+                        style={{
+                          color: "#999",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "0.5px",
+                        }}
+                      >
+                        {imageBuktiTransfer?.fileName}
+                      </span>
+                    </div>
+                  )}
+              </div>
+              {/* <div className="d-flex flex-column">
+                    {wrongFormat && (
+                      <span
+                        className="font-size-sm mt-2"
+                        style={{ color: '#F83245' }}>
+                        Jenis File harus PDF, JPEG, JPG, Or PNG
+                      </span>
+                    )}
+                    {overSize && (
+                      <span
+                        className="font-size-sm mt-2"
+                        style={{ color: '#F83245' }}>
+                        Maksimal ukuran file 2 MB
+                      </span>
+                    )}
+                  </div> */}
+            </div>
           </div>
           <div className="d-flex flex-column gap-2">
             <span
