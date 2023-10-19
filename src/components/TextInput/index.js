@@ -111,7 +111,7 @@ function TextInput({
       {type === "dateWithPrepend" && (
         <input
           placeholder={placeholder}
-          className="form-input-control"
+          className="form-input-control p-2"
           type={"date"}
         />
       )}
