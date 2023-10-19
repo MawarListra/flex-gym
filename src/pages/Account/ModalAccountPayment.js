@@ -13,7 +13,7 @@ const ModalAccountPayment = ({
   setDataAccount,
   currIdx,
 }) => {
-  console.log("cek action", action);
+  console.log("cek action", datas);
   const [checkedType, setCheckedType] = useState(null);
   const [dataAccountPayment, setDataAccountPayment] = useState(
     action === "edit"
@@ -21,10 +21,49 @@ const ModalAccountPayment = ({
       : {
           type: "",
           name: "",
+          accountId: "",
           accountNumber: "",
         }
   );
   console.log("cek dataAccountPayment", dataAccountPayment);
+
+  const bankNameOption = [
+    {
+      id: "BCA",
+      name: "Bank Central Asia (BCA)",
+    },
+    {
+      id: "BRI",
+      name: "Bank Rakyat Indonesia (BRI)",
+    },
+    {
+      id: "BNI",
+      name: "Bank Negara Indonesia (BNI)",
+    },
+    {
+      id: "DANAMON",
+      name: "Bank Danamon",
+    },
+    {
+      id: "PERMATA",
+      name: "Bank Permata",
+    },
+  ];
+
+  const walletOption = [
+    {
+      id: "dana",
+      name: "Dana",
+    },
+    {
+      id: "shoppeePay",
+      name: "Shoppee Pay",
+    },
+    {
+      id: "ovo",
+      name: "OVO",
+    },
+  ];
 
   useEffect(() => {
     if (action === "edit") {
@@ -118,6 +157,18 @@ const ModalAccountPayment = ({
                 placeholder="Nama Bank"
                 isRequired={true}
                 type="select"
+                selectOption={bankNameOption}
+                value={dataAccountPayment?.accountId}
+                onChange={(e) => {
+                  console.log("cek e>>", e);
+                  setDataAccountPayment({
+                    ...dataAccountPayment,
+                    name: e?.name,
+                    accountId: e?.id,
+                  });
+                }}
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option.id}
               />
               <TextInput
                 name="accountNumber"
@@ -156,6 +207,18 @@ const ModalAccountPayment = ({
                 placeholder="Jenis E-Wallet"
                 isRequired={true}
                 type="select"
+                selectOption={walletOption}
+                value={dataAccountPayment?.accountId}
+                onChange={(e) => {
+                  console.log("cek e>>", e);
+                  setDataAccountPayment({
+                    ...dataAccountPayment,
+                    name: e?.name,
+                    accountId: e?.id,
+                  });
+                }}
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option.id}
               />
               <TextInput
                 name="phoneNumber"
@@ -225,6 +288,12 @@ const ModalAccountPayment = ({
                 backgroundColor: "transparent",
                 height: 48,
                 border: "none",
+              }}
+              onClick={() => {
+                let tempDataAccount = JSON.parse(JSON.stringify(dataAccount));
+                tempDataAccount.splice(currIdx, 1);
+                setDataAccount(tempDataAccount);
+                toggle();
               }}
             >
               <span

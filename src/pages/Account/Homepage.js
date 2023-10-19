@@ -150,7 +150,9 @@ const Homepage = () => {
                   color: "#53F60F",
                   textAlign: "right",
                   textDecoration: "underline",
+                  cursor: "pointer",
                 }}
+                onClick={() => navigate("/renew-membership")}
               >
                 Perpanjang Member
               </span>

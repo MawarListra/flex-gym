@@ -19,6 +19,8 @@ import Transaction from "./pages/Account/Transaction";
 import Profile from "./pages/Account/Profile";
 import EditProfile from "./pages/Account/EditProfile";
 import PaymentAccount from "./pages/Account/PaymentAccount";
+import EditTransactionData from "./pages/Account/PaymentForm";
+import ReNewMembership from "./pages/Account/PaymentForm";
 
 function App() {
   return (
@@ -33,9 +35,15 @@ function App() {
         <Route path="/otp-success" exac element={<SuccessOTP />} />
         <Route path="/account" exac element={<HomepageProfile />} />
         <Route path="/detail-transaction/:id" exac element={<Transaction />} />
+        <Route
+          path="/edit-detail-transaction/:id"
+          exac
+          element={<EditTransactionData />}
+        />
         <Route path="/profile" exac element={<Profile />} />
         <Route path="/update-profile" exac element={<EditProfile />} />
         <Route path="/account-payment" exac element={<PaymentAccount />} />
+        <Route path="/renew-membership" exac element={<ReNewMembership />} />
       </Routes>
       {/* </div> */}
     </Router>

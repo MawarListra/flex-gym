@@ -706,3 +706,12 @@ div::-webkit-scrollbar-thumb:hover {
     transform: translateX(-110%);
   }
 }
+
+.label-text-input {
+  color: #fff;
+  font-family: Nunito Sans;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 12px;
+}

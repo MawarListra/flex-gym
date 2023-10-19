@@ -392,6 +392,7 @@ const Transaction = () => {
                       borderBottomRightRadius: 0,
                       height: 48,
                     }}
+                    onClick={() => navigate(`/edit-detail-transaction/${id}`)}
                   >
                     <span
                       className="text-black"
