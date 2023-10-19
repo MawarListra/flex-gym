@@ -132,6 +132,7 @@ const Registrasi = () => {
                 borderBottomRightRadius: 0,
                 height: 48,
               }}
+              onClick={() => navigate("/verif-account")}
             >
               <span
                 className="text-black"

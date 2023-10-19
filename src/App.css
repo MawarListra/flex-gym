@@ -193,11 +193,13 @@ body {
     flex-shrink: 0;
     background-color: #18181c;
     border-radius: 10px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     padding: 24px;
+    gap: 16px;
   }
   .text-desc-title-categories {
+    display: flex;
     color: var(--Secondary, #999);
     text-align: center;
     font-feature-settings: "clig" off, "liga" off;
@@ -266,13 +268,13 @@ body {
 
   #dot1 {
     top: 430px; /* Adjust the vertical position of the first dot */
-    left: -70px; /* Adjust the horizontal position of the first dot */
+    left: -100px; /* Adjust the horizontal position of the first dot */
     filter: blur(150px);
   }
 
   #dot2 {
     top: 1200px; /* Adjust the vertical position of the second dot */
-    right: -70px; /* Adjust the horizontal position of the second dot */
+    right: -100px; /* Adjust the horizontal position of the second dot */
     filter: blur(150px);
   }
 
@@ -443,18 +445,15 @@ body {
   .box-facilities-card-categories {
     display: flex;
     flex-direction: column;
-    /* width: 343px; */
     width: 100%;
     height: 288px;
     flex-shrink: 0;
     background-color: #18181c;
     border-radius: 10px;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     padding: 32px;
-    /* padding-right: 32px;
-    padding-top: 24px;
-    padding-bottom: 24px; */
+    gap: 16px;
   }
   .text-desc-title-categories {
     color: var(--Secondary, #999);

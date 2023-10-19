@@ -26,11 +26,32 @@ const Homepage = () => {
     },
     {
       id: 1,
-      status: "gagal",
+      status: "failed",
+      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
+      tanggal: "17 Desember 2023",
+    },
+    {
+      id: 2,
+      status: "pending",
       pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
       tanggal: "17 Desember 2023",
     },
   ];
+
+  const statusMapper = {
+    success: {
+      text: "Pembelian Berhasil",
+      color: "#53F60F",
+    },
+    failed: {
+      text: "Pembelian Gagal",
+      color: "#F15C59",
+    },
+    pending: {
+      text: "Sedang Diproses",
+      color: "#FC9D05",
+    },
+  };
 
   useEffect(() => {
     QRCode.toDataURL(dataUser, option, (err, url) => {
@@ -176,12 +197,17 @@ const Homepage = () => {
               return (
                 <div
                   className="d-flex flex-row p-3 justify-content-between align-items-center"
-                  style={{ borderRadius: 5, border: "0.5px solid #C0C3CF" }}
+                  style={{
+                    borderRadius: 5,
+                    border: "0.5px solid #C0C3CF",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate(`/detail-transaction/${e?.id}`)}
                 >
                   <div className="d-flex flex-column justify-content-center gap-2">
                     <span
                       style={{
-                        color: e?.status === "success" ? "#53F60F" : "#F15C59",
+                        color: statusMapper[e?.status]?.color,
                         fontFamily: "Nunito Sans",
                         fontSize: 14,
                         fontStyle: "normal",
@@ -189,7 +215,7 @@ const Homepage = () => {
                         lineHeight: "18px",
                       }}
                     >
-                      Pembelian {e?.status === "success" ? "Berhasil" : "Gagal"}
+                      {statusMapper[e?.status]?.text}
                     </span>
                     <span
                       style={{
@@ -219,7 +245,6 @@ const Homepage = () => {
                   <div className="d-flex justify-content-center slign-items-center">
                     <ChevronRight
                       style={{ color: "#999", width: "24px", height: "24px" }}
-                      onClick={() => navigate(`/detail-transaction/${e?.id}`)}
                     />
                   </div>
                 </div>

@@ -18,6 +18,7 @@ import HomepageProfile from "./pages/Account/Homepage";
 import Transaction from "./pages/Account/Transaction";
 import Profile from "./pages/Account/Profile";
 import EditProfile from "./pages/Account/EditProfile";
+import PaymentAccount from "./pages/Account/PaymentAccount";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/detail-transaction/:id" exac element={<Transaction />} />
         <Route path="/profile" exac element={<Profile />} />
         <Route path="/update-profile" exac element={<EditProfile />} />
+        <Route path="/account-payment" exac element={<PaymentAccount />} />
       </Routes>
       {/* </div> */}
     </Router>

@@ -9,30 +9,29 @@ const Facilities = () => {
     {
       id: "cardio",
       icon: CardioIc,
-      title: "CARDIO AREA",
+      title: "Gym Area",
       description:
-        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+        "Memiliki tempat luas bertemakan industrial dan pemandangan yang asri membuat latihan Anda menjadi lebih nyaman",
     },
     {
       id: "free-weight",
       icon: FreeWeightIc,
-      title: "FREE WEIGHT",
+      title: "Cardio Area",
       description:
-        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+        "Dengan berbagai pilihan alat cardio ditemani pemandangan yang asri membuat cardio anda menjadi tidak bosan",
     },
     {
       id: "yoga",
       icon: YogaIc,
-      title: "YOGA AREA",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+      title: "Cafe Area",
+      description: "Tempat bercengkrama dan berbagi tawa bersama teman teman",
     },
     {
       id: "boxing",
       icon: BoxingIc,
-      title: "BOXING AREA",
+      title: "Multipurpose Area",
       description:
-        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
+        " Ruang berbagai program kelas olahraga dilengkapi fasilitas AC",
     },
   ];
   console.log("cek listdata", listData);
@@ -62,22 +61,26 @@ const Facilities = () => {
       <div className="box-facilities-card mt-4">
         {listData.map((item, i) => (
           <div key={item?.id} className="box-facilities-card-categories">
-            <div className="d-flex justify-content-center w-100">
-              <img
-                className="d-flex w-auto h-auto"
-                src={item?.icon}
-                alt={`icon-facilities + ${i}`}
-              />
+            <div className="d-flex flex-column justify-content-between gap-4">
+              <div className="d-flex justify-content-center w-100">
+                <img
+                  className="d-flex w-auto h-auto"
+                  src={item?.icon}
+                  alt={`icon-facilities + ${i}`}
+                />
+              </div>
+              <span
+                className="text-white text-title-card"
+                style={{ fontWeight: "bold" }}
+              >
+                {item?.title}
+              </span>
             </div>
-            <span
-              className="text-white text-title-card"
-              style={{ fontWeight: "bold" }}
-            >
-              {item?.title}
-            </span>
-            <span className="text-desc-title-categories">
-              {item?.description}
-            </span>
+            <div className="d-flex">
+              <span className="text-desc-title-categories">
+                {item?.description}
+              </span>
+            </div>
           </div>
         ))}
       </div>

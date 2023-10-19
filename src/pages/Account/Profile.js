@@ -21,7 +21,7 @@ const Profile = () => {
     {
       id: "manage-payment-account",
       label: "Kelola Akun Pembayaran",
-      onClick: () => navigate("/update-profile"),
+      onClick: () => navigate("/account-payment"),
     },
     {
       id: "extend-membership",
@@ -132,7 +132,11 @@ const Profile = () => {
               return (
                 <div
                   className="d-flex flex-row justify-content-between align-items-center w-100 py-2"
-                  style={{ borderBottom: "0.5px solid #999" }}
+                  style={{
+                    borderBottom: "0.5px solid #999",
+                    cursor: "pointer",
+                  }}
+                  onClick={e?.onClick}
                 >
                   <span
                     style={{
@@ -153,9 +157,7 @@ const Profile = () => {
                       width: 24,
                       height: 24,
                       color: e?.id === "logout" ? "#F15C59" : "#FFF",
-                      cursor: "pointer",
                     }}
-                    onClick={e?.onClick}
                   />
                 </div>
               );

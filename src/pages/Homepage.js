@@ -123,11 +123,9 @@ const Homepage = () => {
       <Hero id="home" />
       <div className="dot" id="dot1"></div>
       <Location id="contact" />
-
       <div className="dot" id="dot2"></div>
       <Facilities />
       <Program id="program" />
-
       <div className="dot" id="dot3"></div>
       <Pricing id="package" />
       <BannerJoin />

@@ -20,11 +20,31 @@ const Transaction = () => {
     },
     {
       id: 1,
-      status: "gagal",
+      status: "failed",
+      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
+      tanggal: "17 Desember 2023",
+    },
+    {
+      id: 2,
+      status: "pending",
       pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
       tanggal: "17 Desember 2023",
     },
   ];
+  const statusMapper = {
+    success: {
+      text: "Pembelian Berhasil",
+      color: "#53F60F",
+    },
+    failed: {
+      text: "Pembelian Gagal",
+      color: "#F15C59",
+    },
+    pending: {
+      text: "Sedang Diproses",
+      color: "#FC9D05",
+    },
+  };
   let data = dataTransaksi.find((e) => e?.id === parseInt(id));
   console.log("cek data", data);
   return (
@@ -55,7 +75,7 @@ const Transaction = () => {
             Detail Transaksi
           </span>
         </div>
-        {data?.status === "gagal" ? (
+        {data?.status === "failed" ? (
           <div
             className="d-flex flex-row p-2  align-items-center"
             style={{ borderRadius: 5, background: "#FEE" }}
@@ -94,7 +114,7 @@ const Transaction = () => {
             </span>
             <span
               style={{
-                color: data?.status === "success" ? "#53F60F" : "#F15C59",
+                color: statusMapper[data?.status]?.color,
                 fontFamily: "Nunito Sans",
                 fontSize: "14px",
                 fontStyle: "normal",
@@ -102,7 +122,7 @@ const Transaction = () => {
                 lineHeight: "18px",
               }}
             >
-              Pembelian {data?.status === "success" ? "Berhasil" : "Gagal"}
+              {statusMapper[data?.status]?.text}
             </span>
           </div>
           <div className="d-flex flex-row justify-content-between align-items-center">
@@ -361,7 +381,7 @@ const Transaction = () => {
                 2029172_Buktitransfer.jpg{" "}
               </span>
             </div>
-            {data?.status === "gagal" && (
+            {data?.status === "failed" && (
               <div className="d-flex flex-column h-100 justify-content-end gap-4 mt-4">
                 <div className="d-flex w-100">
                   <Button

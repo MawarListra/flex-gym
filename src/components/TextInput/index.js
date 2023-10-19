@@ -56,7 +56,7 @@ function TextInput({
   }, [type, value]);
 
   return (
-    <>
+    <div className="pb-2">
       {label && (
         <small className={clsx(labelClassName, labelClassAdditional)}>
           {label} {isRequired && <span style={labelStyle}> *</span>}
@@ -71,7 +71,10 @@ function TextInput({
           )}
           <Input
             type={type}
-            className={"form-input-control placeholder:placeholder-input" || ""}
+            className={
+              "form-input-control placeholder:placeholder-input placeholder:px-0" ||
+              ""
+            }
             name={name}
             id={name}
             placeholder={placeholder}
@@ -228,7 +231,7 @@ function TextInput({
           {...props}
         />
       )}
-    </>
+    </div>
   );
 }
 
