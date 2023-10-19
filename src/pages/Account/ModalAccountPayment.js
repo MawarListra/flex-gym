@@ -9,6 +9,9 @@ const ModalAccountPayment = ({
   toggle,
   datas,
   setDatas,
+  dataAccount,
+  setDataAccount,
+  currIdx,
 }) => {
   console.log("cek action", action);
   const [checkedType, setCheckedType] = useState(null);
@@ -179,6 +182,25 @@ const ModalAccountPayment = ({
               borderTopLeftRadius: 0,
               borderBottomRightRadius: 0,
               height: 48,
+            }}
+            onClick={() => {
+              if (action === "add") {
+                setDataAccount([
+                  ...dataAccount,
+                  {
+                    ...dataAccountPayment,
+                    type: checkedType ? "bank" : "wallet",
+                  },
+                ]);
+              } else {
+                let tempDataAccount = JSON.parse(JSON.stringify(dataAccount));
+                tempDataAccount[currIdx] = {
+                  ...dataAccountPayment,
+                  type: checkedType ? "bank" : "wallet",
+                };
+                setDataAccount(tempDataAccount);
+              }
+              toggle();
             }}
           >
             <span

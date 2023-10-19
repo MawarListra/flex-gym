@@ -10,19 +10,9 @@ const PaymentAccount = () => {
   const navigate = useNavigate();
   const [openModal, setOpenModal] = useState(false);
   const [actionModal, setActionModal] = useState("add");
-  const [dataAccountPayment, setDataAccountPayment] = useState([
-    {
-      type: "wallet",
-      name: "Dana",
-      accountNumber: "081289727869",
-    },
-    {
-      type: "bank",
-      name: "BCA",
-      accountNumber: "6815201101",
-    },
-  ]);
+  const [dataAccountPayment, setDataAccountPayment] = useState([]);
   const [currentData, setCurrentData] = useState({});
+  const [currIdx, setCurrIdx] = useState(-1);
   console.log("cek currentData", currentData);
 
   useEffect(() => {
@@ -45,6 +35,9 @@ const PaymentAccount = () => {
           }}
           datas={currentData}
           setDatas={setCurrentData}
+          dataAccount={dataAccountPayment}
+          setDataAccount={setDataAccountPayment}
+          currIdx={currIdx}
         />
       )}
       <div
@@ -107,6 +100,7 @@ const PaymentAccount = () => {
                   }}
                   onClick={() => {
                     setCurrentData({ ...e });
+                    setCurrIdx(i);
                     setActionModal("edit");
                     // setOpenModal(true);
                   }}

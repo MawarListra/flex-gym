@@ -40,7 +40,7 @@ const Footer = ({ scrollToDiv }) => {
               HOME
             </span>
           </Button>
-          <Button
+          {/* <Button
             color="transparent"
             onClick={() => {
               scrollToDiv("program");
@@ -63,7 +63,7 @@ const Footer = ({ scrollToDiv }) => {
             >
               PROGRAM
             </span>
-          </Button>
+          </Button> */}
           <Button
             color="transparent"
             onClick={() => {
@@ -135,7 +135,7 @@ const Footer = ({ scrollToDiv }) => {
             HOME
           </span>
         </Button>
-        <Button
+        {/* <Button
           color="transparent"
           onClick={() => {
             scrollToDiv("program");
@@ -158,7 +158,7 @@ const Footer = ({ scrollToDiv }) => {
           >
             PROGRAM
           </span>
-        </Button>
+        </Button> */}
         <Button
           color="transparent"
           onClick={() => {

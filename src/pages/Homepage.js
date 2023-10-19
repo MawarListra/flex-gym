@@ -20,10 +20,10 @@ const Homepage = () => {
       id: "home",
       label: "HOME",
     },
-    {
-      id: "program",
-      label: "PROGRAM",
-    },
+    // {
+    //   id: "program",
+    //   label: "PROGRAM",
+    // },
     {
       id: "package",
       label: "PAKET",
@@ -125,7 +125,7 @@ const Homepage = () => {
       <Location id="contact" />
       <div className="dot" id="dot2"></div>
       <Facilities />
-      <Program id="program" />
+      {/* <Program id="program" /> */}
       <div className="dot" id="dot3"></div>
       <Pricing id="package" />
       <BannerJoin />
