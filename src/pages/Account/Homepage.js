@@ -9,6 +9,7 @@ import axios from "axios";
 import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
+import { statusMapper } from "../../utils/statusMapper";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -33,47 +34,12 @@ const Homepage = () => {
     flexShrink: 0,
     margin: 1,
   };
-  const dataTransaksi = [
-    {
-      id: 0,
-      status: "success",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-    {
-      id: 1,
-      status: "failed",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-    {
-      id: 2,
-      status: "pending",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-  ];
-
-  const statusMapper = {
-    success: {
-      text: "Pembelian Berhasil",
-      color: "#53F60F",
-    },
-    failed: {
-      text: "Pembelian Gagal",
-      color: "#F15C59",
-    },
-    pending: {
-      text: "Sedang Diproses",
-      color: "#FC9D05",
-    },
-  };
 
   const getTransactionHistory = async () => {
     setIsLoading(true);
     try {
       const respHistory = await axios.get(
-        `${baseUrl}v1/member/historytransaction?page=1&pagesize=3`,
+        `${baseUrl}v1/member/historytransaction?page=1&pagesize=100`,
         config
       );
       console.log("cek respHistory", respHistory);
@@ -125,6 +91,13 @@ const Homepage = () => {
       localStorage.setItem("dataProfile", JSON.stringify(data));
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div
@@ -267,7 +240,10 @@ const Homepage = () => {
           >
             History Pembelian
           </span>
-          <div className="d-flex flex-column justify-content-between gap-3 mt-2">
+          <div
+            className="d-flex flex-column justify-content-between gap-3 mt-2"
+            style={{ maxHeight: "30vh", overflowY: "scroll" }}
+          >
             {isLoading ? (
               <ReactLoading
                 type="bars"
@@ -296,7 +272,7 @@ const Homepage = () => {
                     <div className="d-flex flex-column justify-content-center gap-2">
                       <span
                         style={{
-                          color: statusMapper[e?.status]?.color,
+                          color: statusMapper(e?.is_accepted)?.color,
                           fontFamily: "Nunito Sans",
                           fontSize: 14,
                           fontStyle: "normal",
@@ -304,7 +280,7 @@ const Homepage = () => {
                           lineHeight: "18px",
                         }}
                       >
-                        {statusMapper[e?.status]?.text}
+                        {statusMapper(e?.is_accepted)?.text}
                       </span>
                       <span
                         style={{
@@ -316,7 +292,7 @@ const Homepage = () => {
                           lineHeight: "18px",
                         }}
                       >
-                        {e?.pembelian}
+                        {e?.package?.name}
                       </span>
                       <span
                         style={{
@@ -328,7 +304,7 @@ const Homepage = () => {
                           lineHeight: "16px",
                         }}
                       >
-                        {moment(e?.createdAt).format("DD MMMM YYYY")}
+                        {moment(e?.payment_date).format("DD MMMM YYYY")}
                       </span>
                     </div>
                     <div className="d-flex justify-content-center slign-items-center">

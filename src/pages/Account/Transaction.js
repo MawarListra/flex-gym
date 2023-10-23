@@ -1,52 +1,113 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
 import bcaIc from "../../assets/bca-removebg-preview 1.png";
 import buktiTransfer from "../../assets/Text Field.png";
 import { Button } from "reactstrap";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
+import { currencyFormatter } from "../../utils/currencyFormatter";
+import { statusMapper } from "../../utils/statusMapper";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const Transaction = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  console.log("cek id", id);
+  const token = localStorage.getItem("token");
 
-  const dataTransaksi = [
-    {
-      id: 0,
-      status: "success",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-    {
-      id: 1,
-      status: "failed",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-    {
-      id: 2,
-      status: "pending",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-  ];
-  const statusMapper = {
-    success: {
-      text: "Pembelian Berhasil",
-      color: "#53F60F",
-    },
-    failed: {
-      text: "Pembelian Gagal",
-      color: "#F15C59",
-    },
-    pending: {
-      text: "Sedang Diproses",
-      color: "#FC9D05",
+  console.log("cek id", id);
+  const [listAccountPayment, setListAccountPayment] = useState([]);
+  const [dataAccountPayment, setDataAccountPayment] = useState({});
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
     },
   };
-  let data = dataTransaksi.find((e) => e?.id === parseInt(id));
-  console.log("cek data", data);
+  const data = JSON.parse(localStorage.getItem("currDataTransaction"));
+
+  const [bankOption, setBankOption] = useState([]);
+  const [walletOption, setWalletOption] = useState([]);
+
+  const getBankList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/1`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setBankOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getWalletList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/2`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setWalletOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getListAccountPayment = async () => {
+    try {
+      const resp = await axios.get(
+        `${baseUrl}v1/payment_method/getall`,
+        config
+      );
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setListAccountPayment(resp?.data?.data);
+      } else {
+        toast.error("Gagal mendapatkan data. Silahkan reload page");
+      }
+    } catch (e) {
+      toast.error("Gagal mendapatkan data. Silahkan reload page");
+      console.log("cek err", e);
+    }
+  };
+
+  const hitungTotal = () => {
+    let val = 0;
+    if (data) {
+      val = Math.abs((data?.package?.price || 0) + (data?.admin_fee || 0));
+    }
+
+    return val;
+  };
+
+  useEffect(() => {
+    getListAccountPayment();
+    getBankList();
+    getWalletList();
+  }, []);
+
+  useEffect(() => {
+    if (listAccountPayment?.length) {
+      let found = listAccountPayment.find(
+        (el) => el?.id === data?.payment_method_id
+      );
+      if (found) {
+        setDataAccountPayment({ ...found });
+      }
+    }
+  }, [listAccountPayment]);
+
+  console.log("cek url image", `${baseUrl}${data?.approval_photo}`);
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -75,7 +136,7 @@ const Transaction = () => {
             Detail Transaksi
           </span>
         </div>
-        {data?.status === "failed" ? (
+        {statusMapper(data?.is_accepted)?.status === "failed" ? (
           <div
             className="d-flex flex-row p-2  align-items-center"
             style={{ borderRadius: 5, background: "#FEE" }}
@@ -114,7 +175,7 @@ const Transaction = () => {
             </span>
             <span
               style={{
-                color: statusMapper[data?.status]?.color,
+                color: statusMapper(data?.is_accepted)?.color,
                 fontFamily: "Nunito Sans",
                 fontSize: "14px",
                 fontStyle: "normal",
@@ -122,7 +183,7 @@ const Transaction = () => {
                 lineHeight: "18px",
               }}
             >
-              {statusMapper[data?.status]?.text}
+              {statusMapper(data?.is_accepted)?.text}
             </span>
           </div>
           <div className="d-flex flex-row justify-content-between align-items-center">
@@ -148,7 +209,7 @@ const Transaction = () => {
                 lineHeight: "18px",
               }}
             >
-              17 Desember 2023
+              {moment(data?.payment_date).format("DD MMMM YYYY")}
             </span>
           </div>
         </div>
@@ -192,7 +253,13 @@ const Transaction = () => {
                   lineHeight: "16px",
                 }}
               >
-                BCA
+                {dataAccountPayment?.payment_type_id === 1
+                  ? bankOption.find(
+                      (v) => v?.id === parseInt(dataAccountPayment?.bank_name)
+                    )?.name
+                  : walletOption.find(
+                      (v) => v?.id === parseInt(dataAccountPayment?.ewallet)
+                    )?.name}
               </span>
               <span
                 style={{
@@ -204,7 +271,11 @@ const Transaction = () => {
                   lineHeight: "18px",
                 }}
               >
-                0373416514 a/n Andrianto Rendragraha
+                {dataAccountPayment?.payment_type_id === 1
+                  ? dataAccountPayment?.bank_number +
+                    "a/n" +
+                    dataAccountPayment?.bank_account_name
+                  : dataAccountPayment?.phone}
               </span>
             </div>
           </div>
@@ -256,7 +327,7 @@ const Transaction = () => {
               </div>
             </div>
             <div
-              className="d-flex flex-column justify-content-between p-3 gap-3"
+              className="d-flex flex-column justify-content-between p-3 gap-3 mt-2"
               style={{ borderRadius: "5px", border: "0.5px solid #C0C3CF" }}
             >
               <div className="d-flex flex-row justify-content-between">
@@ -283,7 +354,9 @@ const Transaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  1 Bulan 150.000
+                  {data?.package?.name +
+                    " " +
+                    currencyFormatter(data?.package?.price)}
                 </span>
               </div>
               <div className="d-flex flex-row justify-content-between">
@@ -310,7 +383,7 @@ const Transaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  Rp50.000
+                  {currencyFormatter(data?.admin_fee)}
                 </span>
               </div>
               <div style={{ borderBottom: "0.5px solid #999" }}></div>
@@ -338,7 +411,7 @@ const Transaction = () => {
                     textAlign: "right",
                   }}
                 >
-                  Rp200.000
+                  {currencyFormatter(hitungTotal())}
                 </span>
               </div>
             </div>
@@ -365,7 +438,16 @@ const Transaction = () => {
                   flexShrink: 0,
                 }}
               >
-                <img src={buktiTransfer} />
+                <img
+                  className="d-flex"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "contain",
+                  }}
+                  src={`${baseUrl}${data?.approval_photo}`}
+                  alt="bukti-transfer"
+                />
               </div>
               <span
                 className="mt-2"
@@ -378,10 +460,12 @@ const Transaction = () => {
                   lineHeight: "0.5px",
                 }}
               >
-                2029172_Buktitransfer.jpg{" "}
+                {data?.approval_image_name
+                  ? data?.approval_image_name
+                  : "Bukti transfer.png"}
               </span>
             </div>
-            {data?.status === "failed" && (
+            {statusMapper(data?.is_accepted)?.status === "failed" && (
               <div className="d-flex flex-column h-100 justify-content-end gap-4 mt-4">
                 <div className="d-flex w-100">
                   <Button
@@ -392,7 +476,10 @@ const Transaction = () => {
                       borderBottomRightRadius: 0,
                       height: 48,
                     }}
-                    onClick={() => navigate(`/edit-detail-transaction/${id}`)}
+                    onClick={() => {
+                      localStorage.setItem("dataToEdit", JSON.stringify(data));
+                      navigate(`/edit-detail-transaction/${id}`);
+                    }}
                   >
                     <span
                       className="text-black"

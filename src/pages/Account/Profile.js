@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
@@ -6,10 +6,12 @@ import bcaIc from "../../assets/bca-removebg-preview 1.png";
 import buktiTransfer from "../../assets/Text Field.png";
 import { Button } from "reactstrap";
 import ProfPic from "../../assets/sporty girl workout.png";
+import toast, { Toaster } from "react-hot-toast";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const token = localStorage.getItem("token");
   console.log("cek id", id);
   const dataUser = JSON.parse(localStorage.getItem("dataProfile"));
   console.log("cek datauser", dataUser);
@@ -38,17 +40,25 @@ const Profile = () => {
       id: "logout",
       label: "Logout",
       onClick: () => {
-        navigate("/");
+        navigate("/login");
         localStorage.setItem("token", "");
       },
     },
   ];
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       <div
         className="d-flex flex-column p-3 w-100 gap-2"
         style={{ minHeight: "100vh" }}

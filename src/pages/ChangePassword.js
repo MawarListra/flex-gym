@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -67,6 +67,13 @@ const ChangePassword = () => {
       console.log("cek err", e);
     }
   };
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div

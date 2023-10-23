@@ -16,6 +16,7 @@ import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
 import Select from "react-select";
 import { currencyFormatter } from "../../utils/currencyFormatter";
+import { statusMapper } from "../../utils/statusMapper";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -59,7 +60,6 @@ const PaymentForm = () => {
   });
 
   let data = JSON.parse(localStorage.getItem("currDataTransaction"));
-  console.log("cek currDataTransaction >>>>", data);
 
   const handleUpload = (type) => {
     let temp = null;
@@ -77,7 +77,6 @@ const PaymentForm = () => {
       console.error("No file selected");
       return;
     }
-    console.log("cek here file", file);
 
     // Validate file type (for example, allow only image files)
     const allowedTypes = ["image/jpeg", "image/png"];
@@ -158,9 +157,7 @@ const PaymentForm = () => {
     payload.append("approval_photo", imageBuktiTransfer.raw);
     payload.append("identity", imageKtp.raw);
     payload.append("approval_image_nam", imageBuktiTransfer?.fileName);
-    for (const pair of payload.entries()) {
-      console.log("cek datas>>>", pair[0] + ", " + pair[1]);
-    }
+
     try {
       const resp = await axios.post(
         `${baseUrl}v1/member/transactioncreate`,
@@ -176,11 +173,22 @@ const PaymentForm = () => {
         setIsLoading(false);
         toast.success("Pembayaran berhasil!");
         navigate(`/account`);
+        localStorage.setItem("currDataTransaction", null);
       }
     } catch (e) {
       toast.error("Pembayaran gagal!");
       console.log("cek err", e);
     }
+  };
+
+  const hitungTotal = () => {
+    let val = 0;
+    val = Math.abs(
+      (dataPayment?.packagePrice || 0) +
+        (dataProfileTransaction?.admin_fee || dataPayment?.admin_fee || 0)
+    );
+
+    return val;
   };
 
   useEffect(() => {
@@ -193,6 +201,46 @@ const PaymentForm = () => {
   useEffect(() => {
     console.log("cek dataPayment", dataPayment);
   }, [dataPayment]);
+
+  useEffect(() => {
+    if (isEditData) {
+      setDataPayment({
+        ktpNumber: data?.identity_number,
+        packageId: data?.package_id,
+        paymentType: {
+          id: data?.payment_method_id,
+          bank_name: data?.bank_name,
+          ewallet: data?.ewallet,
+          payment_type_id: data?.payment_method_id,
+          bank_number: data?.bank_number,
+          phone: data?.phone,
+        },
+        admin_fee: data?.admin_fee,
+        packagePrice: data?.package?.price,
+        packageName: data?.package?.name,
+      });
+
+      setImageKtp({
+        raw: data?.identity,
+        preview: `${baseUrl}${data?.identity}`,
+        fileName: "Foto Ktp.png",
+      });
+      setImageBukiTransfer({
+        raw: data?.approval_photo,
+        preview: `${baseUrl}${data?.approval_photo}`,
+        fileName: data?.approval_image_name,
+      });
+    } else {
+      localStorage.setItem("currDataTransaction", null);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div
@@ -235,7 +283,7 @@ const PaymentForm = () => {
             {isEditData ? "Ubah Data" : "Perpanjang Membership"}
           </span>
         </div>
-        {data?.status === "gagal" || isEditData ? (
+        {statusMapper(data?.is_accepted)?.status === "failed" || isEditData ? (
           <div
             className="d-flex flex-row p-2  align-items-center"
             style={{ borderRadius: 5, background: "#FEE" }}
@@ -831,7 +879,11 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  {dataPayment?.packageName || "-"}
+                  {dataPayment?.packageName
+                    ? dataPayment?.packageName +
+                      " " +
+                      currencyFormatter(dataPayment?.packagePrice)
+                    : "-"}
                 </span>
               </div>
               <div className="d-flex flex-row justify-content-between">
@@ -858,7 +910,11 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  {currencyFormatter(dataProfileTransaction?.admin || 0)}
+                  {currencyFormatter(
+                    dataProfileTransaction?.admin_fee ||
+                      dataPayment?.admin_fee ||
+                      0
+                  )}
                 </span>
               </div>
               <div style={{ borderBottom: "0.5px solid #999" }}></div>
@@ -886,12 +942,7 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  {currencyFormatter(
-                    Math.abs(
-                      (dataPayment?.packagePrice || 0) +
-                        (dataProfileTransaction?.admin || 0)
-                    )
-                  )}
+                  {currencyFormatter(hitungTotal())}
                 </span>
               </div>
             </div>

@@ -53,7 +53,7 @@ const EditProfile = () => {
     };
     try {
       const resp = await axios.put(
-        `${baseUrl}v1/member/updateprofile`,
+        `${baseUrl}v1/member/updatedetail`,
         data,
         config
       );
@@ -71,6 +71,13 @@ const EditProfile = () => {
       console.log("cek err", e);
     }
   };
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div
