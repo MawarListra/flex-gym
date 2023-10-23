@@ -1,31 +1,100 @@
 import React, { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "react-feather";
+import { Cast, ChevronLeft, ChevronRight } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { TextInput } from "../../components";
 import Logo from "../../assets/Logo.png";
 import ModalAccountPayment from "./ModalAccountPayment";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const PaymentAccount = () => {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const [openModal, setOpenModal] = useState(false);
   const [actionModal, setActionModal] = useState("add");
   const [dataAccountPayment, setDataAccountPayment] = useState([]);
   const [currentData, setCurrentData] = useState({});
   const [currIdx, setCurrIdx] = useState(-1);
+  const [bankOption, setBankOption] = useState([]);
+  const [walletOption, setWalletOption] = useState([]);
+
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  };
   console.log("cek currentData", currentData);
 
+  const getBankList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/1`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setBankOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getWalletList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/2`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setWalletOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getListAccountPayment = async () => {
+    try {
+      const resp = await axios.get(
+        `${baseUrl}v1/payment_method/getall`,
+        config
+      );
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setDataAccountPayment(resp?.data?.data);
+      } else {
+        toast.error("Gagal mendapatkan data. Silahkan reload page");
+      }
+    } catch (e) {
+      toast.error("Gagal mendapatkan data. Silahkan reload page");
+      console.log("cek err", e);
+    }
+  };
+
   useEffect(() => {
-    if (currentData?.type) {
+    if (currentData?.id) {
       setOpenModal(true);
     }
   }, [currentData]);
+
+  useEffect(() => {
+    getBankList();
+    getWalletList();
+    getListAccountPayment();
+  }, []);
+
+  useEffect(() => {
+    if (!token || token === "") {
+      toast.error("Session anda habis. Silahkan login kembali");
+      navigate("/login");
+    }
+  }, [token]);
 
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       {openModal && (
         <ModalAccountPayment
           open={openModal}
@@ -38,6 +107,9 @@ const PaymentAccount = () => {
           dataAccount={dataAccountPayment}
           setDataAccount={setDataAccountPayment}
           currIdx={currIdx}
+          bankOption={bankOption}
+          walletOption={walletOption}
+          loadData={getListAccountPayment}
         />
       )}
       <div
@@ -100,9 +172,8 @@ const PaymentAccount = () => {
                   }}
                   onClick={() => {
                     setCurrentData({ ...e });
-                    setCurrIdx(i);
+                    setCurrIdx(e?.id);
                     setActionModal("edit");
-                    // setOpenModal(true);
                   }}
                 >
                   <div className="d-flex flex-column">
@@ -116,7 +187,13 @@ const PaymentAccount = () => {
                         lineHeight: "16px",
                       }}
                     >
-                      {e?.name}
+                      {e?.payment_type_id === 1
+                        ? bankOption.find(
+                            (el) => el?.id === parseInt(e?.bank_name)
+                          )?.name
+                        : walletOption.find(
+                            (el) => el?.id === parseInt(e?.ewallet)
+                          )?.name || "-"}
                     </span>
                     <span
                       style={{
@@ -128,7 +205,9 @@ const PaymentAccount = () => {
                         lineHeight: "18px",
                       }}
                     >
-                      {e?.accountNumber}
+                      {e?.payment_type_id === 1
+                        ? e?.bank_number
+                        : e?.phone || "-"}
                     </span>
                   </div>
                   <div className="d-flex flex-row justify-content-center align-items-center ">

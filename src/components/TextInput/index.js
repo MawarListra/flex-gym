@@ -113,6 +113,7 @@ function TextInput({
           placeholder={placeholder}
           className="form-input-control p-2"
           type={"date"}
+          onChange={handleChange}
         />
       )}
       {type === "datetime" && (

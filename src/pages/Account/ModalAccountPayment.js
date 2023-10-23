@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Modal, ModalHeader, ModalFooter, ModalBody, Button } from "reactstrap";
 import { TextInput } from "../../components";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+import Select from "react-select";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const ModalAccountPayment = ({
   action,
@@ -12,62 +18,109 @@ const ModalAccountPayment = ({
   dataAccount,
   setDataAccount,
   currIdx,
+  bankOption,
+  walletOption,
+  loadData,
 }) => {
-  console.log("cek action", datas);
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  };
+  const [isLoading, setIsLoading] = useState(false);
   const [checkedType, setCheckedType] = useState(null);
   const [dataAccountPayment, setDataAccountPayment] = useState(
     action === "edit"
       ? datas
       : {
           type: "",
-          name: "",
-          accountId: "",
-          accountNumber: "",
+          bank_name: "",
+          ewallet: "",
+          bank_acount: "",
+          bank_number: "",
+          phone: "",
+          bank_account_name: "",
         }
   );
   console.log("cek dataAccountPayment", dataAccountPayment);
 
-  const bankNameOption = [
-    {
-      id: "BCA",
-      name: "Bank Central Asia (BCA)",
-    },
-    {
-      id: "BRI",
-      name: "Bank Rakyat Indonesia (BRI)",
-    },
-    {
-      id: "BNI",
-      name: "Bank Negara Indonesia (BNI)",
-    },
-    {
-      id: "DANAMON",
-      name: "Bank Danamon",
-    },
-    {
-      id: "PERMATA",
-      name: "Bank Permata",
-    },
-  ];
+  const handleSavePaymentAccount = async () => {
+    setIsLoading(true);
+    const payload = checkedType
+      ? {
+          payment_type_id: 1,
+          bank_name: dataAccountPayment?.bank_name,
+          bank_account: dataAccountPayment?.bank_acount,
+          bank_number: dataAccountPayment?.bank_number,
+          bank_account_name: dataAccountPayment?.bank_account_name,
+        }
+      : {
+          payment_type_id: 2,
+          ewallet: dataAccountPayment?.ewallet,
+          phone: dataAccountPayment?.phone,
+        };
+    const url =
+      action === "add"
+        ? "v1/payment_method/create"
+        : `v1/payment_method/update/${currIdx}`;
 
-  const walletOption = [
-    {
-      id: "dana",
-      name: "Dana",
-    },
-    {
-      id: "shoppeePay",
-      name: "Shoppee Pay",
-    },
-    {
-      id: "ovo",
-      name: "OVO",
-    },
-  ];
+    try {
+      const resp = await (action === "add"
+        ? axios.post(`${baseUrl}${url}`, payload, config)
+        : axios.put(`${baseUrl}${url}`, payload, config));
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        toast.success("Berhasil menyimpan");
+        setIsLoading(false);
+        toggle();
+        loadData();
+      } else {
+        toast.error("Gagal menyimpan. Silahkan coba lagi");
+        setIsLoading(false);
+        toggle();
+        loadData();
+      }
+    } catch (e) {
+      toast.error("Gagal menyimpan. Silahkan coba lagi");
+      setIsLoading(false);
+      toggle();
+      loadData();
+      console.log("cek err", e);
+    }
+  };
+
+  const handleDeleteAccountPayment = async () => {
+    setIsLoading(true);
+    try {
+      const resp = await axios.delete(
+        `${baseUrl}v1/payment_method/delete/${currIdx}`,
+        config
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setIsLoading(false);
+        toast.success("Berhasil menghapus data");
+        toggle();
+        loadData();
+      } else {
+        setIsLoading(false);
+        toast.error("Gagal menghapus data. Silahkan coba lagi");
+        toggle();
+        loadData();
+      }
+    } catch (e) {
+      setIsLoading(false);
+      toast.error("Gagal menghapus data. Silahkan coba lagi");
+      toggle();
+      loadData();
+      console.log("cek err", e);
+    }
+  };
 
   useEffect(() => {
     if (action === "edit") {
-      if (datas?.type === "bank") {
+      if (datas?.payment_type_id === 1) {
         setCheckedType(true);
       } else {
         setCheckedType(false);
@@ -76,6 +129,17 @@ const ModalAccountPayment = ({
       setCheckedType(true);
     }
   }, [datas]);
+
+  useEffect(() => {
+    console.log(
+      "cek dataAccountPayment?.bank_name",
+      parseInt(dataAccountPayment?.bank_name)
+    );
+    console.log(
+      "cek here >>> ",
+      bankOption.find((e) => e?.id === parseInt(dataAccountPayment?.bank_name))
+    );
+  }, [dataAccountPayment?.bank_name]);
 
   return (
     <Modal zIndex={2000} centered isOpen={open} toggle={toggle} size="sm">
@@ -151,36 +215,58 @@ const ModalAccountPayment = ({
           </div>
           {checkedType ? (
             <div className="d-flex flex-column">
-              <TextInput
-                name="bankName"
-                label="Nama Bank"
-                placeholder="Nama Bank"
-                isRequired={true}
-                type="select"
-                selectOption={bankNameOption}
-                value={dataAccountPayment?.accountId}
-                onChange={(e) => {
-                  console.log("cek e>>", e);
-                  setDataAccountPayment({
-                    ...dataAccountPayment,
-                    name: e?.name,
-                    accountId: e?.id,
-                  });
-                }}
-                getOptionLabel={(option) => option.name}
-                getOptionValue={(option) => option.id}
-              />
+              <div className="d-flex flex-column">
+                <small className="font-weight-bold pb-2 text-white d-block">
+                  Nama Bank
+                  <span style={{ color: "#F83245" }}> *</span>
+                </small>
+                <Select
+                  styles={{
+                    // Fixes the overlapping problem of the component
+                    menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                  }}
+                  height={48}
+                  // isDisabled={disabled}
+                  placeholder={"Nama Bank"}
+                  // isSearchable={search}
+                  options={bankOption}
+                  value={bankOption.find(
+                    (e) => e?.id === parseInt(dataAccountPayment?.bank_name)
+                  )}
+                  onChange={(e) =>
+                    setDataAccountPayment({
+                      ...dataAccountPayment,
+                      bank_name: e?.id,
+                    })
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  theme={(theme) => {
+                    return {
+                      ...theme,
+                      borderRadius: "0.29rem",
+                      borderWidth: 1,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "rgba(60,68,177,0.15)",
+                        primary50: "rgba(60,68,177,0.15)",
+                        primary: "#3c44b1",
+                      },
+                    };
+                  }}
+                />
+              </div>
               <TextInput
                 name="accountNumber"
                 label="Nomor Rekening"
                 placeholder="Nomor Rekening"
                 isRequired={true}
                 type="text"
-                value={dataAccountPayment?.accountNumber}
+                value={dataAccountPayment?.bank_number}
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    accountNumber: value,
+                    bank_number: value,
                   })
                 }
               />
@@ -190,47 +276,69 @@ const ModalAccountPayment = ({
                 placeholder="Nama Rekening"
                 isRequired={true}
                 type="text"
-                value={dataAccountPayment?.accountName}
+                value={dataAccountPayment?.bank_account_name}
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    accountName: value,
+                    bank_account_name: value,
                   })
                 }
               />
             </div>
           ) : (
             <div className="d-flex flex-column">
-              <TextInput
-                name="walletName"
-                label="Jenis E-Wallet"
-                placeholder="Jenis E-Wallet"
-                isRequired={true}
-                type="select"
-                selectOption={walletOption}
-                value={dataAccountPayment?.accountId}
-                onChange={(e) => {
-                  console.log("cek e>>", e);
-                  setDataAccountPayment({
-                    ...dataAccountPayment,
-                    name: e?.name,
-                    accountId: e?.id,
-                  });
-                }}
-                getOptionLabel={(option) => option.name}
-                getOptionValue={(option) => option.id}
-              />
+              <div className="d-flex flex-column">
+                <small className="font-weight-bold pb-2 text-white d-block">
+                  Jenis E-Wallet
+                  <span style={{ color: "#F83245" }}> *</span>
+                </small>
+                <Select
+                  styles={{
+                    // Fixes the overlapping problem of the component
+                    menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                  }}
+                  height={48}
+                  // isDisabled={disabled}
+                  placeholder={"Jenis E-Wallet"}
+                  // isSearchable={search}
+                  options={walletOption}
+                  value={walletOption.find(
+                    (e) => e?.id === parseInt(dataAccountPayment?.ewallet)
+                  )}
+                  onChange={(e) =>
+                    setDataAccountPayment({
+                      ...dataAccountPayment,
+                      ewallet: e?.id,
+                    })
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  theme={(theme) => {
+                    return {
+                      ...theme,
+                      borderRadius: "0.29rem",
+                      borderWidth: 1,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "rgba(60,68,177,0.15)",
+                        primary50: "rgba(60,68,177,0.15)",
+                        primary: "#3c44b1",
+                      },
+                    };
+                  }}
+                />
+              </div>
               <TextInput
                 name="phoneNumber"
                 label="Nomor Handphone"
                 placeholder="Nomor Handphone"
                 isRequired={true}
                 type="text"
-                value={dataAccountPayment?.accountNumber}
+                value={dataAccountPayment?.phone}
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    accountNumber: value,
+                    phone: value,
                   })
                 }
               />
@@ -247,39 +355,32 @@ const ModalAccountPayment = ({
               height: 48,
             }}
             onClick={() => {
-              if (action === "add") {
-                setDataAccount([
-                  ...dataAccount,
-                  {
-                    ...dataAccountPayment,
-                    type: checkedType ? "bank" : "wallet",
-                  },
-                ]);
-              } else {
-                let tempDataAccount = JSON.parse(JSON.stringify(dataAccount));
-                tempDataAccount[currIdx] = {
-                  ...dataAccountPayment,
-                  type: checkedType ? "bank" : "wallet",
-                };
-                setDataAccount(tempDataAccount);
-              }
-              toggle();
+              handleSavePaymentAccount();
             }}
           >
-            <span
-              className="text-black"
-              style={{
-                color: "#030304",
-                textAlign: "center",
-                fontFamily: "Nunito Sans",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontweight: 700,
-                lineheight: "18px" /* 128.571% */,
-              }}
-            >
-              Simpan
-            </span>
+            {isLoading ? (
+              <ReactLoading
+                type="spinningBubbles"
+                width={"1.5rem"}
+                height={"auto"}
+                color="white"
+              />
+            ) : (
+              <span
+                className="text-black"
+                style={{
+                  color: "#030304",
+                  textAlign: "center",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "14px",
+                  fontStyle: "normal",
+                  fontweight: 700,
+                  lineheight: "18px" /* 128.571% */,
+                }}
+              >
+                Simpan
+              </span>
+            )}
           </Button>
           {action === "edit" && (
             <Button
@@ -289,26 +390,33 @@ const ModalAccountPayment = ({
                 height: 48,
                 border: "none",
               }}
+              disabled={isLoading}
               onClick={() => {
-                let tempDataAccount = JSON.parse(JSON.stringify(dataAccount));
-                tempDataAccount.splice(currIdx, 1);
-                setDataAccount(tempDataAccount);
-                toggle();
+                handleDeleteAccountPayment();
               }}
             >
-              <span
-                style={{
-                  color: "#F15C59",
-                  textAlign: "center",
-                  fontFamily: "Nunito Sans",
-                  fontSize: "14px",
-                  fontStyle: "normal",
-                  fontweight: 700,
-                  lineheight: "18px" /* 128.571% */,
-                }}
-              >
-                Hapus
-              </span>
+              {isLoading ? (
+                <ReactLoading
+                  type="spinningBubbles"
+                  width={"1.5rem"}
+                  height={"auto"}
+                  color="white"
+                />
+              ) : (
+                <span
+                  style={{
+                    color: "#F15C59",
+                    textAlign: "center",
+                    fontFamily: "Nunito Sans",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontweight: 700,
+                    lineheight: "18px" /* 128.571% */,
+                  }}
+                >
+                  Hapus
+                </span>
+              )}
             </Button>
           )}
         </div>

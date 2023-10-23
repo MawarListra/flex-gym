@@ -1,64 +1,96 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { TextInput } from "../components";
+import Select from "react-select";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const Registrasi = () => {
   const navigate = useNavigate();
-  const dataUser = [
-    {
-      name: "email",
-      label: "Email",
-      isRequired: true,
-      type: "text",
-    },
-    {
-      name: "password",
-      label: "Password",
-      isRequired: true,
-      type: "password",
-    },
-    {
-      name: "confirm-pass",
-      label: "Masukkan ulang Password",
-      isRequired: true,
-      type: "password",
-    },
-    {
-      name: "name",
-      label: "Nama Panjang",
-      isRequired: true,
-      type: "text",
-    },
-    {
-      name: "phoneNumber",
-      label: "Nomor Handphone",
-      isRequired: true,
-      type: "text",
-    },
-    {
-      name: "bornDate",
-      label: "Tanggal Lahir",
-      isRequired: true,
-      type: "dateWithPrepend",
-    },
-    {
-      name: "gender",
-      label: "Jenis Kelamin",
-      isRequired: true,
-      type: "select",
-      selectOption: [
-        { id: "male", name: "Laki-laki" },
-        { id: "female", name: "Perempuan" },
-      ],
-    },
+  const [isLoading, setIsLoading] = useState(false);
+  const [tempData, setTempData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
+    phone: "",
+    born_date: "",
+    sex: "",
+  });
+
+  const genderOption = [
+    { id: "male", name: "Laki-Laki" },
+    { id: "female", name: "Perempuan" },
   ];
+
+  const dataRegister = new FormData();
+  dataRegister.append("email", "");
+  dataRegister.append("password", "");
+  dataRegister.append("name", "");
+  dataRegister.append("phone", "");
+  dataRegister.append("born_date", "");
+  dataRegister.append("sex", "");
+  console.log("cek formData", dataRegister);
+
+  const validateData = () => {
+    if (tempData?.password !== tempData?.confirmPassword) {
+      return false;
+    }
+    if (
+      Object.keys(tempData).some(
+        (key) => key === "" || key === {} || key === null
+      )
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    dataRegister.set("email", tempData?.email);
+    dataRegister.set("password", tempData?.password);
+    dataRegister.set("name", tempData?.name);
+    dataRegister.set("phone", tempData?.phone);
+    dataRegister.set("born_date", tempData?.born_date);
+    dataRegister.set("sex", tempData?.sex?.name);
+
+    // console.log("cek dataRegister", dataRegister);
+    for (const pair of dataRegister.entries()) {
+      console.log("cek datas", pair[0] + ", " + pair[1]);
+    }
+
+    try {
+      const resp = await axios.post(
+        `${baseUrl}v1/member/register`,
+        dataRegister
+      );
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        toast.success("Berhasil mendaftar. Silahkan verif akun anda!");
+        setIsLoading(false);
+        setTimeout(() => {
+          navigate("/verif-account", { state: { email: tempData?.email } });
+        }, 1000);
+      }
+    } catch (e) {
+      setIsLoading(false);
+      toast.error("Gagal mendaftar. Silahkan coba lagi!");
+      console.log("cek err", e);
+    }
+  };
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       <div
         className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}
@@ -112,15 +144,132 @@ const Registrasi = () => {
             Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
             egestas amet id pretium.
           </span>
-          {dataUser.map((e) => (
+          <div className="d-flex flex-column">
             <TextInput
-              name={e?.name}
-              label={e?.label}
-              placeholder={e?.label}
-              type={e?.type}
-              {...e}
+              name="email"
+              label="Email"
+              placeholder={"Email"}
+              type={"text"}
+              value={tempData?.email}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  email: value,
+                });
+              }}
+              isRequired={true}
             />
-          ))}
+            <TextInput
+              name="password"
+              label="Password"
+              placeholder={"Password"}
+              type={"password"}
+              value={tempData?.password}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  password: value,
+                });
+              }}
+              isRequired={true}
+            />
+            <TextInput
+              name="confirm-pasword"
+              label="Masukkan ulang password"
+              placeholder={"Masukkan ulang password"}
+              type={"password"}
+              value={tempData?.confirmPassword}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  confirmPassword: value,
+                });
+              }}
+              isRequired={true}
+            />
+            <TextInput
+              name="name"
+              label="Nama Panjang"
+              placeholder={"Nama Panjang"}
+              type={"text"}
+              value={tempData?.name}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  name: value,
+                });
+              }}
+              isRequired={true}
+            />
+            <TextInput
+              name="phone"
+              label="Nomor Handphone"
+              placeholder={"Nomor Handphone"}
+              type={"text"}
+              value={tempData?.phone}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  phone: value,
+                });
+              }}
+              isRequired={true}
+            />
+
+            <TextInput
+              name="born_date"
+              label="Tanggal Lahir"
+              placeholder={"Tanggal Lahir"}
+              type={"dateWithPrepend"}
+              value={tempData?.born_date}
+              handleChange={({ target: { value } }) => {
+                setTempData({
+                  ...tempData,
+                  born_date: value,
+                });
+              }}
+              isRequired={true}
+            />
+            <div className="d-flex flex-column">
+              <small className="font-weight-bold pb-2 text-white d-block">
+                Jenis Kelamin
+                <span style={{ color: "#F83245" }}> *</span>
+              </small>
+              <Select
+                styles={{
+                  // Fixes the overlapping problem of the component
+                  menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                }}
+                height={48}
+                // isDisabled={disabled}
+                placeholder={"Jenis Kelamin"}
+                // isSearchable={search}
+                options={genderOption}
+                value={genderOption.find((e) => e?.id === tempData?.sex?.id)}
+                onChange={(e) =>
+                  setTempData({
+                    ...tempData,
+                    sex: e,
+                  })
+                }
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option.id}
+                theme={(theme) => {
+                  return {
+                    ...theme,
+                    borderRadius: "0.29rem",
+                    borderWidth: 1,
+                    colors: {
+                      ...theme.colors,
+                      primary25: "rgba(60,68,177,0.15)",
+                      primary50: "rgba(60,68,177,0.15)",
+                      primary: "#3c44b1",
+                    },
+                  };
+                }}
+              />
+            </div>
+          </div>
         </div>
         <div className="d-flex flex-column h-100 justify-content-end gap-4">
           <div className="d-flex w-100">
@@ -132,22 +281,32 @@ const Registrasi = () => {
                 borderBottomRightRadius: 0,
                 height: 48,
               }}
-              onClick={() => navigate("/verif-account")}
+              onClick={() => handleSubmit()}
+              disabled={!validateData() || isLoading}
             >
-              <span
-                className="text-black"
-                style={{
-                  color: "#030304",
-                  textAlign: "center",
-                  fontFamily: "Nunito Sans",
-                  fontSize: 14,
-                  fontStyle: "normal",
-                  fontweight: 700,
-                  lineheight: "18px" /* 128.571% */,
-                }}
-              >
-                Daftar
-              </span>
+              {isLoading ? (
+                <ReactLoading
+                  type="spinningBubbles"
+                  width={"1.5rem"}
+                  height={"auto"}
+                  color="white"
+                />
+              ) : (
+                <span
+                  className="text-black"
+                  style={{
+                    color: "#030304",
+                    textAlign: "center",
+                    fontFamily: "Nunito Sans",
+                    fontSize: 14,
+                    fontStyle: "normal",
+                    fontweight: 700,
+                    lineheight: "18px" /* 128.571% */,
+                  }}
+                >
+                  Daftar
+                </span>
+              )}
             </Button>
           </div>
           <div className="d-flex justify-content-center align-items-center">

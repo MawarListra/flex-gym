@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft } from "react-feather";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import { useTimer } from "react-timer-hook";
 import ReactLoading from "react-loading";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const SendOTP = () => {
   const expiredOTP = 40;
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log("cek location", location);
+  const { email } = location.state;
   const [otp, setOtp] = useState("");
   const [time, setTime] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -34,6 +41,61 @@ const SendOTP = () => {
     },
   });
 
+  const handleRequestOtp = async () => {
+    const payload = {
+      email: email,
+    };
+    setIsLoading(false);
+    console.log("cek payload", payload);
+    try {
+      const resp = await axios.put(`${baseUrl}v1/member/reverify`, payload);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        // setIsLoading(false);
+
+        startTimer({ seconds: expiredOTP });
+        // navigate("/otp-success");
+      } else {
+        toast.error("Gagal request OTP. Silahkan coba lagi!");
+        setTime(time);
+        restart(time);
+      }
+    } catch (e) {
+      toast.error("Gagal request OTP. Silahkan coba lagi!");
+      setIsLoading(false);
+      console.log("cek err", e);
+    }
+  };
+
+  const handleSendOtp = async () => {
+    const payload = {
+      email: email,
+      verif_code: otp,
+    };
+    setIsLoading(true);
+    console.log("cek payload", payload);
+    try {
+      const resp = await axios.put(`${baseUrl}v1/member/verify`, payload);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setIsLoading(false);
+        navigate("/otp-success");
+      } else {
+        toast.error("Gagal verifikasi. Silahkan coba lagi!");
+        setTime(time);
+        restart(time);
+      }
+    } catch (e) {
+      toast.error("Gagal verifikasi. Silahkan coba lagi!");
+      setIsLoading(false);
+      console.log("cek err", e);
+    }
+  };
+
+  useEffect(() => {
+    if (otp?.length === 6 && isLoading) {
+      pause();
+    }
+  }, [isLoading, otp]);
+
   useEffect(() => {
     startTimer({ seconds: expiredOTP });
     if (otp !== "") {
@@ -44,11 +106,7 @@ const SendOTP = () => {
 
   useEffect(() => {
     if (otp.length === 6) {
-      setIsLoading(true);
-
-      setTimeout(() => {
-        navigate("/otp-success");
-      }, 10000);
+      handleSendOtp();
     }
   }, [otp]);
 
@@ -59,6 +117,7 @@ const SendOTP = () => {
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       <div
         className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}
@@ -151,7 +210,9 @@ const SendOTP = () => {
                     textDecoration: "underline",
                     cursor: "pointer",
                   }}
-                  onClick={() => startTimer({ seconds: expiredOTP })}
+                  onClick={() => {
+                    handleRequestOtp();
+                  }}
                 >
                   Kirim ulang kode
                 </span>

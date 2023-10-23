@@ -1,16 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "react-feather";
-import { Button } from "reactstrap";
+import { Button, Toast } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../assets/Logo.png";
 import ProfPic from "../../assets/sporty girl workout.png";
 import QRCode from "qrcode";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const Homepage = () => {
   const navigate = useNavigate();
-
+  const token = localStorage.getItem("token");
+  const [data, setData] = useState({});
+  const [loadQr, setLoadQr] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataTransaction, setDataTransaction] = useState([]);
   const dataUser = "Rein, active";
   const [imgUrl, setImgUrl] = useState("");
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  };
   const option = {
     width: 343,
     height: 331,
@@ -53,23 +69,69 @@ const Homepage = () => {
     },
   };
 
-  useEffect(() => {
-    QRCode.toDataURL(dataUser, option, (err, url) => {
-      if (err) {
-        console.error("cek err", err);
+  const getTransactionHistory = async () => {
+    setIsLoading(true);
+    try {
+      const respHistory = await axios.get(
+        `${baseUrl}v1/member/historytransaction?page=1&pagesize=3`,
+        config
+      );
+      console.log("cek respHistory", respHistory);
+      if (
+        respHistory?.status === 200 &&
+        respHistory?.data?.status === "success"
+      ) {
+        setIsLoading(false);
+        setDataTransaction(respHistory?.data?.data);
       } else {
-        setImgUrl(url);
-        console.log("cek url", url);
-        // Now 'url' contains the QR code image data URL
-        // You can display this image URL in an <img> tag or use it as needed
+        toast.error("Gagal mendappatkan data. Silahkan reload page");
       }
-    });
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const handleGetData = async () => {
+    setLoadQr(true);
+    try {
+      const resp = await axios.get(`${baseUrl}v1/member/myprofile`, config);
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setLoadQr(false);
+        setData(resp?.data?.data);
+        getTransactionHistory();
+      } else {
+        toast.error("Gagal mendapatkan data. Silahkan reload page");
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  useEffect(() => {
+    handleGetData();
   }, []);
+
+  useEffect(() => {
+    if (data?.id) {
+      QRCode.toDataURL(JSON.stringify({ id: data?.id }), option, (err, url) => {
+        if (err) {
+          console.error("cek err", err);
+        } else {
+          setImgUrl(url);
+          console.log("cek url", url);
+        }
+      });
+      localStorage.setItem("dataProfile", JSON.stringify(data));
+    }
+  }, [data]);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       <div
         className="d-flex flex-column p-3 w-100 gap-2"
         style={{ minHeight: "100vh" }}
@@ -125,7 +187,7 @@ const Homepage = () => {
               marginBottom: 4,
             }}
           >
-            Hi, Andrianto
+            Hi, {data?.name}
           </span>
           <div
             className="d-flex flex-row justify-content-between align-items-end"
@@ -142,7 +204,9 @@ const Homepage = () => {
               <span style={{ color: "#999" }}>
                 Membership kamu hingga tanggal
               </span>
-              <span style={{ color: "#F15C59" }}>8 September 2023</span>
+              <span style={{ color: "#F15C59" }}>
+                {moment(new Date(data?.member_until)).format("DD MMMM YYYY")}
+              </span>
             </div>
             <div className="d-flex flex-column justify-content-end">
               <span
@@ -164,7 +228,16 @@ const Homepage = () => {
           style={{ borderBottom: "0.5px solid #999" }}
         >
           <div className="d-flex justify-content-center align-items-center">
-            <img className="d-flex cover" src={imgUrl} alt="qrUser" />
+            {loadQr ? (
+              <ReactLoading
+                type="spinningBubbles"
+                width={"5rem"}
+                height={"auto"}
+                color="white"
+              />
+            ) : (
+              <img className="d-flex cover" src={imgUrl} alt="qrUser" />
+            )}
           </div>
           <span
             style={{
@@ -195,63 +268,78 @@ const Homepage = () => {
             History Pembelian
           </span>
           <div className="d-flex flex-column justify-content-between gap-3 mt-2">
-            {dataTransaksi.map((e) => {
-              return (
-                <div
-                  className="d-flex flex-row p-3 justify-content-between align-items-center"
-                  style={{
-                    borderRadius: 5,
-                    border: "0.5px solid #C0C3CF",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate(`/detail-transaction/${e?.id}`)}
-                >
-                  <div className="d-flex flex-column justify-content-center gap-2">
-                    <span
-                      style={{
-                        color: statusMapper[e?.status]?.color,
-                        fontFamily: "Nunito Sans",
-                        fontSize: 14,
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        lineHeight: "18px",
-                      }}
-                    >
-                      {statusMapper[e?.status]?.text}
-                    </span>
-                    <span
-                      style={{
-                        color: "#FFF",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        lineHeight: "18px",
-                      }}
-                    >
-                      {e?.pembelian}
-                    </span>
-                    <span
-                      style={{
-                        color: "#999",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "12px",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        lineHeight: "16px",
-                      }}
-                    >
-                      {e?.tanggal}
-                    </span>
+            {isLoading ? (
+              <ReactLoading
+                type="bars"
+                width={"3rem"}
+                height={"auto"}
+                color="white"
+              />
+            ) : (
+              dataTransaction.map((e) => {
+                return (
+                  <div
+                    className="d-flex flex-row p-3 justify-content-between align-items-center"
+                    style={{
+                      borderRadius: 5,
+                      border: "0.5px solid #C0C3CF",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      navigate(`/detail-transaction/${e?.id}`);
+                      localStorage.setItem(
+                        "currDataTransaction",
+                        JSON.stringify(e)
+                      );
+                    }}
+                  >
+                    <div className="d-flex flex-column justify-content-center gap-2">
+                      <span
+                        style={{
+                          color: statusMapper[e?.status]?.color,
+                          fontFamily: "Nunito Sans",
+                          fontSize: 14,
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {statusMapper[e?.status]?.text}
+                      </span>
+                      <span
+                        style={{
+                          color: "#FFF",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {e?.pembelian}
+                      </span>
+                      <span
+                        style={{
+                          color: "#999",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "16px",
+                        }}
+                      >
+                        {moment(e?.createdAt).format("DD MMMM YYYY")}
+                      </span>
+                    </div>
+                    <div className="d-flex justify-content-center slign-items-center">
+                      <ChevronRight
+                        style={{ color: "#999", width: "24px", height: "24px" }}
+                      />
+                    </div>
                   </div>
-                  <div className="d-flex justify-content-center slign-items-center">
-                    <ChevronRight
-                      style={{ color: "#999", width: "24px", height: "24px" }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </div>
         </div>
       </div>

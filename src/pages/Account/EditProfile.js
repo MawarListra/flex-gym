@@ -1,46 +1,83 @@
-import React from "react";
+import React, { useState } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { TextInput } from "../../components";
+import Select from "react-select";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const EditProfile = () => {
   const navigate = useNavigate();
-  const dataUser = [
-    {
-      name: "name",
-      label: "Nama Panjang",
-      isRequired: true,
-      type: "text",
-    },
-    {
-      name: "phoneNumber",
-      label: "Nomor Handphone",
-      isRequired: true,
-      type: "text",
-    },
-    {
-      name: "bornDate",
-      label: "Tanggal Lahir",
-      isRequired: true,
-      type: "dateWithPrepend",
-    },
-    {
-      name: "gender",
-      label: "Jenis Kelamin",
-      isRequired: true,
-      type: "select",
-      selectOption: [
-        { id: "male", name: "Laki-laki" },
-        { id: "female", name: "Perempuan" },
-      ],
-    },
+  const [isLoading, setIsLoading] = useState(false);
+  const token = localStorage.getItem("token");
+  const [dataUser, setDataUser] = useState({
+    name: "",
+    phone: "",
+    born_date: "",
+    sex: {},
+  });
+  const genderOption = [
+    { id: "male", name: "Laki-Laki" },
+    { id: "female", name: "Perempuan" },
   ];
+
+  const validateData = () => {
+    if (
+      Object.keys(dataUser).some(
+        (key) => key === "" || key === {} || key === null
+      )
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  console.log("cek token", token);
+
+  const handleUbahData = async () => {
+    setIsLoading(true);
+
+    const config = {
+      headers: {
+        Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
+      },
+    };
+    const data = {
+      ...dataUser,
+      sex: dataUser?.sex?.name,
+    };
+    try {
+      const resp = await axios.put(
+        `${baseUrl}v1/member/updateprofile`,
+        data,
+        config
+      );
+      console.log("cek resp", resp);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        toast.success("Berhasil ubah data!");
+        setIsLoading(false);
+        setTimeout(() => {
+          navigate("/account");
+        }, 1000);
+      }
+    } catch (e) {
+      setIsLoading(false);
+      toast.error("Gagal ubah data. Silahkan coba lagi!");
+      console.log("cek err", e);
+    }
+  };
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       <div className="d-flex flex-column p-3 w-100 gap-4">
         <div
           className="d-flex flex-row justify-content-start gap-2 align-items-center h-auto"
@@ -95,15 +132,89 @@ const EditProfile = () => {
               Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
               egestas amet id pretium.
             </span>
-            {dataUser.map((e) => (
+            <div className="d-flex flex-column">
               <TextInput
-                name={e?.name}
-                label={e?.label}
-                placeholder={e?.label}
-                type={e?.type}
-                {...e}
+                name="name"
+                label="Nama Panjang"
+                placeholder={"Nama Panjang"}
+                type={"text"}
+                value={dataUser?.name}
+                handleChange={({ target: { value } }) => {
+                  setDataUser({
+                    ...dataUser,
+                    name: value,
+                  });
+                }}
+                isRequired={true}
               />
-            ))}
+              <TextInput
+                name="phone"
+                label="Nomor Handphone"
+                placeholder={"Nomor Handphone"}
+                type={"text"}
+                value={dataUser?.phone}
+                handleChange={({ target: { value } }) => {
+                  setDataUser({
+                    ...dataUser,
+                    phone: value,
+                  });
+                }}
+                isRequired={true}
+              />
+              <TextInput
+                name="born_date"
+                label="Tanggal Lahir"
+                placeholder={"Tanggal Lahir"}
+                type={"dateWithPrepend"}
+                value={dataUser?.born_date}
+                handleChange={({ target: { value } }) => {
+                  setDataUser({
+                    ...dataUser,
+                    born_date: value,
+                  });
+                }}
+                isRequired={true}
+              />
+              <div className="d-flex flex-column">
+                <small className="font-weight-bold pb-2 text-white d-block">
+                  Jenis Kelamin
+                  <span style={{ color: "#F83245" }}> *</span>
+                </small>
+                <Select
+                  styles={{
+                    // Fixes the overlapping problem of the component
+                    menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                  }}
+                  height={48}
+                  // isDisabled={disabled}
+                  placeholder={"Jenis Kelamin"}
+                  // isSearchable={search}
+                  options={genderOption}
+                  value={genderOption.find((e) => e?.id === dataUser?.sex?.id)}
+                  onChange={(e) =>
+                    setDataUser({
+                      ...dataUser,
+                      sex: e,
+                    })
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                  theme={(theme) => {
+                    return {
+                      ...theme,
+                      borderRadius: "0.29rem",
+                      borderWidth: 1,
+                      colors: {
+                        ...theme.colors,
+                        primary25: "rgba(60,68,177,0.15)",
+                        primary50: "rgba(60,68,177,0.15)",
+                        primary: "#3c44b1",
+                      },
+                    };
+                  }}
+                />
+              </div>
+            </div>
           </div>
           <div className="d-flex flex-column justify-content-end gap-4">
             <div className="d-flex w-100">
@@ -115,21 +226,32 @@ const EditProfile = () => {
                   borderBottomRightRadius: 0,
                   height: 48,
                 }}
+                onClick={() => handleUbahData()}
+                disabled={!validateData() || isLoading}
               >
-                <span
-                  className="text-black"
-                  style={{
-                    color: "#030304",
-                    textAlign: "center",
-                    fontFamily: "Nunito Sans",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontweight: 700,
-                    lineheight: "18px" /* 128.571% */,
-                  }}
-                >
-                  Simpan
-                </span>
+                {isLoading ? (
+                  <ReactLoading
+                    type="spinningBubbles"
+                    width={"1.5rem"}
+                    height={"auto"}
+                    color="white"
+                  />
+                ) : (
+                  <span
+                    className="text-black"
+                    style={{
+                      color: "#030304",
+                      textAlign: "center",
+                      fontFamily: "Nunito Sans",
+                      fontSize: 14,
+                      fontStyle: "normal",
+                      fontweight: 700,
+                      lineheight: "18px" /* 128.571% */,
+                    }}
+                  >
+                    Simpan
+                  </span>
+                )}
               </Button>
             </div>
           </div>

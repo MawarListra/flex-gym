@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { ChevronLeft, ChevronRight, Upload } from "react-feather";
+import { ChevronLeft, ChevronRight, Upload, X, Edit2 } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
 import bcaIc from "../../assets/bca-removebg-preview 1.png";
 import buktiTransfer from "../../assets/Text Field.png";
@@ -10,16 +10,36 @@ import Edit from "../../assets/icon/edit.svg";
 import ModalPaymentType from "./ModalPaymentType";
 import { Input, Button } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
+import ReactLoading from "react-loading";
+import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
+import Select from "react-select";
+import { currencyFormatter } from "../../utils/currencyFormatter";
+
+const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
 const PaymentForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const token = localStorage.getItem("token");
+  const dataUser = JSON.parse(localStorage.getItem("dataProfile"));
   const path = location.pathname.split("/");
   const { id } = useParams();
   let isEditData = path.includes("edit-detail-transaction") ? true : false;
   const [dataPayment, setDataPayment] = useState({});
   const [openModal, setOpenModal] = useState(false);
-
+  const [packageOption, setPackageOption] = useState([false]);
+  const [bankOption, setBankOption] = useState([]);
+  const [walletOption, setWalletOption] = useState([]);
+  const [dataProfileTransaction, setDataProfileTransaction] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const config = {
+    headers: {
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json",
+    },
+  };
   const [ktp, setKtp] = useState({
     foto: useRef(null),
   });
@@ -37,40 +57,9 @@ const PaymentForm = () => {
     raw: null,
     fileName: null,
   });
-  const packageOption = [
-    {
-      id: "1month",
-      name: "Paket 1 Bulan - 150.000",
-    },
-    {
-      id: "3month",
-      name: "Paket 3 Bulan - 150.000",
-    },
-    {
-      id: "6month",
-      name: "Paket 6 Bulan - 150.000",
-    },
-    {
-      id: "1year",
-      name: "Paket 1 Tahun - 150.000",
-    },
-  ];
 
-  const dataTransaksi = [
-    {
-      id: 0,
-      status: "success",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-    {
-      id: 1,
-      status: "gagal",
-      pembelian: "Paket 1 bulan - Rp150.000 (Umum)",
-      tanggal: "17 Desember 2023",
-    },
-  ];
-  let data = dataTransaksi.find((e) => e?.id === parseInt(id));
+  let data = JSON.parse(localStorage.getItem("currDataTransaction"));
+  console.log("cek currDataTransaction >>>>", data);
 
   const handleUpload = (type) => {
     let temp = null;
@@ -83,82 +72,134 @@ const PaymentForm = () => {
   };
 
   const handleChangeImage = (e, type) => {
-    console.log("cek here", type);
-    let file = e.target.files[0];
-    // if (file?.size > 2097152) {
-    //   setOverSize(true);
-    //   setImage({
-    //     ...image,
-    //     preview: null,
-    //     raw: null,
-    //     fileName: null,
-    //   });
-    // } else {
-    //   setOverSize(false);
-    // }
-
-    // if (
-    //   file?.type !== 'application/pdf' &&
-    //   file?.type !== 'image/png' &&
-    //   file?.type !== 'image/jpeg' &&
-    //   file?.type !== 'image/jpg'
-    // ) {
-    //   setWrongFormat(true);
-    //   setImage({
-    //     ...image,
-    //     preview: null,
-    //     raw: null,
-    //     fileName: null,
-    //   });
-    // } else {
-    //   setWrongFormat(false);
-    // }
-
-    // if (
-    //   file?.size <= 2097152 &&
-    //   (file?.type === 'application/pdf' ||
-    //     file?.type === 'image/png' ||
-    //     file?.type === 'image/jpeg' ||
-    //     file?.type === 'image/jpg')
-    // ) {
-    //   setOverSize(false);
-    //   setWrongFormat(false);
-    if (type === "ktp") {
-      setImageKtp({
-        ...imageKtp,
-        preview: URL.createObjectURL(e.target.files[0]),
-        raw: Object.assign(e.target.files[0]),
-        fileName: e.target.files[0].name,
-      });
-    } else {
-      setImageBukiTransfer({
-        ...buktiTransfer,
-        preview: URL.createObjectURL(e.target.files[0]),
-        raw: Object.assign(e.target.files[0]),
-        fileName: e.target.files[0].name,
-      });
+    let file = e?.target?.files?.[0];
+    if (!file) {
+      console.error("No file selected");
+      return;
     }
-    // uploadTransactionProof({
-    //   filename: `${moment().format('X')}_${e.target.files[0].name}`,
-    //   file: Object.assign(e.target.files[0], {
-    //     preview: URL.createObjectURL(e.target.files[0]),
-    //   }),
-    // });
-    // }
+    console.log("cek here file", file);
 
-    e.target.value = "";
+    // Validate file type (for example, allow only image files)
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      console.error("Invalid file type. Please select a valid image file.");
+      return;
+    }
+
+    // Update state based on the type
+    if (type === "ktp") {
+      setImageKtp((prevState) => ({
+        ...prevState,
+        preview: URL.createObjectURL(file),
+        raw: file,
+        fileName: file.name,
+      }));
+    } else {
+      setImageBukiTransfer((prevState) => ({
+        ...prevState,
+        preview: URL.createObjectURL(file),
+        raw: file,
+        fileName: file.name,
+      }));
+    }
+  };
+
+  const getBankList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/1`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setBankOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getWalletList = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/bank_wallet/getall/2`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setWalletOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getDataPackage = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/package_data/getall`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setPackageOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getProfileTransaction = async () => {
+    try {
+      const resp = await axios.get(`${baseUrl}v1/member/myprofile`, config);
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setDataProfileTransaction(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const payload = new FormData();
+    payload.append("identity_number", dataPayment?.ktpNumber);
+    payload.append("admin_fee", 0);
+    payload.append("payment_method_id", dataPayment?.paymentType?.id);
+    payload.append("package_id", dataPayment?.packageId);
+    payload.append("approval_photo", imageBuktiTransfer.raw);
+    payload.append("identity", imageKtp.raw);
+    payload.append("approval_image_nam", imageBuktiTransfer?.fileName);
+    for (const pair of payload.entries()) {
+      console.log("cek datas>>>", pair[0] + ", " + pair[1]);
+    }
+    try {
+      const resp = await axios.post(
+        `${baseUrl}v1/member/transactioncreate`,
+        payload,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setIsLoading(false);
+        toast.success("Pembayaran berhasil!");
+        navigate(`/account`);
+      }
+    } catch (e) {
+      toast.error("Pembayaran gagal!");
+      console.log("cek err", e);
+    }
   };
 
   useEffect(() => {
-    console.log("cek imageBuktiTransfer", imageBuktiTransfer);
-    console.log("cek imageKtp", imageKtp);
-  }, [imageBuktiTransfer, imageKtp]);
+    getBankList();
+    getWalletList();
+    getDataPackage();
+    getProfileTransaction();
+  }, []);
+
+  useEffect(() => {
+    console.log("cek dataPayment", dataPayment);
+  }, [dataPayment]);
 
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
+      <Toaster />
       {openModal && (
         <ModalPaymentType
           open={openModal}
@@ -167,6 +208,8 @@ const PaymentForm = () => {
           }}
           setDataAccount={setDataPayment}
           dataAccount={dataPayment}
+          bankOption={bankOption}
+          walletOption={walletOption}
         />
       )}
       <div
@@ -287,7 +330,7 @@ const PaymentForm = () => {
                   marginBottom: 4,
                 }}
               >
-                Hi, Andrianto
+                Hi, {dataProfileTransaction?.name}
               </span>
 
               <div
@@ -304,31 +347,58 @@ const PaymentForm = () => {
                 <span style={{ color: "#999" }}>
                   Membership kamu hingga tanggal
                 </span>
-                <span style={{ color: "#F15C59" }}>8 September 2023</span>
+                <span style={{ color: "#F15C59" }}>
+                  {moment(
+                    new Date(dataProfileTransaction?.member_until)
+                  ).format("DD MMMM YYYY")}
+                </span>
               </div>
             </div>
           </div>
           <div className="d-flex flex-column">
-            <TextInput
-              labelClassName="label-text-input"
-              name="packageName"
-              label="Pilih Paket"
-              placeholder="Pilih Paket"
-              isRequired={true}
-              type="select"
-              selectOption={packageOption}
-              value={dataPayment?.packageId}
-              onChange={(e) => {
-                console.log("cek e>>", e);
-                setDataPayment({
-                  ...dataPayment,
-                  packageName: e?.name,
-                  packageId: e?.id,
-                });
-              }}
-              getOptionLabel={(option) => option.name}
-              getOptionValue={(option) => option.id}
-            />
+            <div className="d-flex flex-column">
+              <small className="font-weight-bold pb-2 text-white d-block">
+                Pilih Paket
+                <span style={{ color: "#F83245" }}> *</span>
+              </small>
+              <Select
+                styles={{
+                  // Fixes the overlapping problem of the component
+                  menu: (provided) => ({ ...provided, zIndex: 9999 }),
+                }}
+                height={48}
+                // isDisabled={disabled}
+                placeholder={"Pilih Paket"}
+                // isSearchable={search}
+                options={packageOption}
+                value={packageOption.find(
+                  (e) => e?.id === dataPayment?.packageId
+                )}
+                onChange={(e) =>
+                  setDataPayment({
+                    ...dataPayment,
+                    packageId: e?.id,
+                    packageName: e?.name,
+                    packagePrice: e?.price,
+                  })
+                }
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option.id}
+                theme={(theme) => {
+                  return {
+                    ...theme,
+                    borderRadius: "0.29rem",
+                    borderWidth: 1,
+                    colors: {
+                      ...theme.colors,
+                      primary25: "rgba(60,68,177,0.15)",
+                      primary50: "rgba(60,68,177,0.15)",
+                      primary: "#3c44b1",
+                    },
+                  };
+                }}
+              />
+            </div>
             <TextInput
               labelClassName="label-text-input"
               name="ktpNumber"
@@ -345,7 +415,6 @@ const PaymentForm = () => {
               }
             />
             {/* upload ktp */}
-
             <div style={{ marginBottom: "24px" }}>
               <input
                 type="file"
@@ -355,18 +424,63 @@ const PaymentForm = () => {
                 style={{ display: "none" }}
                 accept="image/jpg, image/jpeg, image/png, application/pdf"
               />
+
               <div className="d-flex flex-column justify-content-between">
-                <div
-                  className="upload-file-container"
-                  onClick={() => handleUpload("ktp")}
-                >
-                  {imageKtp?.fileName ? (
+                {imageKtp?.fileName ? (
+                  <div
+                    className="upload-file-container"
+                    style={{ position: "relative" }}
+                  >
+                    <div
+                      className="d-flex flex-row justify-content-between w-100 p-2"
+                      style={{ position: "absolute", top: 0 }}
+                    >
+                      <div
+                        className="d-flex justify-content-center align-items-center"
+                        style={{
+                          backgroundColor: "#004FA7",
+                          borderRadius: "50%",
+                          width: "16px",
+                          height: "16px",
+                        }}
+                        onClick={() => {
+                          setImageKtp({
+                            preview: null,
+                            raw: null,
+                            fileName: null,
+                          });
+                        }}
+                      >
+                        <X color="white" width={"10px"} height={"10px"} />
+                      </div>
+                      <div
+                        className="d-flex justify-content-center align-items-center"
+                        style={{
+                          backgroundColor: "#004FA7",
+                          borderRadius: "50%",
+                          width: "16px",
+                          height: "16px",
+                        }}
+                        onClick={() => handleUpload("ktp")}
+                      >
+                        <Edit2 color="white" width={"10px"} height={"10px"} />
+                      </div>
+                    </div>
                     <img
-                      className="d-flex cover"
-                      style={{ width: "191px", height: "93px" }}
+                      className="d-flex"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
                       src={imageKtp?.preview}
                     />
-                  ) : (
+                  </div>
+                ) : (
+                  <div
+                    className="upload-file-container"
+                    onClick={() => handleUpload("ktp")}
+                  >
                     <div className="d-flex flex-row gap-2 row-100 align-items-center">
                       <Upload width={"24px"} height={"24px"} color="white" />
                       <span
@@ -382,8 +496,8 @@ const PaymentForm = () => {
                         Upload Foto Identitas
                       </span>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
                 {imageKtp?.fileName && imageKtp?.fileName !== "" && (
                   <div>
                     <span
@@ -419,7 +533,7 @@ const PaymentForm = () => {
                   </div> */}
             </div>
 
-            {dataPayment?.paymentType?.accountId ? (
+            {dataPayment?.paymentType?.payment_type_id ? (
               <div className="d-flex flex-column gap-2 mt-2">
                 <span
                   style={{
@@ -455,7 +569,17 @@ const PaymentForm = () => {
                         lineHeight: "16px",
                       }}
                     >
-                      {dataPayment?.paymentType.name}
+                      {dataPayment?.paymentType?.payment_type_id === 1
+                        ? bankOption.find(
+                            (el) =>
+                              el?.id ===
+                              parseInt(dataPayment?.paymentType?.bank_name)
+                          )?.name
+                        : walletOption.find(
+                            (el) =>
+                              el?.id ===
+                              parseInt(dataPayment?.paymentType?.ewallet)
+                          )?.name || "-"}
                     </span>
                     <span
                       style={{
@@ -467,7 +591,9 @@ const PaymentForm = () => {
                         lineHeight: "18px",
                       }}
                     >
-                      {dataPayment?.paymentType?.accountNumber}
+                      {dataPayment?.paymentType?.payment_type_id === 1
+                        ? dataPayment?.paymentType?.bank_number
+                        : dataPayment?.paymentType?.phone || "-"}
                     </span>
                   </div>
                   <div className="d-flex flex-row justify-content-center align-items-center ">
@@ -498,7 +624,7 @@ const PaymentForm = () => {
             )}
             {/* upload bukti pembayaran */}
 
-            <div style={{ marginBottom: "24px" }}>
+            <div className="mt-2" style={{ marginBottom: "24px" }}>
               <input
                 type="file"
                 id="file"
@@ -508,17 +634,61 @@ const PaymentForm = () => {
                 accept="image/jpg, image/jpeg, image/png, application/pdf"
               />
               <div className="d-flex flex-column justify-content-between">
-                <div
-                  className="upload-file-container"
-                  onClick={() => handleUpload("bukti")}
-                >
-                  {imageBuktiTransfer?.fileName ? (
+                {imageBuktiTransfer?.fileName ? (
+                  <div
+                    className="upload-file-container"
+                    style={{ position: "relative" }}
+                  >
+                    <div
+                      className="d-flex flex-row justify-content-between w-100 p-2"
+                      style={{ position: "absolute", top: 0 }}
+                    >
+                      <div
+                        className="d-flex justify-content-center align-items-center"
+                        style={{
+                          backgroundColor: "#004FA7",
+                          borderRadius: "50%",
+                          width: "16px",
+                          height: "16px",
+                        }}
+                        onClick={() => {
+                          setImageBukiTransfer({
+                            preview: null,
+                            raw: null,
+                            fileName: null,
+                          });
+                        }}
+                      >
+                        <X color="white" width={"10px"} height={"10px"} />
+                      </div>
+                      <div
+                        className="d-flex justify-content-center align-items-center"
+                        style={{
+                          backgroundColor: "#004FA7",
+                          borderRadius: "50%",
+                          width: "16px",
+                          height: "16px",
+                        }}
+                        onClick={() => handleUpload("bukti")}
+                      >
+                        <Edit2 color="white" width={"10px"} height={"10px"} />
+                      </div>
+                    </div>
                     <img
-                      className="d-flex cover"
-                      style={{ width: "191px", height: "93px" }}
+                      className="d-flex"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
                       src={imageBuktiTransfer?.preview}
                     />
-                  ) : (
+                  </div>
+                ) : (
+                  <div
+                    className="upload-file-container"
+                    onClick={() => handleUpload("bukti")}
+                  >
                     <div className="d-flex flex-row gap-2 row-100 align-items-center">
                       <Upload width={"24px"} height={"24px"} color="white" />
                       <span
@@ -531,11 +701,11 @@ const PaymentForm = () => {
                           lineHeight: "18px",
                         }}
                       >
-                        Upload Files
+                        Upload Foto Identitas
                       </span>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
                 {imageBuktiTransfer?.fileName &&
                   imageBuktiTransfer?.fileName !== "" && (
                     <div>
@@ -661,7 +831,7 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  1 Bulan 150.000
+                  {dataPayment?.packageName || "-"}
                 </span>
               </div>
               <div className="d-flex flex-row justify-content-between">
@@ -688,7 +858,7 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  Rp50.000
+                  {currencyFormatter(dataProfileTransaction?.admin || 0)}
                 </span>
               </div>
               <div style={{ borderBottom: "0.5px solid #999" }}></div>
@@ -716,7 +886,12 @@ const PaymentForm = () => {
                     textAlign: "right",
                   }}
                 >
-                  Rp200.000
+                  {currencyFormatter(
+                    Math.abs(
+                      (dataPayment?.packagePrice || 0) +
+                        (dataProfileTransaction?.admin || 0)
+                    )
+                  )}
                 </span>
               </div>
             </div>
@@ -731,22 +906,32 @@ const PaymentForm = () => {
                   borderBottomRightRadius: isEditData ? 0 : undefined,
                   height: 48,
                 }}
-                onClick={() => navigate(`/account`)}
+                disabled={isLoading}
+                onClick={() => handleSubmit()}
               >
-                <span
-                  className="text-black"
-                  style={{
-                    color: isEditData ? "#030304" : "#71747D",
-                    textAlign: "center",
-                    fontFamily: "Nunito Sans",
-                    fontSize: 14,
-                    fontStyle: "normal",
-                    fontweight: 700,
-                    lineheight: "18px" /* 128.571% */,
-                  }}
-                >
-                  {isEditData ? "Simpan" : "Bayar Sekarang"}
-                </span>
+                {isLoading ? (
+                  <ReactLoading
+                    type="spinningBubbles"
+                    width={"1.5rem"}
+                    height={"auto"}
+                    color="white"
+                  />
+                ) : (
+                  <span
+                    className="text-black"
+                    style={{
+                      color: isEditData ? "#030304" : "#71747D",
+                      textAlign: "center",
+                      fontFamily: "Nunito Sans",
+                      fontSize: 14,
+                      fontStyle: "normal",
+                      fontweight: 700,
+                      lineheight: "18px" /* 128.571% */,
+                    }}
+                  >
+                    {isEditData ? "Simpan" : "Bayar Sekarang"}
+                  </span>
+                )}
               </Button>
             </div>
           </div>

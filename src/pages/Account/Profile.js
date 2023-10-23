@@ -11,7 +11,8 @@ const Profile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   console.log("cek id", id);
-
+  const dataUser = JSON.parse(localStorage.getItem("dataProfile"));
+  console.log("cek datauser", dataUser);
   const listMenu = [
     {
       id: "update-profile",
@@ -36,7 +37,10 @@ const Profile = () => {
     {
       id: "logout",
       label: "Logout",
-      onClick: () => navigate("/"),
+      onClick: () => {
+        navigate("/");
+        localStorage.setItem("token", "");
+      },
     },
   ];
 
@@ -106,7 +110,7 @@ const Profile = () => {
                   marginBottom: 4,
                 }}
               >
-                Hi, Andrianto
+                Hi, {dataUser?.name}
               </span>
 
               <div
