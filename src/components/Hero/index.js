@@ -31,9 +31,9 @@ const Hero = ({ id }) => {
       </div>
       <div className="title-hero-box mb-4">
         <span className="text-desc-title">
-          Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-          egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
-          blandit risus porttitor.
+          Segera gabung bersama kami. Flex Gym and Cafe menggunakan alat import
+          berkualitas dengan harga yang terjangkau serta memiliki tempat luas,
+          sejuk, dan nyaman, Start your membership right now!
         </span>
       </div>
       <div className="title-hero-box flex-row gap-3 gap-md-3">

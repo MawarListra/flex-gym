@@ -4,6 +4,7 @@ import FreeWeightIc from "../../assets/sporty girl workout.png";
 import YogaIc from "../../assets/woman in yoga pose.png";
 import BoxingIc from "../../assets/Workout.png";
 import { Button } from "reactstrap";
+import { currencyFormatter } from "../../utils/currencyFormatter";
 
 const Pricing = ({ id }) => {
   const listData = [
@@ -52,9 +53,8 @@ const Pricing = ({ id }) => {
       </div>
       <div className="paddingComponentRight paddingComponentLeft">
         <span className="text-desc-title">
-          Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-          egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
-          blandit risus porttitor.
+          Daftar harga membership Flex Gym and Cafe. Tentukan paketmu dan daftar
+          member sekarang juga
         </span>
       </div>
       <div
@@ -157,7 +157,9 @@ const Pricing = ({ id }) => {
                     alignItems: "flex-end",
                   }}
                 >
-                  {item?.subPrice ? item?.subPrice : undefined}
+                  {item?.subPrice
+                    ? currencyFormatter(item?.subPrice)
+                    : undefined}
                   {item?.subPrice && (
                     <small className="text-desc-title" style={{ fontSize: 14 }}>
                       /bulan
@@ -196,7 +198,7 @@ const Pricing = ({ id }) => {
                         letterSpacing: 0.3,
                       }}
                     >
-                      {item?.price}
+                      {currencyFormatter(item?.price)}
                     </span>
                   </div>
                   <div className="d-flex mt-3 w-100 ">
@@ -255,7 +257,7 @@ const Pricing = ({ id }) => {
                         letterSpacing: 0.3,
                       }}
                     >
-                      {item?.price}
+                      {currencyFormatter(item?.price)}
                     </span>
                   </div>
                   <div className="d-flex" style={{ marginTop: 56 }}>

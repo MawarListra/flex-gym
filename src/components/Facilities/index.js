@@ -53,9 +53,8 @@ const Facilities = () => {
       </div>
       <div className="box-desc-title">
         <span className="text-desc-title">
-          Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-          egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id
-          blandit risus porttitor.
+          Kami memiliki beragam Fasilitas yang dapat digunakan dan tentunya kami
+          akan selalu memberikan kenyamanan
         </span>
       </div>
       <div className="box-facilities-card mt-4">

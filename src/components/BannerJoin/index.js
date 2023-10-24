@@ -29,8 +29,7 @@ const BannerJoin = () => {
         </div>
         <div className="d-flex mt-1 justify-content-center justify-content-md-start justify-content-center">
           <span className="text-white text-desc-banner">
-            Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-            egestas amet id pretium.
+            Segera daftar jadi member dan mulailah hidup sehat bersama kami
           </span>
         </div>
         <div

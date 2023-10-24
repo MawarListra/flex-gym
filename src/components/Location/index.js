@@ -78,20 +78,26 @@ const Location = ({ id }) => {
             zIndex: 1, // Ensure it's above the second column
           }}
         >
-          <div>
+          {/* <div>
             <span
               className="text-white text-title"
               style={{ fontWeight: "bold" }}
             >
               {listData?.[currIdx]?.title}
             </span>
-          </div>
-          <div className="d-flex flex-row">
-            <div className="mt-1">
+          </div> */}
+          <div className="d-flex flex-row justify-content-between align-items-center">
+            {/* <div className="mt-1">
               <span className="text-desc-title">
                 {listData?.[currIdx]?.description}
               </span>
-            </div>
+            </div> */}
+            <span
+              className="text-white text-title"
+              style={{ fontWeight: "bold" }}
+            >
+              {listData?.[currIdx]?.title}
+            </span>
             <div className="d-none d-md-flex flex-row align-items-end">
               <ChevronLeft
                 className="cursor-pointer"
