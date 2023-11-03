@@ -114,6 +114,7 @@ function TextInput({
           className="form-input-control p-2"
           type={"date"}
           onChange={handleChange}
+          value={value ? moment(value).toDate() : null}
         />
       )}
       {type === "datetime" && (

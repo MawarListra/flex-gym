@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Upload, X, Edit2 } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
@@ -35,6 +35,15 @@ const PaymentForm = () => {
   const [walletOption, setWalletOption] = useState([]);
   const [dataProfileTransaction, setDataProfileTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const dataForm = new FormData();
+  dataForm.append("identity_number", "");
+  dataForm.append("admin_fee", 0);
+  dataForm.append("payment_method_id", "");
+  dataForm.append("package_id", "");
+  dataForm.append("approval_photo", "");
+  dataForm.append("identity", "");
+  dataForm.append("approval_image_nam", "");
+
   const config = {
     headers: {
       Authorization: "Bearer " + token,
@@ -147,21 +156,41 @@ const PaymentForm = () => {
     }
   };
 
+  const isFormDataEmpty = () => {
+    if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
+      console.log("cek here");
+      return true;
+    }
+    if (
+      !dataPayment?.ktpNumber ||
+      dataPayment?.ktpNumber === "" ||
+      dataPayment?.ktpNumber?.length !== 16
+    ) {
+      console.log("cek here 2");
+      return true;
+    }
+    if (!dataPayment?.packageId || !dataPayment?.paymentType?.id) {
+      console.log("cek here 3");
+      return true;
+    }
+
+    return false; // No empty fields found
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
-    const payload = new FormData();
-    payload.append("identity_number", dataPayment?.ktpNumber);
-    payload.append("admin_fee", 0);
-    payload.append("payment_method_id", dataPayment?.paymentType?.id);
-    payload.append("package_id", dataPayment?.packageId);
-    payload.append("approval_photo", imageBuktiTransfer.raw);
-    payload.append("identity", imageKtp.raw);
-    payload.append("approval_image_nam", imageBuktiTransfer?.fileName);
+    dataForm.set("identity_number", dataPayment?.ktpNumber);
+    dataForm.set("admin_fee", 0);
+    dataForm.set("payment_method_id", dataPayment?.paymentType?.id);
+    dataForm.set("package_id", dataPayment?.packageId);
+    dataForm.set("approval_photo", imageBuktiTransfer?.raw);
+    dataForm.set("identity", imageKtp?.raw);
+    dataForm.set("approval_image_nam", imageBuktiTransfer?.fileName);
 
     try {
       const resp = await axios.post(
         `${baseUrl}v1/member/transactioncreate`,
-        payload,
+        dataForm,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -242,6 +271,8 @@ const PaymentForm = () => {
     }
   }, [token]);
 
+  console.log("cek validation data", isFormDataEmpty());
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -299,7 +330,7 @@ const PaymentForm = () => {
                 lineHeight: "16px",
               }}
             >
-              Teks ini inputan dari admin jika di tolak
+              {data?.reason || "-"}
             </span>
           </div>
         ) : null}
@@ -415,7 +446,9 @@ const PaymentForm = () => {
                   menu: (provided) => ({ ...provided, zIndex: 9999 }),
                 }}
                 height={48}
-                // isDisabled={disabled}
+                isDisabled={
+                  statusMapper(data?.is_accepted)?.status === "failed"
+                }
                 placeholder={"Pilih Paket"}
                 // isSearchable={search}
                 options={packageOption}
@@ -952,12 +985,13 @@ const PaymentForm = () => {
               <Button
                 className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"
                 style={{
-                  backgroundColor: isEditData ? "#53f60f" : "#F4EFE9",
+                  backgroundColor:
+                    isEditData || !isFormDataEmpty() ? "#53f60f" : "#F4EFE9",
                   borderTopLeftRadius: isEditData ? 0 : undefined,
                   borderBottomRightRadius: isEditData ? 0 : undefined,
                   height: 48,
                 }}
-                disabled={isLoading}
+                disabled={isLoading || isFormDataEmpty()}
                 onClick={() => handleSubmit()}
               >
                 {isLoading ? (

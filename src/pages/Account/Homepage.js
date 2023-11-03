@@ -20,7 +20,6 @@ const Homepage = () => {
   const [loadQr, setLoadQr] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [dataTransaction, setDataTransaction] = useState([]);
-  const dataUser = "Rein, active";
   const [imgUrl, setImgUrl] = useState("");
   const config = {
     headers: {
@@ -173,14 +172,23 @@ const Homepage = () => {
               letterSpacing: 0.5,
             }}
           >
-            <div className="d-flex flex-column">
-              <span style={{ color: "#999" }}>
-                Membership kamu hingga tanggal
-              </span>
-              <span style={{ color: "#F15C59" }}>
-                {moment(new Date(data?.member_until)).format("DD MMMM YYYY")}
-              </span>
-            </div>
+            {data?.member_until &&
+            moment(data?.member_until) > moment().toDate() ? (
+              <div className="d-flex flex-column">
+                <span style={{ color: "#999" }}>
+                  Membership kamu hingga tanggal
+                </span>
+                <span style={{ color: "#F15C59" }}>
+                  {moment(new Date(data?.member_until)).format("DD MMMM YYYY")}
+                </span>
+              </div>
+            ) : (
+              <div>
+                <span style={{ color: "#999" }}>
+                  Kamu belum memiliki paket gym
+                </span>
+              </div>
+            )}
             <div className="d-flex flex-column justify-content-end">
               <span
                 style={{
@@ -191,7 +199,10 @@ const Homepage = () => {
                 }}
                 onClick={() => navigate("/renew-membership")}
               >
-                Perpanjang Member
+                {data?.member_until &&
+                moment(data?.member_until) > moment().toDate()
+                  ? "Perpanjang Member"
+                  : "Beli Paket Gym"}
               </span>
             </div>
           </div>

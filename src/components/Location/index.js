@@ -52,7 +52,7 @@ const Location = ({ id }) => {
       id="contact"
     >
       <div
-        className="d-flex flex-column align-items-center justify-content-between width-why-us"
+        className="d-flex flex-column align-items-center justify-content-end width-why-us"
         style={{
           overflowX: "auto",
           maxWidth: "100%",

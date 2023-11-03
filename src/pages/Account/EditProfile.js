@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import Select from "react-select";
 import axios from "axios";
 import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -14,15 +15,16 @@ const EditProfile = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const token = localStorage.getItem("token");
+  const defData = JSON.parse(localStorage.getItem("dataProfile"));
   const [dataUser, setDataUser] = useState({
-    name: "",
-    phone: "",
-    born_date: "",
-    sex: {},
+    name: defData?.name,
+    phone: defData?.phone,
+    born_date: defData?.born_date,
+    sex: defData?.sex,
   });
   const genderOption = [
-    { id: "male", name: "Laki-Laki" },
-    { id: "female", name: "Perempuan" },
+    { id: "Laki-Laki", name: "Laki-Laki" },
+    { id: "Perempuan", name: "Perempuan" },
   ];
 
   const validateData = () => {
@@ -35,8 +37,6 @@ const EditProfile = () => {
     }
     return true;
   };
-
-  console.log("cek token", token);
 
   const handleUbahData = async () => {
     setIsLoading(true);
@@ -78,6 +78,7 @@ const EditProfile = () => {
       navigate("/login");
     }
   }, [token]);
+  console.log("cek here", dataUser);
 
   return (
     <div
@@ -173,7 +174,11 @@ const EditProfile = () => {
                 label="Tanggal Lahir"
                 placeholder={"Tanggal Lahir"}
                 type={"dateWithPrepend"}
-                value={dataUser?.born_date}
+                value={
+                  dataUser?.born_date
+                  // ? moment(new Date(dataUser?.born_date)).format("dd/mm/yyyy")
+                  // : null
+                }
                 handleChange={({ target: { value } }) => {
                   setDataUser({
                     ...dataUser,
@@ -197,11 +202,11 @@ const EditProfile = () => {
                   placeholder={"Jenis Kelamin"}
                   // isSearchable={search}
                   options={genderOption}
-                  value={genderOption.find((e) => e?.id === dataUser?.sex?.id)}
+                  value={genderOption.find((e) => e?.id === dataUser?.sex)}
                   onChange={(e) =>
                     setDataUser({
                       ...dataUser,
-                      sex: e,
+                      sex: e?.id,
                     })
                   }
                   getOptionLabel={(option) => option.name}

@@ -196,7 +196,7 @@ body {
     /* justify-content: space-between; */
     align-items: center;
     padding: 24px;
-    gap: 16px;
+    /* gap: 16px; */
   }
   .text-desc-title-categories {
     display: flex;
@@ -282,8 +282,6 @@ body {
     top: 2700px; /* Adjust the vertical position of the third dot */
     left: -70px; /* Adjust the horizontal position of the third dot */
     filter: blur(125px);
-  }
-  .navbar {
   }
 }
 
@@ -372,8 +370,6 @@ body {
   }
   .width-location {
     width: 100%;
-  }
-  .hero-background {
   }
   .hero-title {
     font-size: 56px;
@@ -577,8 +573,6 @@ body {
   display: flex;
   justify-content: space-between;
   width: 100%;
-}
-.otpContainer div {
 }
 .otpContainer input {
   display: flex;

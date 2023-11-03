@@ -7,6 +7,7 @@ import buktiTransfer from "../../assets/Text Field.png";
 import { Button } from "reactstrap";
 import ProfPic from "../../assets/sporty girl workout.png";
 import toast, { Toaster } from "react-hot-toast";
+import moment from "moment";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -134,10 +135,23 @@ const Profile = () => {
                   letterSpacing: 0.5,
                 }}
               >
-                <span style={{ color: "#999" }}>
-                  Membership kamu hingga tanggal
-                </span>
-                <span style={{ color: "#F15C59" }}>8 September 2023</span>
+                {dataUser?.member_until &&
+                moment(dataUser?.member_until) > moment().toDate() ? (
+                  <>
+                    <span style={{ color: "#999" }}>
+                      Membership kamu hingga tanggal
+                    </span>
+                    <span style={{ color: "#F15C59" }}>
+                      {moment(new Date(dataUser?.member_until)).format(
+                        "DD MMMM YYYY"
+                      )}
+                    </span>
+                  </>
+                ) : (
+                  <span style={{ color: "#999" }}>
+                    Kamu belum memiliki paket gym
+                  </span>
+                )}
               </div>
             </div>
           </div>

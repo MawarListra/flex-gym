@@ -24,10 +24,12 @@ const Hero = ({ id }) => {
         </span>
       </div>
       <div className="title-hero-box mb-2">
+        {" "}
+        <span className="text-white text-title-hero"> BUILD YOUR BODY </span>
         <span className="text-white text-title-hero">
-          <span className="text-outline text-title-hero">BUILD</span> YOUR BODY
+          AND THEN {"  "}
+          <span className="text-outline text-title-hero ml-2">FLEX IT</span>
         </span>
-        <span className="text-white text-title-hero">AND THEN FLEX IT</span>
       </div>
       <div className="title-hero-box mb-4">
         <span className="text-desc-title">
