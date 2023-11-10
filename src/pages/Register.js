@@ -221,8 +221,9 @@ const Registrasi = () => {
               label="Tanggal Lahir"
               placeholder={"Tanggal Lahir"}
               type={"dateWithPrepend"}
-              value={tempData?.born_date}
+              value={tempData?.born_date ? new Date(tempData?.born_date) : null}
               handleChange={({ target: { value } }) => {
+                console.log("cek value", value);
                 setTempData({
                   ...tempData,
                   born_date: value,

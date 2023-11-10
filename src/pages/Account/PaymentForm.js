@@ -186,6 +186,7 @@ const PaymentForm = () => {
     dataForm.set("approval_photo", imageBuktiTransfer?.raw);
     dataForm.set("identity", imageKtp?.raw);
     dataForm.set("approval_image_nam", imageBuktiTransfer?.fileName);
+    dataForm.set("id_before", id);
 
     try {
       const resp = await axios.post(

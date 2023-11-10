@@ -175,7 +175,7 @@ const EditProfile = () => {
                 placeholder={"Tanggal Lahir"}
                 type={"dateWithPrepend"}
                 value={
-                  dataUser?.born_date
+                  dataUser?.born_date ? new Date(dataUser?.born_date) : null
                   // ? moment(new Date(dataUser?.born_date)).format("dd/mm/yyyy")
                   // : null
                 }
