@@ -88,7 +88,7 @@ const Program = ({ id }) => {
         "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
     },
   ];
-  console.log("cek listdata", listData);
+
   return (
     <div
       className="d-flex flex-column paddingComponentRight paddingComponentLeft"

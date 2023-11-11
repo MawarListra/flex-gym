@@ -33,14 +33,7 @@ const Location = ({ id }) => {
     },
   ];
   const [currIdx, setCurrIdx] = useState(0);
-  // const scrollToDiv = (myDiv) => {
-  //   console.log("cek myDiv", myDiv);
-  //   // Replace 'myDiv' with the ID of the div you want to scroll to
-  //   scroll.scrollTo(myDiv, {
-  //     duration: 800, // Scroll duration in milliseconds
-  //     smooth: "easeInOutQuart", // Scroll animation easing function
-  //   });
-  // };
+
   return (
     <div
       className="d-flex flex-column flex-md-row paddingComponentRight md-paddingComponentLeft"
@@ -106,7 +99,6 @@ const Location = ({ id }) => {
                   if (currIdx === 0) {
                     return undefined;
                   } else {
-                    console.log("cek here");
                     const targetIndex = currIdx - 1;
                     const item = document.getElementById(
                       "imageScroll-" + targetIndex

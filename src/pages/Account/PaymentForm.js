@@ -158,7 +158,6 @@ const PaymentForm = () => {
 
   const isFormDataEmpty = () => {
     if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
-      console.log("cek here");
       return true;
     }
     if (
@@ -166,11 +165,9 @@ const PaymentForm = () => {
       dataPayment?.ktpNumber === "" ||
       dataPayment?.ktpNumber?.length !== 16
     ) {
-      console.log("cek here 2");
       return true;
     }
     if (!dataPayment?.packageId || !dataPayment?.paymentType?.id) {
-      console.log("cek here 3");
       return true;
     }
 
@@ -229,10 +226,6 @@ const PaymentForm = () => {
   }, []);
 
   useEffect(() => {
-    console.log("cek dataPayment", dataPayment);
-  }, [dataPayment]);
-
-  useEffect(() => {
     if (isEditData) {
       setDataPayment({
         ktpNumber: data?.identity_number,
@@ -271,8 +264,6 @@ const PaymentForm = () => {
       navigate("/login");
     }
   }, [token]);
-
-  console.log("cek validation data", isFormDataEmpty());
 
   return (
     <div

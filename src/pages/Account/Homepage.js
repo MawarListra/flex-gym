@@ -41,7 +41,6 @@ const Homepage = () => {
         `${baseUrl}v1/member/historytransaction?page=1&pagesize=100`,
         config
       );
-      console.log("cek respHistory", respHistory);
       if (
         respHistory?.status === 200 &&
         respHistory?.data?.status === "success"
@@ -60,7 +59,6 @@ const Homepage = () => {
     setLoadQr(true);
     try {
       const resp = await axios.get(`${baseUrl}v1/member/myprofile`, config);
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         setLoadQr(false);
         setData(resp?.data?.data);
@@ -84,7 +82,6 @@ const Homepage = () => {
           console.error("cek err", err);
         } else {
           setImgUrl(url);
-          console.log("cek url", url);
         }
       });
       localStorage.setItem("dataProfile", JSON.stringify(data));

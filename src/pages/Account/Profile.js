@@ -13,9 +13,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const token = localStorage.getItem("token");
-  console.log("cek id", id);
   const dataUser = JSON.parse(localStorage.getItem("dataProfile"));
-  console.log("cek datauser", dataUser);
   const listMenu = [
     {
       id: "update-profile",

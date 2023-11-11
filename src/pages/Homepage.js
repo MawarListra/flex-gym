@@ -76,12 +76,10 @@ const Homepage = () => {
       window.onscroll = function () {
         window.scrollTo(scrollLeft, scrollTop);
       };
-      console.log("cek here remove");
     } else {
       document.querySelector("body").classList.add("scroll");
       document.querySelector("html").classList.add("scroll");
       window.onscroll = function () {};
-      console.log("cek here add");
     }
   }, [openMenu]);
 

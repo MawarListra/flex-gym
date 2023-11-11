@@ -19,7 +19,6 @@ const Transaction = () => {
   const { id } = useParams();
   const token = localStorage.getItem("token");
 
-  console.log("cek id", id);
   const [listAccountPayment, setListAccountPayment] = useState([]);
   const [dataAccountPayment, setDataAccountPayment] = useState({});
   const config = {
@@ -61,7 +60,6 @@ const Transaction = () => {
         `${baseUrl}v1/payment_method/getall`,
         config
       );
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         setListAccountPayment(resp?.data?.data);
       } else {
@@ -98,8 +96,6 @@ const Transaction = () => {
       }
     }
   }, [listAccountPayment]);
-
-  console.log("cek url image", `${baseUrl}${data?.approval_photo}`);
 
   useEffect(() => {
     if (!token || token === "") {

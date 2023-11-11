@@ -34,7 +34,7 @@ const Facilities = () => {
         " Ruang berbagai program kelas olahraga dilengkapi fasilitas AC",
     },
   ];
-  console.log("cek listdata", listData);
+
   return (
     <div
       className="d-flex flex-column justify-content-center align-items-center text-center paddingComponentRight paddingComponentLeft"

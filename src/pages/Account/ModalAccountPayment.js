@@ -44,7 +44,6 @@ const ModalAccountPayment = ({
           bank_account_name: "",
         }
   );
-  console.log("cek dataAccountPayment", dataAccountPayment);
 
   const handleSavePaymentAccount = async () => {
     setIsLoading(true);
@@ -70,7 +69,6 @@ const ModalAccountPayment = ({
       const resp = await (action === "add"
         ? axios.post(`${baseUrl}${url}`, payload, config)
         : axios.put(`${baseUrl}${url}`, payload, config));
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         toast.success("Berhasil menyimpan");
         setIsLoading(false);
@@ -129,17 +127,6 @@ const ModalAccountPayment = ({
       setCheckedType(true);
     }
   }, [datas]);
-
-  useEffect(() => {
-    console.log(
-      "cek dataAccountPayment?.bank_name",
-      parseInt(dataAccountPayment?.bank_name)
-    );
-    console.log(
-      "cek here >>> ",
-      bankOption.find((e) => e?.id === parseInt(dataAccountPayment?.bank_name))
-    );
-  }, [dataAccountPayment?.bank_name]);
 
   return (
     <Modal zIndex={2000} centered isOpen={open} toggle={toggle} size="sm">

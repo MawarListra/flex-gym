@@ -28,7 +28,6 @@ const PaymentAccount = () => {
       "Content-Type": "application/json",
     },
   };
-  console.log("cek currentData", currentData);
 
   const getBankList = async () => {
     try {
@@ -58,7 +57,6 @@ const PaymentAccount = () => {
         `${baseUrl}v1/payment_method/getall`,
         config
       );
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         setDataAccountPayment(resp?.data?.data);
       } else {

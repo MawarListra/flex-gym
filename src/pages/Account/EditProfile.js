@@ -63,7 +63,6 @@ const EditProfile = () => {
         data,
         config
       );
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         toast.success("Berhasil ubah data!");
         setIsLoading(false);
@@ -84,7 +83,6 @@ const EditProfile = () => {
       navigate("/login");
     }
   }, [token]);
-  console.log("cek here", dataUser);
 
   return (
     <div
@@ -190,7 +188,6 @@ const EditProfile = () => {
                       dataUser?.born_date ? new Date(dataUser?.born_date) : null
                     }
                     onChange={(date) => {
-                      console.log("cek date", date);
                       setDataUser({ ...dataUser, born_date: date });
                     }}
                     dateFormat={"dd-MMM-yyyy"}

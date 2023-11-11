@@ -44,7 +44,6 @@ const Registrasi = () => {
   dataRegister.append("phone", "");
   dataRegister.append("born_date", "");
   dataRegister.append("sex", "");
-  console.log("cek formData", dataRegister);
 
   const validateData = () => {
     if (tempData?.password !== tempData?.confirmPassword) {
@@ -69,7 +68,6 @@ const Registrasi = () => {
     dataRegister.set("born_date", tempData?.born_date);
     dataRegister.set("sex", tempData?.sex?.name);
 
-    // console.log("cek dataRegister", dataRegister);
     for (const pair of dataRegister.entries()) {
       console.log("cek datas", pair[0] + ", " + pair[1]);
     }
@@ -79,7 +77,6 @@ const Registrasi = () => {
         `${baseUrl}v1/member/register`,
         dataRegister
       );
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         localStorage.setItem("emailRegist", resp?.data?.m_member?.email);
         toast.success("Berhasil mendaftar. Silahkan verif akun anda!");
@@ -239,7 +236,6 @@ const Registrasi = () => {
                     tempData?.born_date ? new Date(tempData?.born_date) : null
                   }
                   onChange={(date) => {
-                    console.log("cek date", date);
                     setTempData({ ...tempData, born_date: date });
                   }}
                   dateFormat={"dd-MMM-yyyy"}

@@ -13,7 +13,6 @@ const SendOTP = () => {
   const expiredOTP = 40;
   const navigate = useNavigate();
   const location = useLocation();
-  console.log("cek location", location);
   const { email } = location.state;
   const [otp, setOtp] = useState("");
   const [time, setTime] = useState("");
@@ -46,7 +45,6 @@ const SendOTP = () => {
       email: email,
     };
     setIsLoading(false);
-    console.log("cek payload", payload);
     try {
       const resp = await axios.put(`${baseUrl}v1/member/reverify`, payload);
       if (resp?.status === 200 && resp?.data?.status === "success") {
@@ -72,7 +70,6 @@ const SendOTP = () => {
       verif_code: otp,
     };
     setIsLoading(true);
-    console.log("cek payload", payload);
     try {
       const resp = await axios.put(`${baseUrl}v1/member/verify`, payload);
       if (resp?.status === 200 && resp?.data?.status === "success") {
@@ -109,8 +106,6 @@ const SendOTP = () => {
       handleSendOtp();
     }
   }, [otp]);
-
-  console.log("cek otp", otp);
 
   return (
     <div

@@ -39,7 +39,6 @@ const Login = () => {
           "Access-Control-Allow-Origin": "*",
         },
       });
-      console.log("cek resp", resp);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         toast.success("Berhasil login");
         localStorage.setItem("token", resp.data.token);

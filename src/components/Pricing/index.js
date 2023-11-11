@@ -33,7 +33,7 @@ const Pricing = ({ id }) => {
       recomendation: true,
     },
   ];
-  console.log("cek listdata", listData);
+
   return (
     <div
       className="d-flex flex-column justify-content-center align-items-center text-center paddingComponentRight paddingComponentLeft"
