@@ -171,7 +171,7 @@ const SendOTP = () => {
             >
               Kode OTP telah dikirimkan ke email{" "}
               <span className="text-white" style={{ fontWeight: "bold" }}>
-                rei***@gmail.com
+                {localStorage.getItem("emailRegist")}
               </span>
               . Demi keamanan, jangan berikan kodenya ke siapapun termasuk pihak
               GPI.

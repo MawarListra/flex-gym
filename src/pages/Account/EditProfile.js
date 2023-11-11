@@ -12,6 +12,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import id from "date-fns/locale/id";
 import "react-datepicker/dist/react-datepicker.css";
 import "../style.css";
+import CalendarIc from "../../assets/icon/date_range.svg";
 
 registerLocale("id", id);
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
@@ -180,28 +181,40 @@ const EditProfile = () => {
                   Tanggal Lahir
                   <span style={{ color: "#F83245" }}> *</span>
                 </small>
-                <DatePicker
-                  locale="id"
-                  className="form-input-control"
-                  selected={
-                    dataUser?.born_date ? new Date(dataUser?.born_date) : null
-                  }
-                  onChange={(date) => {
-                    console.log("cek date", date);
-                    setDataUser({ ...dataUser, born_date: date });
-                  }}
-                  dateFormat={"dd-MMM-yyyy"}
-                  showYearDropdown
-                  showMonthDropdown
-                  dropdownMode="select"
-                  popperPlacement="bottom-end"
-                  popperModifiers={{
-                    flip: {
-                      behavior: ["bottom"],
-                    },
-                  }}
-                  showPopperArrow={false}
-                />
+                <div className="w-100 " style={{ position: "relative" }}>
+                  <DatePicker
+                    locale="id"
+                    placeholderText="Tanggal Lahir"
+                    className="form-input-control"
+                    selected={
+                      dataUser?.born_date ? new Date(dataUser?.born_date) : null
+                    }
+                    onChange={(date) => {
+                      console.log("cek date", date);
+                      setDataUser({ ...dataUser, born_date: date });
+                    }}
+                    dateFormat={"dd-MMM-yyyy"}
+                    showYearDropdown
+                    showMonthDropdown
+                    dropdownMode="select"
+                    popperPlacement="bottom-end"
+                    popperModifiers={{
+                      flip: {
+                        behavior: ["bottom"],
+                      },
+                    }}
+                    showPopperArrow={false}
+                  />
+                  <img
+                    src={CalendarIc}
+                    style={{
+                      position: "absolute",
+                      right: 15,
+                      top: 10,
+                      zIndex: 9999,
+                    }}
+                  />
+                </div>
               </div>
               <div className="d-flex flex-column">
                 <small className="font-weight-bold pb-2 text-white d-block">

@@ -9,3 +9,10 @@
   width: 100%;
   padding-left: 8px;
 }
+
+.react-datepicker-wrapper {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  width: 100%;
+}
