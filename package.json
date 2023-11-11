@@ -15,7 +15,7 @@
     "numbro": "^2.4.0",
     "qrcode": "^1.5.3",
     "react": "^18.2.0",
-    "react-datepicker": "^4.20.0",
+    "react-datepicker": "^4.21.0",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
     "react-hot-toast": "^2.4.1",
