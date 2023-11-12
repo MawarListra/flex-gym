@@ -36,6 +36,10 @@ const PaymentForm = () => {
   const [dataProfileTransaction, setDataProfileTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [rekeningOption, setRekeningOption] = useState([]);
+  const [tempImage, setTempImage] = useState({
+    tempKtp: "",
+    tempBukti: "",
+  });
   const dataForm = new FormData();
   dataForm.append("identity_number", "");
   dataForm.append("admin_fee", 0);
@@ -206,6 +210,10 @@ const PaymentForm = () => {
           preview: `${baseUrl}${resp?.data?.data?.approval_photo}`,
           fileName: resp?.data?.data?.approval_image_name,
         });
+        setTempImage({
+          tempKtp: resp?.data?.data?.identity,
+          tempBukti: resp?.data?.data?.approval_photo,
+        });
       }
     } catch (e) {
       console.log("cek err", e);
@@ -242,8 +250,8 @@ const PaymentForm = () => {
     dataForm.set("id_before", id);
 
     if (
-      typeof imageKtp?.raw === String ||
-      typeof imageBuktiTransfer?.raw === String
+      dataPayment?.identity === tempImage?.ktp ||
+      dataPayment?.approval_photo === tempImage?.tempBukti
     ) {
       toast.error("Silahkan Upload ulang identitas dan bukti transfer");
     } else {
