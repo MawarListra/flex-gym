@@ -308,38 +308,14 @@ const PaymentForm = () => {
     console.log("cek here>>>>", dataPayment);
   }, [dataPayment]);
 
-  // useEffect(() => {
-  //   if (isEditData) {
-  //     setDataPayment({
-  //       ktpNumber: data?.identity_number,
-  //       packageId: data?.package_id,
-  //       paymentType: {
-  //         id: data?.payment_method_id,
-  //         bank_name: data?.bank_name,
-  //         ewallet: data?.ewallet,
-  //         payment_type_id: data?.payment_method_id,
-  //         bank_number: data?.bank_number,
-  //         phone: data?.phone,
-  //       },
-  //       admin_fee: data?.admin_fee,
-  //       packagePrice: data?.package?.price,
-  //       packageName: data?.package?.name,
-  //     });
+  const calculateMembershipDuration = (member_until) => {
+    let tanggal1 = moment(new Date());
+    let tanggal2 = moment(member_until);
 
-  //     setImageKtp({
-  //       raw: data?.identity,
-  //       preview: `${baseUrl}${data?.identity}`,
-  //       fileName: "Foto Ktp.png",
-  //     });
-  //     setImageBukiTransfer({
-  //       raw: data?.approval_photo,
-  //       preview: `${baseUrl}${data?.approval_photo}`,
-  //       fileName: data?.approval_image_name,
-  //     });
-  //   } else {
-  //     localStorage.setItem("currDataTransaction", null);
-  //   }
-  // }, []);
+    const selisih = tanggal2.diff(tanggal1, "days");
+    console.log("cek selisih");
+    return selisih;
+  };
 
   useEffect(() => {
     if (!token || token === "") {
@@ -446,10 +422,10 @@ const PaymentForm = () => {
                       color: "#F15C59",
                     }}
                   >
-                    {new Date().diff(
-                      moment(dataProfileTransaction?.member_until),
-                      "days"
-                    )}
+                    {calculateMembershipDuration(
+                      dataProfileTransaction.member_until
+                    )}{" "}
+                    hari lagi
                   </span>
                 )}
               </span>
