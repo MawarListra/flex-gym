@@ -46,9 +46,9 @@ const Registrasi = () => {
   dataRegister.append("sex", "");
 
   const validateData = () => {
-    if (tempData?.password !== tempData?.confirmPassword) {
-      return false;
-    }
+    // if (tempData?.confirmPassword !== tempData?.password) {
+    //   return false;
+    // }
     if (
       Object.keys(tempData).some(
         (key) => key === "" || key === {} || key === null
@@ -87,7 +87,11 @@ const Registrasi = () => {
       }
     } catch (e) {
       setIsLoading(false);
-      toast.error("Gagal mendaftar. Silahkan coba lagi!");
+      if (e.response.status === 422) {
+        toast.error("Email sudah terdaftar");
+      } else {
+        toast.error("Gagal mendaftar. Silahkan coba lagi!");
+      }
       console.log("cek err", e);
     }
   };
@@ -192,6 +196,7 @@ const Registrasi = () => {
                   confirmPassword: value,
                 });
               }}
+              // notMatch={tempData?.confirmPassword !== tempData?.password}
               isRequired={true}
             />
             <TextInput
@@ -312,7 +317,11 @@ const Registrasi = () => {
                 borderBottomRightRadius: 0,
                 height: 48,
               }}
-              onClick={() => handleSubmit()}
+              onClick={() =>
+                tempData?.confirmPassword !== tempData?.password
+                  ? toast.error("Password Anda tidak cocok")
+                  : handleSubmit()
+              }
               disabled={!validateData() || isLoading}
             >
               {isLoading ? (

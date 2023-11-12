@@ -223,10 +223,7 @@ const SendOTP = () => {
                   }}
                 >
                   Kirim ulang kode?{" "}
-                  <span
-                    style={{ color: "#F15C59", cursor: "pointer" }}
-                    onClick={() => navigate("/registration")}
-                  >
+                  <span style={{ color: "#F15C59" }}>
                     Tunggu {`${parseTime(seconds)}`} detik
                   </span>
                 </span>

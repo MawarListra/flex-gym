@@ -35,6 +35,7 @@ const PaymentForm = () => {
   const [walletOption, setWalletOption] = useState([]);
   const [dataProfileTransaction, setDataProfileTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [rekeningOption, setRekeningOption] = useState([]);
   const dataForm = new FormData();
   dataForm.append("identity_number", "");
   dataForm.append("admin_fee", 0);
@@ -42,7 +43,7 @@ const PaymentForm = () => {
   dataForm.append("package_id", "");
   dataForm.append("approval_photo", "");
   dataForm.append("identity", "");
-  dataForm.append("approval_image_nam", "");
+  dataForm.append("approval_image_name", "");
 
   const config = {
     headers: {
@@ -145,11 +146,66 @@ const PaymentForm = () => {
     }
   };
 
+  const getDataRekeningAdmin = async () => {
+    try {
+      const resp = await axios.get(
+        `${baseUrl}v1/rekeningadmin_type/getall`,
+        config
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setRekeningOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
   const getProfileTransaction = async () => {
     try {
       const resp = await axios.get(`${baseUrl}v1/member/myprofile`, config);
       if (resp?.status === 200 && resp?.data?.status === "success") {
         setDataProfileTransaction(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
+  const getDetailTransaction = async () => {
+    try {
+      const resp = await axios.get(
+        `${baseUrl}v1/member/transactiondetail/${id}`,
+        config
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        console.log("cek response >>>", resp?.data?.data);
+
+        setDataPayment({
+          ktpNumber: resp?.data?.data?.identity_number,
+          packageId: resp?.data?.data?.package?.id,
+          paymentType: {
+            id: resp?.data?.data?.payment_method_id,
+            bank_name: resp?.data?.payment_method?.data?.bank_name,
+            ewallet: parseInt(resp?.data?.data?.payment_method?.ewallet),
+            payment_type_id: resp?.data?.data?.payment_method_id,
+            bank_number: resp?.data?.data?.payment_method?.bank_number,
+            phone: resp?.data?.data?.payment_method?.phone,
+          },
+          admin_fee: resp?.data?.data?.admin_fee,
+          packagePrice: resp?.data?.data?.package?.price,
+          packageName: resp?.data?.data?.package?.name,
+        });
+
+        setImageKtp({
+          raw: resp?.data?.data?.identity,
+          preview: `${baseUrl}${resp?.data?.data?.identity}`,
+          fileName: "Foto Ktp.png",
+        });
+        setImageBukiTransfer({
+          raw: resp?.data?.data?.approval_photo,
+          preview: `${baseUrl}${resp?.data?.data?.approval_photo}`,
+          fileName: resp?.data?.data?.approval_image_name,
+        });
       }
     } catch (e) {
       console.log("cek err", e);
@@ -182,29 +238,37 @@ const PaymentForm = () => {
     dataForm.set("package_id", dataPayment?.packageId);
     dataForm.set("approval_photo", imageBuktiTransfer?.raw);
     dataForm.set("identity", imageKtp?.raw);
-    dataForm.set("approval_image_nam", imageBuktiTransfer?.fileName);
+    dataForm.set("approval_image_name", imageBuktiTransfer?.fileName);
     dataForm.set("id_before", id);
 
-    try {
-      const resp = await axios.post(
-        `${baseUrl}v1/member/transactioncreate`,
-        dataForm,
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-            "Content-Type": "multipart/form-data",
-          },
+    if (
+      typeof imageKtp?.raw === String ||
+      typeof imageBuktiTransfer?.raw === String
+    ) {
+      toast.error("Silahkan Upload ulang identitas dan bukti transfer");
+    } else {
+      try {
+        const resp = await axios.post(
+          `${baseUrl}v1/member/transactioncreate`,
+          dataForm,
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        if (resp?.status === 200 && resp?.data?.status === "success") {
+          setIsLoading(false);
+          toast.success("Pembayaran berhasil!");
+          navigate(`/account`);
+          localStorage.setItem("currDataTransaction", null);
         }
-      );
-      if (resp?.status === 200 && resp?.data?.status === "success") {
+      } catch (e) {
         setIsLoading(false);
-        toast.success("Pembayaran berhasil!");
-        navigate(`/account`);
-        localStorage.setItem("currDataTransaction", null);
+        toast.error("Pembayaran gagal!");
+        console.log("cek err", e);
       }
-    } catch (e) {
-      toast.error("Pembayaran gagal!");
-      console.log("cek err", e);
     }
   };
 
@@ -223,40 +287,51 @@ const PaymentForm = () => {
     getWalletList();
     getDataPackage();
     getProfileTransaction();
+    getDataRekeningAdmin();
   }, []);
 
   useEffect(() => {
-    if (isEditData) {
-      setDataPayment({
-        ktpNumber: data?.identity_number,
-        packageId: data?.package_id,
-        paymentType: {
-          id: data?.payment_method_id,
-          bank_name: data?.bank_name,
-          ewallet: data?.ewallet,
-          payment_type_id: data?.payment_method_id,
-          bank_number: data?.bank_number,
-          phone: data?.phone,
-        },
-        admin_fee: data?.admin_fee,
-        packagePrice: data?.package?.price,
-        packageName: data?.package?.name,
-      });
-
-      setImageKtp({
-        raw: data?.identity,
-        preview: `${baseUrl}${data?.identity}`,
-        fileName: "Foto Ktp.png",
-      });
-      setImageBukiTransfer({
-        raw: data?.approval_photo,
-        preview: `${baseUrl}${data?.approval_photo}`,
-        fileName: data?.approval_image_name,
-      });
-    } else {
-      localStorage.setItem("currDataTransaction", null);
+    if (id) {
+      getDetailTransaction();
     }
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    console.log("cek here>>>>", dataPayment);
+  }, [dataPayment]);
+
+  // useEffect(() => {
+  //   if (isEditData) {
+  //     setDataPayment({
+  //       ktpNumber: data?.identity_number,
+  //       packageId: data?.package_id,
+  //       paymentType: {
+  //         id: data?.payment_method_id,
+  //         bank_name: data?.bank_name,
+  //         ewallet: data?.ewallet,
+  //         payment_type_id: data?.payment_method_id,
+  //         bank_number: data?.bank_number,
+  //         phone: data?.phone,
+  //       },
+  //       admin_fee: data?.admin_fee,
+  //       packagePrice: data?.package?.price,
+  //       packageName: data?.package?.name,
+  //     });
+
+  //     setImageKtp({
+  //       raw: data?.identity,
+  //       preview: `${baseUrl}${data?.identity}`,
+  //       fileName: "Foto Ktp.png",
+  //     });
+  //     setImageBukiTransfer({
+  //       raw: data?.approval_photo,
+  //       preview: `${baseUrl}${data?.approval_photo}`,
+  //       fileName: data?.approval_image_name,
+  //     });
+  //   } else {
+  //     localStorage.setItem("currDataTransaction", null);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (!token || token === "") {
@@ -354,14 +429,21 @@ const PaymentForm = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                Membership Kamu tersisa{" "}
-                <span
-                  style={{
-                    color: "#F15C59",
-                  }}
-                >
-                  5 hari lagi
-                </span>
+                {dataProfileTransaction?.member_until
+                  ? "Membership Kamu tersisa "
+                  : "Kamu belum memiliki paket"}
+                {dataProfileTransaction?.member_until && (
+                  <span
+                    style={{
+                      color: "#F15C59",
+                    }}
+                  >
+                    {new Date().diff(
+                      moment(dataProfileTransaction?.member_until),
+                      "days"
+                    )}
+                  </span>
+                )}
               </span>
             </div>
           )}
@@ -416,13 +498,17 @@ const PaymentForm = () => {
                 }}
               >
                 <span style={{ color: "#999" }}>
-                  Membership kamu hingga tanggal
+                  {dataProfileTransaction?.member_until
+                    ? "Membership Kamu tersisa "
+                    : "Kamu belum memiliki paket"}
                 </span>
-                <span style={{ color: "#F15C59" }}>
-                  {moment(
-                    new Date(dataProfileTransaction?.member_until)
-                  ).format("DD MMMM YYYY")}
-                </span>
+                {dataProfileTransaction?.member_until && (
+                  <span style={{ color: "#F15C59" }}>
+                    {moment(
+                      new Date(dataProfileTransaction?.member_until)
+                    ).format("DD MMMM YYYY")}
+                  </span>
+                )}
               </div>
             </div>
           </div>
@@ -629,6 +715,7 @@ const PaymentForm = () => {
                   }}
                   onClick={() => {
                     setOpenModal(!openModal);
+                    localStorage.setItem("currFormData", dataPayment);
                   }}
                 >
                   <div className="d-flex flex-column">
@@ -707,7 +794,9 @@ const PaymentForm = () => {
                 accept="image/jpg, image/jpeg, image/png, application/pdf"
               />
               <div className="d-flex flex-column justify-content-between">
-                {imageBuktiTransfer?.fileName ? (
+                {(imageBuktiTransfer?.fileName &&
+                  imageBuktiTransfer?.fileName !== "") ||
+                (isEditData && imageBuktiTransfer?.raw) ? (
                   <div
                     className="upload-file-container"
                     style={{ position: "relative" }}
@@ -774,13 +863,14 @@ const PaymentForm = () => {
                           lineHeight: "18px",
                         }}
                       >
-                        Upload Foto Identitas
+                        Upload Bukti Transfer
                       </span>
                     </div>
                   </div>
                 )}
-                {imageBuktiTransfer?.fileName &&
-                  imageBuktiTransfer?.fileName !== "" && (
+                {(imageBuktiTransfer?.fileName &&
+                  imageBuktiTransfer?.fileName !== "") ||
+                  (isEditData && imageBuktiTransfer?.raw && (
                     <div>
                       <span
                         style={{
@@ -795,24 +885,8 @@ const PaymentForm = () => {
                         {imageBuktiTransfer?.fileName}
                       </span>
                     </div>
-                  )}
+                  ))}
               </div>
-              {/* <div className="d-flex flex-column">
-                    {wrongFormat && (
-                      <span
-                        className="font-size-sm mt-2"
-                        style={{ color: '#F83245' }}>
-                        Jenis File harus PDF, JPEG, JPG, Or PNG
-                      </span>
-                    )}
-                    {overSize && (
-                      <span
-                        className="font-size-sm mt-2"
-                        style={{ color: '#F83245' }}>
-                        Maksimal ukuran file 2 MB
-                      </span>
-                    )}
-                  </div> */}
             </div>
           </div>
           <div className="d-flex flex-column gap-2">
@@ -828,40 +902,48 @@ const PaymentForm = () => {
             >
               Bank Transfer
             </span>
-            <div
-              className="d-flex flex-row p-3 gap-2"
-              style={{ borderRadius: "5px", border: "0.5px solid #999" }}
-            >
-              <div className="d-flex justify-content-center align-items-center">
-                <img src={bcaIc} />
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between">
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "16px",
-                  }}
+            {rekeningOption.map((el) => {
+              return (
+                <div
+                  className="d-flex flex-row p-3 gap-2"
+                  style={{ borderRadius: "5px", border: "0.5px solid #999" }}
                 >
-                  Bank Central Asia (BCA)
-                </span>
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "18px",
-                  }}
-                >
-                  0373232121 a/n Naufal{" "}
-                </span>
-              </div>
-            </div>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <img
+                      src={`${baseUrl}${el?.icon}`}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </div>
+                  <div className="d-flex flex-column gap-2 justify-content-between">
+                    <span
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "16px",
+                      }}
+                    >
+                      {el?.bank_account || "-"}
+                    </span>
+                    <span
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "14px",
+                        fontStyle: "normal",
+                        fontWeight: 700,
+                        lineHeight: "18px",
+                      }}
+                    >
+                      {el?.bank_account_number || "-"} a/n{" "}
+                      {el?.bank_account_name || "-"}{" "}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
           <div className="d-flex flex-column gap-2 mt-2">
             <span

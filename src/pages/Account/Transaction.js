@@ -28,6 +28,7 @@ const Transaction = () => {
     },
   };
   const data = JSON.parse(localStorage.getItem("currDataTransaction"));
+  const [rekeningOption, setRekeningOption] = useState([]);
 
   const [bankOption, setBankOption] = useState([]);
   const [walletOption, setWalletOption] = useState([]);
@@ -71,6 +72,20 @@ const Transaction = () => {
     }
   };
 
+  const getDataRekeningAdmin = async () => {
+    try {
+      const resp = await axios.get(
+        `${baseUrl}v1/rekeningadmin_type/getall`,
+        config
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
+        setRekeningOption(resp?.data?.data);
+      }
+    } catch (e) {
+      console.log("cek err", e);
+    }
+  };
+
   const hitungTotal = () => {
     let val = 0;
     if (data) {
@@ -84,9 +99,12 @@ const Transaction = () => {
     getListAccountPayment();
     getBankList();
     getWalletList();
+    getDataRekeningAdmin();
   }, []);
 
   useEffect(() => {
+    console.log("cek listAccountPayment", listAccountPayment);
+    console.log("cek data?.payment_method_id", data);
     if (listAccountPayment?.length) {
       let found = listAccountPayment.find(
         (el) => el?.id === data?.payment_method_id
@@ -288,40 +306,48 @@ const Transaction = () => {
             >
               Ke
             </span>
-            <div
-              className="d-flex flex-row p-3 gap-2"
-              style={{ borderRadius: "5px", border: "0.5px solid #999" }}
-            >
-              <div className="d-flex justify-content-center align-items-center">
-                <img src={bcaIc} />
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between">
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "16px",
-                  }}
+            {rekeningOption.map((el) => {
+              return (
+                <div
+                  className="d-flex flex-row p-3 gap-2"
+                  style={{ borderRadius: "5px", border: "0.5px solid #999" }}
                 >
-                  Bank Central Asia (BCA)
-                </span>
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "18px",
-                  }}
-                >
-                  0373232121 a/n Naufal{" "}
-                </span>
-              </div>
-            </div>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <img
+                      src={`${baseUrl}${el?.icon}`}
+                      style={{ width: 24, height: 24 }}
+                    />
+                  </div>
+                  <div className="d-flex flex-column gap-2 justify-content-between">
+                    <span
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "16px",
+                      }}
+                    >
+                      {el?.bank_account || "-"}
+                    </span>
+                    <span
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "14px",
+                        fontStyle: "normal",
+                        fontWeight: 700,
+                        lineHeight: "18px",
+                      }}
+                    >
+                      {el?.bank_account_number || "-"} a/n{" "}
+                      {el?.bank_account_name || "-"}{" "}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
             <div
               className="d-flex flex-column justify-content-between p-3 gap-3 mt-2"
               style={{ borderRadius: "5px", border: "0.5px solid #C0C3CF" }}

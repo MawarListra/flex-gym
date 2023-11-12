@@ -89,6 +89,25 @@ const ModalAccountPayment = ({
     }
   };
 
+  const validateData = () => {
+    if (checkedType) {
+      if (
+        !dataAccountPayment?.bank_name ||
+        // !dataAccountPayment?.bank_acount ||
+        !dataAccountPayment?.bank_number ||
+        !dataAccountPayment?.bank_account_name
+      ) {
+        return false;
+      }
+    } else {
+      if (!dataAccountPayment?.ewallet || !dataAccountPayment?.phone) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleDeleteAccountPayment = async () => {
     setIsLoading(true);
     try {
@@ -341,6 +360,7 @@ const ModalAccountPayment = ({
               borderBottomRightRadius: 0,
               height: 48,
             }}
+            disabled={!validateData()}
             onClick={() => {
               handleSavePaymentAccount();
             }}

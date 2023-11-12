@@ -39,6 +39,7 @@ function TextInput({
   customOptionValue,
   innerRef,
   rows = "1",
+  notMatch = false,
   ...props
 }) {
   const textArea = useRef(null);
@@ -192,7 +193,10 @@ function TextInput({
             onChange={handleChange}
             value={value}
             disabled={disabled}
-            style={{ paddingRight: 35 }}
+            style={{
+              paddingRight: 35,
+              border: notMatch && "3px solid rgb(248, 50, 69)",
+            }}
             {...props}
           />
         </div>
