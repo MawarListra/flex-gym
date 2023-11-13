@@ -222,12 +222,14 @@ const PaymentForm = () => {
 
   const isFormDataEmpty = () => {
     if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
+      clg;
       return true;
     }
     if (
       !dataPayment?.ktpNumber ||
-      dataPayment?.ktpNumber === "" ||
-      dataPayment?.ktpNumber?.length !== 16
+      dataPayment?.ktpNumber === ""
+      // ||
+      // dataPayment?.ktpNumber?.length !== 16
     ) {
       return true;
     }
