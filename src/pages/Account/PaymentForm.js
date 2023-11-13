@@ -36,10 +36,7 @@ const PaymentForm = () => {
   const [dataProfileTransaction, setDataProfileTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [rekeningOption, setRekeningOption] = useState([]);
-  const [tempImage, setTempImage] = useState({
-    tempKtp: "",
-    tempBukti: "",
-  });
+
   const dataForm = new FormData();
   dataForm.append("identity_number", "");
   dataForm.append("admin_fee", 0);
@@ -73,7 +70,9 @@ const PaymentForm = () => {
     fileName: null,
   });
 
-  let data = JSON.parse(localStorage.getItem("currDataTransaction"));
+  let data = isEditData
+    ? JSON.parse(localStorage.getItem("currDataTransaction"))
+    : {};
 
   const handleUpload = (type) => {
     let temp = null;
@@ -166,7 +165,10 @@ const PaymentForm = () => {
 
   const getProfileTransaction = async () => {
     try {
-      const resp = await axios.get(`${baseUrl}v1/member/myprofile`, config);
+      const resp = await axios.get(
+        `${baseUrl}v1/member/profilefortransaction`,
+        config
+      );
       if (resp?.status === 200 && resp?.data?.status === "success") {
         setDataProfileTransaction(resp?.data?.data);
       }
@@ -199,21 +201,6 @@ const PaymentForm = () => {
           packagePrice: resp?.data?.data?.package?.price,
           packageName: resp?.data?.data?.package?.name,
         });
-
-        setImageKtp({
-          raw: resp?.data?.data?.identity,
-          preview: `${baseUrl}${resp?.data?.data?.identity}`,
-          fileName: "Foto Ktp.png",
-        });
-        setImageBukiTransfer({
-          raw: resp?.data?.data?.approval_photo,
-          preview: `${baseUrl}${resp?.data?.data?.approval_photo}`,
-          fileName: resp?.data?.data?.approval_image_name,
-        });
-        setTempImage({
-          tempKtp: resp?.data?.data?.identity,
-          tempBukti: resp?.data?.data?.approval_photo,
-        });
       }
     } catch (e) {
       console.log("cek err", e);
@@ -225,12 +212,7 @@ const PaymentForm = () => {
       // clg;
       return true;
     }
-    if (
-      !dataPayment?.ktpNumber ||
-      dataPayment?.ktpNumber === ""
-      // ||
-      // dataPayment?.ktpNumber?.length !== 16
-    ) {
+    if (!dataPayment?.ktpNumber || dataPayment?.ktpNumber === "") {
       return true;
     }
     if (!dataPayment?.packageId || !dataPayment?.paymentType?.id) {
@@ -300,7 +282,19 @@ const PaymentForm = () => {
   }, [id]);
 
   useEffect(() => {
+    if (!isEditData && localStorage.getItem("currDataForm")) {
+      console.log(
+        "cek here data >>>",
+        JSON.parse(localStorage.getItem("currDataForm"))
+      );
+    }
+  }, [isEditData, localStorage.getItem("currDataForm")]);
+
+  useEffect(() => {
     console.log("cek here>>>>", dataPayment);
+    if (dataPayment !== {}) {
+      localStorage.setItem("currDataForm", JSON.stringify(dataPayment));
+    }
   }, [dataPayment]);
 
   const calculateMembershipDuration = (member_until) => {
@@ -694,7 +688,8 @@ const PaymentForm = () => {
                   }}
                   onClick={() => {
                     setOpenModal(!openModal);
-                    localStorage.setItem("currFormData", dataPayment);
+                    let temp = localStorage.getItem("currDataForm");
+                    console.log("cek temp", JSON.parse(temp));
                   }}
                 >
                   <div className="d-flex flex-column">
