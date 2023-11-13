@@ -222,7 +222,7 @@ const PaymentForm = () => {
 
   const isFormDataEmpty = () => {
     if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
-      clg;
+      // clg;
       return true;
     }
     if (
