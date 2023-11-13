@@ -249,35 +249,35 @@ const PaymentForm = () => {
     dataForm.set("approval_image_name", imageBuktiTransfer?.fileName);
     dataForm.set("id_before", id);
 
-    if (
-      dataPayment?.identity === tempImage?.ktp ||
-      dataPayment?.approval_photo === tempImage?.tempBukti
-    ) {
-      toast.error("Silahkan Upload ulang identitas dan bukti transfer");
-    } else {
-      try {
-        const resp = await axios.post(
-          `${baseUrl}v1/member/transactioncreate`,
-          dataForm,
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        if (resp?.status === 200 && resp?.data?.status === "success") {
-          setIsLoading(false);
-          toast.success("Pembayaran berhasil!");
-          navigate(`/account`);
-          localStorage.setItem("currDataTransaction", null);
+    // if (
+    //   dataPayment?.identity === tempImage?.ktp ||
+    //   dataPayment?.approval_photo === tempImage?.tempBukti
+    // ) {
+    //   toast.error("Silahkan Upload ulang identitas dan bukti transfer");
+    // } else {
+    try {
+      const resp = await axios.post(
+        `${baseUrl}v1/member/transactioncreate`,
+        dataForm,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+            "Content-Type": "multipart/form-data",
+          },
         }
-      } catch (e) {
+      );
+      if (resp?.status === 200 && resp?.data?.status === "success") {
         setIsLoading(false);
-        toast.error("Pembayaran gagal!");
-        console.log("cek err", e);
+        toast.success("Pembayaran berhasil!");
+        navigate(`/account`);
+        localStorage.setItem("currDataTransaction", null);
       }
+    } catch (e) {
+      setIsLoading(false);
+      toast.error("Pembayaran gagal!");
+      console.log("cek err", e);
     }
+    // }
   };
 
   const hitungTotal = () => {
