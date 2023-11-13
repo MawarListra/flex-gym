@@ -249,12 +249,6 @@ const PaymentForm = () => {
     dataForm.set("approval_image_name", imageBuktiTransfer?.fileName);
     dataForm.set("id_before", id);
 
-    // if (
-    //   dataPayment?.identity === tempImage?.ktp ||
-    //   dataPayment?.approval_photo === tempImage?.tempBukti
-    // ) {
-    //   toast.error("Silahkan Upload ulang identitas dan bukti transfer");
-    // } else {
     try {
       const resp = await axios.post(
         `${baseUrl}v1/member/transactioncreate`,
@@ -277,7 +271,6 @@ const PaymentForm = () => {
       toast.error("Pembayaran gagal!");
       console.log("cek err", e);
     }
-    // }
   };
 
   const hitungTotal = () => {
