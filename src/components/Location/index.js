@@ -4,8 +4,18 @@ import { ChevronRight, ChevronLeft } from "react-feather";
 import GymIc from "../../assets/gym.png";
 import Image1 from "../../assets/image1.png";
 import { MapPin } from "react-feather";
+import GymImage1 from "../../assets/gymImage/unnamed1.jpeg";
+import GymImage2 from "../../assets/gymImage/unnamed2.jpeg";
+import GymImage3 from "../../assets/gymImage/unnamed3.jpeg";
+import GymImage4 from "../../assets/gymImage/unnamed4.jpeg";
+import GymImage5 from "../../assets/gymImage/unnamed5.jpeg";
+import GymImage6 from "../../assets/gymImage/unnamed6.jpeg";
+import GymImage7 from "../../assets/gymImage/unnamed7.jpeg";
+import GymImage8 from "../../assets/gymImage/unnamed8.jpeg";
+import GymImage9 from "../../assets/gymImage/unnamed9.jpeg";
 
 const Location = ({ id }) => {
+  const [currIdx, setCurrIdx] = useState(0);
   const listData = [
     {
       title: "Tempat Luas & Nyaman",
@@ -14,25 +24,30 @@ const Location = ({ id }) => {
       photo: Image1,
     },
     {
-      title: "Bangunan Besar ",
+      title: "Alat Lengkap & Berkualitas ",
       description:
         "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
       photo: GymIc,
     },
     {
-      title: "Fasilitas Lengkap",
+      title: "Cafe dengan Berbagai Menu",
       description:
         "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
       photo: GymIc,
-    },
-    {
-      title: "Tempat Luas & Nyaman",
-      description:
-        "Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida egestas amet id pretium. Ultrices mauris sodales elit mi lobortis id blandit risus porttitor.",
-      photo: Image1,
     },
   ];
-  const [currIdx, setCurrIdx] = useState(0);
+
+  const listImage = [
+    GymImage1,
+    GymImage2,
+    GymImage3,
+    GymImage4,
+    GymImage5,
+    GymImage6,
+    GymImage7,
+    GymImage8,
+    GymImage9,
+  ];
 
   return (
     <div
@@ -79,7 +94,7 @@ const Location = ({ id }) => {
               {listData?.[currIdx]?.title}
             </span>
           </div> */}
-          <div className="d-flex flex-row justify-content-between align-items-center">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
             {/* <div className="mt-1">
               <span className="text-desc-title">
                 {listData?.[currIdx]?.description}
@@ -91,7 +106,7 @@ const Location = ({ id }) => {
             >
               {listData?.[currIdx]?.title}
             </span>
-            <div className="d-none d-md-flex flex-row align-items-end">
+            <div className="d-flex flex-row align-items-end w-md-fit w-100 justify-content-end">
               <ChevronLeft
                 className="cursor-pointer"
                 color="white"
@@ -99,14 +114,6 @@ const Location = ({ id }) => {
                   if (currIdx === 0) {
                     return undefined;
                   } else {
-                    const targetIndex = currIdx - 1;
-                    const item = document.getElementById(
-                      "imageScroll-" + targetIndex
-                    );
-                    item.scrollIntoView({
-                      behavior: "smooth",
-                      inline: "center",
-                    });
                     return setCurrIdx(currIdx - 1);
                   }
                 }}
@@ -119,14 +126,6 @@ const Location = ({ id }) => {
                   if (currIdx === listData?.length - 1) {
                     return undefined;
                   } else {
-                    const targetIndex = currIdx + 1;
-                    const item = document.getElementById(
-                      "imageScroll-" + targetIndex
-                    );
-                    item.scrollIntoView({
-                      behavior: "smooth",
-                      inline: "center",
-                    });
                     return setCurrIdx(currIdx + 1);
                   }
                 }}
@@ -135,67 +134,28 @@ const Location = ({ id }) => {
             </div>
           </div>
         </div>
-        <div
-          className="d-flex d-md-none gap-4 mt-4 w-100"
-          style={{ position: "relative" }}
-        >
-          <div
-            className="d-flex d-md-none flex-row align-items-center justify-content-between w-100 h-100"
-            style={{ position: "absolute", zIndex: 9999 }}
-          >
-            <div
-              className={`${
-                currIdx === 0 ? "bg-transparent" : "bg-black"
-              } p-1 d-flex justify-content-center align-items-center`}
-              style={{ borderRadius: "50%" }}
-            >
-              <ChevronLeft
-                className="cursor-pointer"
-                style={{
-                  color: currIdx === 0 ? "transparent" : "#53F60F",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  currIdx === 0 ? undefined : setCurrIdx(currIdx - 1)
-                }
-              />
-            </div>
-            <div
-              className={`${
-                currIdx === listData?.length - 1 ? "bg-transparent" : "bg-black"
-              } p-1 d-flex justify-content-center align-items-center`}
-              style={{ borderRadius: "50%" }}
-            >
-              <ChevronRight
-                className="cursor-pointer"
-                style={{
-                  color:
-                    currIdx === listData?.length - 1
-                      ? "transparent"
-                      : "#53F60F",
-                  cursor: "pointer",
-                }}
-                onClick={() =>
-                  currIdx === listData?.length - 1
-                    ? undefined
-                    : setCurrIdx(currIdx + 1)
-                }
-              />
-            </div>
-          </div>
-          <div className="d-flex w-100" style={{ height: 192 }}>
-            <img
-              src={listData?.[currIdx]?.photo}
-              className="d-flex img-fluid w-100 h-100"
-              alt={`image-loc-${currIdx}`}
-            />
-          </div>
+        <div className="d-flex d-md-none gap-4 mt-4 w-100 container-image-scroll">
+          {listImage.map((e, idxE) => {
+            return (
+              <div
+                className="d-flex imageScroll"
+                style={{ height: 192, width: "100%" }}
+                key={idxE}
+              >
+                <img
+                  src={e}
+                  className="d-flex cover"
+                  alt={`image-loc-${idxE}`}
+                />
+              </div>
+            );
+          })}
         </div>
         <div
           className="d-md-flex d-none gap-4 container-image-scroll w-100"
           style={{ marginTop: 32 }}
         >
-          {listData.map((e, i) => (
+          {listImage.map((e, i) => (
             <div
               key={i}
               className="d-flex imageScroll"
@@ -203,9 +163,9 @@ const Location = ({ id }) => {
               id={`imageScroll-` + i}
             >
               <img
-                src={e?.photo}
+                src={e}
                 className="d-flex cover"
-                alt={`image-loc-${e?.photo}`}
+                alt={`image-loc-${e}`}
                 style={{ height: "100%" }}
               />
             </div>

@@ -163,7 +163,7 @@ const Transaction = () => {
                 lineHeight: "16px",
               }}
             >
-              Teks ini inputan dari admin jika di tolak
+              {data?.reason}
             </span>
           </div>
         ) : null}
@@ -284,7 +284,7 @@ const Transaction = () => {
               >
                 {dataAccountPayment?.payment_type_id === 1
                   ? dataAccountPayment?.bank_number +
-                    "a/n" +
+                    " a/n " +
                     dataAccountPayment?.bank_account_name
                   : dataAccountPayment?.phone}
               </span>
