@@ -142,7 +142,14 @@ const PaymentForm = () => {
     try {
       const resp = await axios.get(`${baseUrl}v1/package_data/getall`, config);
       if (resp?.status === 200 && resp?.data?.status === "success") {
-        setPackageOption(resp?.data?.data);
+        console.log("cek heree >>>", resp?.data?.data);
+        let temp = resp?.data?.data?.map((e) => {
+          return {
+            ...e,
+            label: `${e?.name} - ${currencyFormatter(e?.price)}`,
+          };
+        });
+        setPackageOption(temp);
       }
     } catch (e) {
       console.log("cek err", e);
@@ -192,6 +199,8 @@ const PaymentForm = () => {
           paymentType: {
             id: resp?.data?.data?.payment_method_id,
             bank_name: resp?.data?.data?.payment_method?.bank_name,
+            bank_account_name:
+              resp?.data?.data?.payment_method?.bank_account_name,
             ewallet: resp?.data?.data?.payment_method?.ewallet
               ? parseInt(resp?.data?.data?.payment_method?.ewallet)
               : null,
@@ -521,9 +530,13 @@ const PaymentForm = () => {
                     cursor: "pointer",
                   }}
                   onClick={() => {
-                    setOpenModal(!openModal);
-                    let temp = localStorage.getItem("currDataForm");
-                    console.log("cek temp", JSON.parse(temp));
+                    if (statusMapper(data?.is_accepted)?.status === "failed") {
+                      return undefined;
+                    } else {
+                      setOpenModal(!openModal);
+                      let temp = localStorage.getItem("currDataForm");
+                      console.log("cek temp", JSON.parse(temp));
+                    }
                   }}
                 >
                   <div className="d-flex flex-column">
@@ -560,7 +573,9 @@ const PaymentForm = () => {
                       }}
                     >
                       {dataPayment?.paymentType?.payment_type_id === 1
-                        ? dataPayment?.paymentType?.bank_number
+                        ? dataPayment?.paymentType?.bank_number +
+                          " a/n " +
+                          dataPayment?.paymentType?.bank_account_name
                         : dataPayment?.paymentType?.phone || "-"}
                     </span>
                   </div>
@@ -622,7 +637,7 @@ const PaymentForm = () => {
                     packagePrice: e?.price,
                   })
                 }
-                getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => option.label}
                 getOptionValue={(option) => option.id}
                 theme={(theme) => {
                   return {
@@ -650,7 +665,7 @@ const PaymentForm = () => {
               onChange={({ target: { value } }) =>
                 setDataPayment({
                   ...dataPayment,
-                  ktpNumber: value,
+                  ktpNumber: value.replace(/\D/g, ""),
                 })
               }
               disabled={!dataPayment?.paymentType?.payment_type_id}

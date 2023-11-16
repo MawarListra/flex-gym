@@ -7,12 +7,14 @@ import { MapPin } from "react-feather";
 import GymImage1 from "../../assets/gymImage/unnamed1.jpeg";
 import GymImage2 from "../../assets/gymImage/unnamed2.jpeg";
 import GymImage3 from "../../assets/gymImage/unnamed3.jpeg";
-import GymImage4 from "../../assets/gymImage/unnamed4.jpeg";
-import GymImage5 from "../../assets/gymImage/unnamed5.jpeg";
-import GymImage6 from "../../assets/gymImage/unnamed6.jpeg";
-import GymImage7 from "../../assets/gymImage/unnamed7.jpeg";
-import GymImage8 from "../../assets/gymImage/unnamed8.jpeg";
-import GymImage9 from "../../assets/gymImage/unnamed9.jpeg";
+import GymImage4 from "../../assets/gymImage/cafe1.jpeg";
+import GymImage5 from "../../assets/gymImage/cafe2.jpeg";
+import GymImage6 from "../../assets/gymImage/cafe3.jpeg";
+import GymImage7 from "../../assets/gymImage/cardio1.jpeg";
+import GymImage8 from "../../assets/gymImage/cardio2.jpeg";
+import GymImage9 from "../../assets/gymImage/unnamed7.jpeg";
+import GymImage10 from "../../assets/gymImage/unnamed4.jpeg";
+import GymImage11 from "../../assets/gymImage/unnamed5.jpeg";
 
 const Location = ({ id }) => {
   const [currIdx, setCurrIdx] = useState(0);
@@ -47,6 +49,12 @@ const Location = ({ id }) => {
     GymImage7,
     GymImage8,
     GymImage9,
+    GymImage10,
+    GymImage11,
+    GymImage6,
+    GymImage7,
+    GymImage2,
+    GymImage3,
   ];
 
   return (
@@ -152,19 +160,19 @@ const Location = ({ id }) => {
           })}
         </div>
         <div
-          className="d-md-flex d-none gap-4 container-image-scroll w-100"
+          className="d-md-flex d-none gap-4 scrolling-container w-100"
           style={{ marginTop: 32 }}
         >
           {listImage.map((e, i) => (
             <div
               key={i}
-              className="d-flex imageScroll"
-              style={{ height: 360, width: "100%" }}
+              className="d-flex w-auto"
+              style={{ height: 360 }}
               id={`imageScroll-` + i}
             >
               <img
                 src={e}
-                className="d-flex cover"
+                className="d-flex"
                 alt={`image-loc-${e}`}
                 style={{ height: "100%" }}
               />
@@ -260,7 +268,7 @@ const Location = ({ id }) => {
                   top: 0 /* Align the image to the top of the div */,
                   left: 0 /* Align the image to the left of the div */,
                 }}
-                src={GymIc}
+                src={GymImage6}
                 // className="d-flex cover"
                 alt="gym-building"
               />

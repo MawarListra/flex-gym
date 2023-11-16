@@ -690,7 +690,7 @@ div::-webkit-scrollbar-thumb:hover {
   width: 100%;
   position: relative;
   white-space: nowrap;
-  animation: scroll 10s linear infinite; /* Adjust animation duration as needed */
+  animation: scroll 20s linear infinite; /* Adjust animation duration as needed */
 }
 
 @keyframes scroll {
@@ -698,7 +698,7 @@ div::-webkit-scrollbar-thumb:hover {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-110%);
+    transform: translateX(-200%);
   }
 }
 

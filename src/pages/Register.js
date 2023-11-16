@@ -222,7 +222,7 @@ const Registrasi = () => {
               handleChange={({ target: { value } }) => {
                 setTempData({
                   ...tempData,
-                  phone: value,
+                  phone: value.replace(/\D/g, ""),
                 });
               }}
               isRequired={true}

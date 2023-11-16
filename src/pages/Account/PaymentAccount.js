@@ -204,7 +204,7 @@ const PaymentAccount = () => {
                       }}
                     >
                       {e?.payment_type_id === 1
-                        ? e?.bank_number
+                        ? e?.bank_number + " a/n " + e?.bank_account_name
                         : e?.phone || "-"}
                     </span>
                   </div>

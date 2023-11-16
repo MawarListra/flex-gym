@@ -272,7 +272,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    bank_number: value,
+                    bank_number: value.replace(/\D/g, ""),
                   })
                 }
               />
@@ -286,7 +286,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    bank_account_name: value,
+                    bank_account_name: value.replace(/[^a-zA-Z ]+/g, ""),
                   })
                 }
               />
@@ -344,7 +344,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    phone: value,
+                    phone: value.replace(/\D/g, ""),
                   })
                 }
               />

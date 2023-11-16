@@ -20,14 +20,15 @@ const ChangePassword = () => {
   });
 
   const validateData = () => {
-    if (dataUser?.newpassword !== dataUser?.confirm_password) {
-      return false;
-    }
     if (
       Object.keys(dataUser).some(
-        (key) => key === "" || key === {} || key === null
+        (key) =>
+          dataUser[key] === "" || dataUser[key] === {} || dataUser[key] === null
       )
     ) {
+      return false;
+    }
+    if (dataUser?.newpassword !== dataUser?.confirm_password) {
       return false;
     }
     return true;
@@ -82,7 +83,7 @@ const ChangePassword = () => {
     >
       <Toaster />
       <div
-        className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
+        className="d-flex flex-column p-3 w-100 gap-4"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column gap-4">
@@ -132,8 +133,7 @@ const ChangePassword = () => {
                 marginBottom: 16,
               }}
             >
-              Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-              egestas amet id pretium.
+              Silahkan perbaharui password anda
             </span>
             <div className="d-flex flex-column gap-2">
               <TextInput
@@ -181,7 +181,7 @@ const ChangePassword = () => {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-column h-100 justify-content-end gap-4">
+        <div className="d-flex flex-column  gap-4">
           <div className="d-flex w-100">
             <Button
               className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"
