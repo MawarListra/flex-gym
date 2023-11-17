@@ -1,8 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import CardioIc from "../../assets/woman running.png";
-import FreeWeightIc from "../../assets/sporty girl workout.png";
-import YogaIc from "../../assets/woman in yoga pose.png";
-import BoxingIc from "../../assets/Workout.png";
 import { Button } from "reactstrap";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import axios from "axios";
@@ -157,7 +153,7 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
           );
         })}
       </div>
-      <div className="d-flex flex-row flex-wrap flex-md-nowrap justify-content-center h-auto mt-4 w-100 gap-md-25 gap-3">
+      <div className="d-flex flex-row flex-wrap  justify-content-center h-auto mt-4 w-100 gap-md-25 gap-3">
         {listPricing.map((item, i) => (
           <div
             className="d-flex flex-column w-md-25 w-auto"
