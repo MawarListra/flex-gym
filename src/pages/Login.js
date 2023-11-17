@@ -61,6 +61,12 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"

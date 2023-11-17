@@ -325,17 +325,11 @@ const PaymentForm = () => {
     }
   }, [token]);
 
-  console.log(
-    "cek found",
-    bankOption.find(
-      (el) => el?.id === parseInt(dataPayment?.paymentType?.bank_name)
-    )?.name
-  );
-
-  console.log("cek bank name", dataPayment?.paymentType?.bank_name);
-
-  console.log("cek bankOption", bankOption);
-
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"

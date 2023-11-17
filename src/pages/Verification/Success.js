@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,11 @@ import SuccessIc from "../../assets/success-verif.png";
 
 const SuccessOTP = () => {
   const navigate = useNavigate();
-
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between align-items-center "

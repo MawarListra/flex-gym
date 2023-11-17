@@ -81,6 +81,12 @@ const PaymentAccount = () => {
   }, []);
 
   useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
+  useEffect(() => {
     if (!token || token === "") {
       toast.error("Session anda habis. Silahkan login kembali");
       navigate("/login");

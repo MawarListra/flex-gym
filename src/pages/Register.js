@@ -100,9 +100,9 @@ const Registrasi = () => {
   };
 
   useEffect(() => {
-    window.onload = function () {
-      window.scrollTo(0, 0);
-    };
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
   }, []);
 
   return (
