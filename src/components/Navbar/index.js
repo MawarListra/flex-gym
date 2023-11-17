@@ -30,17 +30,24 @@ const Navbar = ({
               <Button
                 color="transparent"
                 onClick={() => {
-                  scrollToDiv(e?.id);
-                  var menuItems = document.querySelectorAll(
-                    "#container-button-menu div button span"
-                  );
-                  menuItems.forEach(function (item) {
-                    item.classList.remove("active-menu-item");
-                    item.classList.add("text-white");
-                  });
-                  const element = document.getElementById("button-menu-" + i);
-                  element.classList.remove("text-white");
-                  element.classList.add("active-menu-item");
+                  if (e?.id !== "contact") {
+                    scrollToDiv(e?.id);
+                    var menuItems = document.querySelectorAll(
+                      "#container-button-menu div button span"
+                    );
+                    menuItems.forEach(function (item) {
+                      item.classList.remove("active-menu-item");
+                      item.classList.add("text-white");
+                    });
+                    const element = document.getElementById("button-menu-" + i);
+                    element.classList.remove("text-white");
+                    element.classList.add("active-menu-item");
+                  } else {
+                    window.open(
+                      "https://api.whatsapp.com/send?phone=+62895378229030&text=Halo%20min!%20saya%20berminat%20untuk%20mendaftar%20member%20di%20Flex%20Gym%20and%20Cafe",
+                      "_blank"
+                    );
+                  }
                 }}
               >
                 <span className="text-white" id={`button-menu-` + i}>

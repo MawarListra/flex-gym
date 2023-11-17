@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import bannerJoinIc from "../../assets/bannerjoin.png";
 
 const BannerJoin = () => {
+  const navigate = useNavigate();
   return (
     <div
       className="d-flex flex-md-row flex-column"
@@ -39,12 +41,7 @@ const BannerJoin = () => {
           <Button
             className="px-4 py-2"
             style={{ backgroundColor: "#fff", borderColor: "#fff" }}
-            onClick={() =>
-              window.open(
-                "https://api.whatsapp.com/send?phone=+62895378229030&text=Halo%20min!%20saya%20berminat%20untuk%20mendaftar%20member%20di%20Flex%20Gym%20and%20Cafe",
-                "_blank"
-              )
-            }
+            onClick={() => navigate("/registration")}
           >
             <span
               style={{

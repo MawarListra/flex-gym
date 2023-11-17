@@ -81,6 +81,12 @@ const PaymentAccount = () => {
   }, []);
 
   useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
+  useEffect(() => {
     if (!token || token === "") {
       toast.error("Session anda habis. Silahkan login kembali");
       navigate("/login");
@@ -204,7 +210,7 @@ const PaymentAccount = () => {
                       }}
                     >
                       {e?.payment_type_id === 1
-                        ? e?.bank_number
+                        ? e?.bank_number + " a/n " + e?.bank_account_name
                         : e?.phone || "-"}
                     </span>
                   </div>

@@ -221,7 +221,7 @@ const ModalAccountPayment = ({
           </div>
           {checkedType ? (
             <div className="d-flex flex-column">
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column mb-2">
                 <small className="font-weight-bold pb-2 text-white d-block">
                   Nama Bank
                   <span style={{ color: "#F83245" }}> *</span>
@@ -272,7 +272,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    bank_number: value,
+                    bank_number: value.replace(/\D/g, ""),
                   })
                 }
               />
@@ -286,7 +286,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    bank_account_name: value,
+                    bank_account_name: value.replace(/[^a-zA-Z ]+/g, ""),
                   })
                 }
               />
@@ -344,7 +344,7 @@ const ModalAccountPayment = ({
                 onChange={({ target: { value } }) =>
                   setDataAccountPayment({
                     ...dataAccountPayment,
-                    phone: value,
+                    phone: value.replace(/\D/g, ""),
                   })
                 }
               />

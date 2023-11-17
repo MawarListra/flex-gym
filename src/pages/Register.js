@@ -51,7 +51,10 @@ const Registrasi = () => {
     // }
     if (
       Object.keys(tempData).some(
-        (key) => key === "" || key === {} || key === null
+        (key) =>
+          tempData?.[key] === "" ||
+          tempData?.[key] === {} ||
+          tempData?.[key] === null
       )
     ) {
       return false;
@@ -96,6 +99,12 @@ const Registrasi = () => {
     }
   };
 
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -103,7 +112,7 @@ const Registrasi = () => {
     >
       <Toaster />
       <div
-        className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
+        className="d-flex flex-column p-3 w-100 gap-4"
         style={{ minHeight: "100vh" }}
       >
         <div
@@ -152,8 +161,7 @@ const Registrasi = () => {
               marginBottom: 16,
             }}
           >
-            Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-            egestas amet id pretium.
+            Silahkan isi data diri anda.
           </span>
           <div className="d-flex flex-column">
             <TextInput
@@ -222,7 +230,7 @@ const Registrasi = () => {
               handleChange={({ target: { value } }) => {
                 setTempData({
                   ...tempData,
-                  phone: value,
+                  phone: value.replace(/\D/g, ""),
                 });
               }}
               isRequired={true}
@@ -307,7 +315,7 @@ const Registrasi = () => {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-column h-100 justify-content-end gap-4">
+        <div className="d-flex flex-column gap-4">
           <div className="d-flex w-100">
             <Button
               className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft } from "react-feather";
 import { Button } from "reactstrap";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +21,10 @@ const Login = () => {
   const validateData = () => {
     if (
       Object.keys(dataUser).some(
-        (key) => key === "" || key === {} || key === null
+        (key) =>
+          dataUser?.[key] === "" ||
+          dataUser?.[key] === {} ||
+          dataUser?.[key] === null
       )
     ) {
       return false;
@@ -52,11 +55,27 @@ const Login = () => {
         toast.error("Gagal login. Silahkan coba lagi!");
       }
     } catch (e) {
-      setIsLoading(false);
-      toast.error("Gagal login. Silahkan coba lagi!");
+      if (!e?.response?.data?.is_verification) {
+        setIsLoading(false);
+        toast.error("Anda belum verifikasi. Silahkan cek email anda!");
+        setTimeout(() => {
+          navigate("/verif-account", {
+            state: { email: dataUser?.email, notVerif: true },
+          });
+        }, 1000);
+      } else {
+        setIsLoading(false);
+        toast.error("Gagal login. Silahkan coba lagi!");
+      }
       console.log("cek err", e);
     }
   };
+
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
 
   return (
     <div
@@ -65,7 +84,7 @@ const Login = () => {
     >
       <Toaster />
       <div
-        className="d-flex flex-column p-3 justify-content-between w-100 gap-2"
+        className="d-flex flex-column p-3 w-100 gap-2"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column">
@@ -150,7 +169,7 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="d-flex flex-column h-100 justify-content-end gap-4">
+        <div className="d-flex flex-column gap-4 mt-4">
           <div className="d-flex w-100">
             <Button
               className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"

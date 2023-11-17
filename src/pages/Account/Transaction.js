@@ -2,11 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
-import bcaIc from "../../assets/bca-removebg-preview 1.png";
-import buktiTransfer from "../../assets/Text Field.png";
 import { Button } from "reactstrap";
 import axios from "axios";
-import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
 import { currencyFormatter } from "../../utils/currencyFormatter";
@@ -122,6 +119,12 @@ const Transaction = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -166,7 +169,7 @@ const Transaction = () => {
                 lineHeight: "16px",
               }}
             >
-              Teks ini inputan dari admin jika di tolak
+              {data?.reason}
             </span>
           </div>
         ) : null}
@@ -287,7 +290,7 @@ const Transaction = () => {
               >
                 {dataAccountPayment?.payment_type_id === 1
                   ? dataAccountPayment?.bank_number +
-                    "a/n" +
+                    " a/n " +
                     dataAccountPayment?.bank_account_name
                   : dataAccountPayment?.phone}
               </span>

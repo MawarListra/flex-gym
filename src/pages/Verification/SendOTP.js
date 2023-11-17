@@ -13,7 +13,7 @@ const SendOTP = () => {
   const expiredOTP = 40;
   const navigate = useNavigate();
   const location = useLocation();
-  const { email } = location.state;
+  const { email, notVerif } = location.state;
   const [otp, setOtp] = useState("");
   const [time, setTime] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -87,11 +87,11 @@ const SendOTP = () => {
     }
   };
 
-  useEffect(() => {
-    if (otp?.length === 6 && isLoading) {
-      pause();
-    }
-  }, [isLoading, otp]);
+  // useEffect(() => {
+  //   if (otp?.length === 6 && isLoading) {
+  //     pause();
+  //   }
+  // }, [isLoading, otp]);
 
   useEffect(() => {
     startTimer({ seconds: expiredOTP });
@@ -107,12 +107,18 @@ const SendOTP = () => {
     }
   }, [otp]);
 
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
       style={{ minHeight: "100vh" }}
     >
-      <Toaster />
+      {!notVerif && <Toaster />}
       <div
         className="d-flex flex-column p-3 justify-content-between w-100 gap-4"
         style={{ minHeight: "100vh" }}

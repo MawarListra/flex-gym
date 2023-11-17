@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 const Homepage = () => {
   const navigate = useNavigate();
   const [openMenu, setOpenMenu] = useState(false);
+  const [currType, setCurrType] = useState(1);
   const listMenu = [
     {
       id: "home",
@@ -125,7 +126,7 @@ const Homepage = () => {
       <Facilities />
       {/* <Program id="program" /> */}
       <div className="dot" id="dot3"></div>
-      <Pricing id="package" />
+      <Pricing id="package" currType={currType} setCurrType={setCurrType} />
       <BannerJoin />
       <Footer scrollToDiv={scrollToDiv} />
     </div>

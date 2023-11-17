@@ -55,7 +55,6 @@ const EditProfile = () => {
     };
     const data = {
       ...dataUser,
-      sex: dataUser?.sex?.name,
     };
     try {
       const resp = await axios.put(
@@ -84,6 +83,12 @@ const EditProfile = () => {
     }
   }, [token]);
 
+  useEffect(() => {
+    document.querySelector("body").classList.add("scroll");
+    document.querySelector("html").classList.add("scroll");
+    window.onscroll = function () {};
+  }, []);
+
   return (
     <div
       className="d-flex flex-column max-w-screen-sm bg-black mx-auto justify-content-between"
@@ -110,10 +115,7 @@ const EditProfile = () => {
             Ubah Profile
           </span>
         </div>
-        <div
-          className="d-flex flex-column justify-content-between"
-          style={{ height: "100vh" }}
-        >
+        <div className="d-flex flex-column gap-5">
           <div className="d-flex flex-column gap-2">
             <span
               className="text-white"
@@ -141,8 +143,7 @@ const EditProfile = () => {
                 marginBottom: 16,
               }}
             >
-              Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-              egestas amet id pretium.
+              Silahkan perbaharui data diri anda.
             </span>
             <div className="d-flex flex-column">
               <TextInput
@@ -168,7 +169,7 @@ const EditProfile = () => {
                 handleChange={({ target: { value } }) => {
                   setDataUser({
                     ...dataUser,
-                    phone: value,
+                    phone: value.replace(/\D/g, ""),
                   });
                 }}
                 isRequired={true}
@@ -213,7 +214,7 @@ const EditProfile = () => {
                   />
                 </div>
               </div>
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column mt-2">
                 <small className="font-weight-bold pb-2 text-white d-block">
                   Jenis Kelamin
                   <span style={{ color: "#F83245" }}> *</span>
@@ -265,7 +266,7 @@ const EditProfile = () => {
                   height: 48,
                 }}
                 onClick={() => handleUbahData()}
-                disabled={!validateData() || isLoading}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <ReactLoading
