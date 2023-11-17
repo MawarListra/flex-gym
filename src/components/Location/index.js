@@ -65,7 +65,6 @@ const Location = ({ id }) => {
         paddingBottom: 72,
         gap: 10,
       }}
-      id="contact"
     >
       <div
         className="d-flex flex-column align-items-center justify-content-end width-why-us"

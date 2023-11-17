@@ -2,14 +2,11 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Upload, X, Edit2 } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
-import bcaIc from "../../assets/bca-removebg-preview 1.png";
-import buktiTransfer from "../../assets/Text Field.png";
 import ProfPic from "../../assets/sporty girl workout.png";
 import { TextInput } from "../../components";
 import Edit from "../../assets/icon/edit.svg";
 import ModalPaymentType from "./ModalPaymentType";
-import { Input, Button } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Modal, ModalBody } from "reactstrap";
 import axios from "axios";
 import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
@@ -17,6 +14,7 @@ import moment from "moment";
 import Select from "react-select";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { statusMapper } from "../../utils/statusMapper";
+import pdfIc from "../../assets/pdf-icon.jpeg";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -36,6 +34,8 @@ const PaymentForm = () => {
   const [dataProfileTransaction, setDataProfileTransaction] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [rekeningOption, setRekeningOption] = useState([]);
+  const [showFile, setShowFile] = useState(false);
+  const [clickedFile, setClickedFile] = useState("");
 
   const dataForm = new FormData();
   dataForm.append("identity_number", "");
@@ -62,12 +62,14 @@ const PaymentForm = () => {
     preview: null,
     raw: null,
     fileName: null,
+    type: null,
   });
 
   const [imageBuktiTransfer, setImageBukiTransfer] = useState({
     preview: null,
     raw: null,
     fileName: null,
+    type: null,
   });
 
   let data = isEditData
@@ -90,9 +92,12 @@ const PaymentForm = () => {
       console.error("No file selected");
       return;
     }
+    console.log("cek here file >>>", file);
+    let isPdf = file?.type === "application/pdf" ? true : false;
+    console.log("cek isPdf", isPdf);
 
     // Validate file type (for example, allow only image files)
-    const allowedTypes = ["image/jpeg", "image/png"];
+    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
     if (!allowedTypes.includes(file.type)) {
       console.error("Invalid file type. Please select a valid image file.");
       return;
@@ -105,6 +110,7 @@ const PaymentForm = () => {
         preview: URL.createObjectURL(file),
         raw: file,
         fileName: file.name,
+        type: isPdf ? "pdf" : "image",
       }));
     } else {
       setImageBukiTransfer((prevState) => ({
@@ -112,9 +118,15 @@ const PaymentForm = () => {
         preview: URL.createObjectURL(file),
         raw: file,
         fileName: file.name,
+        type: isPdf ? "pdf" : "image",
       }));
     }
   };
+
+  useEffect(() => {
+    console.log("cek here imageKtp", imageKtp);
+    console.log("cek here imageBuktiTransfer", imageBuktiTransfer);
+  }, [imageKtp, imageBuktiTransfer]);
 
   const getBankList = async () => {
     try {
@@ -146,7 +158,9 @@ const PaymentForm = () => {
         let temp = resp?.data?.data?.map((e) => {
           return {
             ...e,
-            label: `${e?.name} - ${currencyFormatter(e?.price)}`,
+            label: `${e?.name} - ${e?.package_type?.name} - ${currencyFormatter(
+              e?.price
+            )}`,
           };
         });
         setPackageOption(temp);
@@ -294,15 +308,6 @@ const PaymentForm = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!isEditData && localStorage.getItem("currDataForm")) {
-      console.log(
-        "cek here data >>>",
-        JSON.parse(localStorage.getItem("currDataForm"))
-      );
-    }
-  }, [isEditData, localStorage.getItem("currDataForm")]);
-
-  useEffect(() => {
     console.log("cek here>>>>", dataPayment);
     if (dataPayment !== {}) {
       localStorage.setItem("currDataForm", JSON.stringify(dataPayment));
@@ -347,6 +352,36 @@ const PaymentForm = () => {
           bankOption={bankOption}
           walletOption={walletOption}
         />
+      )}
+      {showFile && clickedFile !== "" && (
+        <Modal
+          zIndex={2000}
+          centered
+          isOpen={showFile}
+          toggle={() => setShowFile(false)}
+          size="sm"
+        >
+          <ModalBody
+            className="d-flex flex-column p-3 gap-3"
+            style={{
+              backgroundColor: "#18181C",
+            }}
+          >
+            <img
+              className="d-flex"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+              }}
+              src={
+                clickedFile === "ktp"
+                  ? imageKtp?.preview
+                  : imageBuktiTransfer?.preview
+              }
+            />
+          </ModalBody>
+        </Modal>
       )}
       <div
         className="d-flex flex-column p-3 w-100 gap-2"
@@ -501,6 +536,25 @@ const PaymentForm = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div
+            className="d-flex flex-row p-2  align-items-center"
+            style={{ borderRadius: 5, background: "#FEE" }}
+          >
+            <img className="mr-2" src={infoAlert} />
+            <span
+              style={{
+                color: "#F15C59",
+                fontFamily: "Roboto",
+                fontSize: "12px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "16px",
+              }}
+            >
+              Harap memilih akun pembayaran pada Jenis Pembayaran terlebih
+              dahulu!
+            </span>
           </div>
           <div className="d-flex flex-column">
             {dataPayment?.paymentType?.payment_type_id ? (
@@ -702,6 +756,7 @@ const PaymentForm = () => {
                             preview: null,
                             raw: null,
                             fileName: null,
+                            type: null,
                           });
                         }}
                       >
@@ -727,7 +782,18 @@ const PaymentForm = () => {
                         height: "100%",
                         objectFit: "contain",
                       }}
-                      src={imageKtp?.preview}
+                      src={imageKtp?.type === "pdf" ? pdfIc : imageKtp?.preview}
+                      onClick={() => {
+                        if (imageKtp?.type === "pdf") {
+                          let el = document.createElement("a");
+                          el.href = imageKtp?.preview;
+                          el.download = imageKtp?.fileName;
+                          el.click();
+                        } else {
+                          setClickedFile("ktp");
+                          setShowFile(true);
+                        }
+                      }}
                     />
                   </div>
                 ) : (
@@ -769,22 +835,6 @@ const PaymentForm = () => {
                   </div>
                 )}
               </div>
-              {/* <div className="d-flex flex-column">
-                    {wrongFormat && (
-                      <span
-                        className="font-size-sm mt-2"
-                        style={{ color: '#F83245' }}>
-                        Jenis File harus PDF, JPEG, JPG, Or PNG
-                      </span>
-                    )}
-                    {overSize && (
-                      <span
-                        className="font-size-sm mt-2"
-                        style={{ color: '#F83245' }}>
-                        Maksimal ukuran file 2 MB
-                      </span>
-                    )}
-                  </div> */}
             </div>
 
             {/* upload bukti pembayaran */}
@@ -832,6 +882,7 @@ const PaymentForm = () => {
                               preview: null,
                               raw: null,
                               fileName: null,
+                              type: null,
                             });
                           }}
                         >
@@ -857,7 +908,22 @@ const PaymentForm = () => {
                           height: "100%",
                           objectFit: "contain",
                         }}
-                        src={imageBuktiTransfer?.preview}
+                        src={
+                          imageBuktiTransfer?.type === "pdf"
+                            ? pdfIc
+                            : imageBuktiTransfer?.preview
+                        }
+                        onClick={() => {
+                          if (imageBuktiTransfer?.type === "pdf") {
+                            let el = document.createElement("a");
+                            el.href = imageBuktiTransfer?.preview;
+                            el.download = imageBuktiTransfer?.fileName;
+                            el.click();
+                          } else {
+                            setClickedFile("bukti");
+                            setShowFile(true);
+                          }
+                        }}
                       />
                     </div>
                   ) : (

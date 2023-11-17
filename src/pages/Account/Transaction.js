@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { ChevronLeft } from "react-feather";
 import infoAlert from "../../assets/icon/info_outline.svg";
-import { Button } from "reactstrap";
+import { Button, Modal, ModalBody } from "reactstrap";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { statusMapper } from "../../utils/statusMapper";
+import pdfIc from "../../assets/pdf-icon.jpeg";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -15,6 +16,7 @@ const Transaction = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const token = localStorage.getItem("token");
+  const [showFile, setShowFile] = useState(false);
 
   const [listAccountPayment, setListAccountPayment] = useState([]);
   const [dataAccountPayment, setDataAccountPayment] = useState({});
@@ -134,6 +136,32 @@ const Transaction = () => {
         className="d-flex flex-column p-3 w-100 gap-2"
         style={{ minHeight: "100vh" }}
       >
+        {showFile && (
+          <Modal
+            zIndex={2000}
+            centered
+            isOpen={showFile}
+            toggle={() => setShowFile(false)}
+            size="sm"
+          >
+            <ModalBody
+              className="d-flex flex-column p-3 gap-3"
+              style={{
+                backgroundColor: "#18181C",
+              }}
+            >
+              <img
+                className="d-flex"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+                src={`${baseUrl}${data?.approval_photo}`}
+              />
+            </ModalBody>
+          </Modal>
+        )}
         <div
           className="d-flex flex-row justify-content-start gap-2 align-items-center h-auto"
           style={{ cursor: "pointer" }}
@@ -470,7 +498,26 @@ const Transaction = () => {
                     height: "100%",
                     objectFit: "contain",
                   }}
-                  src={`${baseUrl}${data?.approval_photo}`}
+                  src={
+                    data?.approval_photo.split(".").includes("PDF")
+                      ? pdfIc
+                      : `${baseUrl}${data?.approval_photo}`
+                  }
+                  onClick={() => {
+                    console.log(
+                      "cek hereee>>>",
+                      data?.approval_photo.split(".")
+                    );
+                    if (data?.approval_photo.split(".").includes("PDF")) {
+                      let el = document.createElement("a");
+                      el.href = `${baseUrl}${data?.approval_photo}`;
+                      el.target = "_blank";
+                      el.download = "bukti_transfer.pdf";
+                      el.click();
+                    } else {
+                      setShowFile(true);
+                    }
+                  }}
                   alt="bukti-transfer"
                 />
               </div>

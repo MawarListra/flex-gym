@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "reactstrap";
 import bannerJoinIc from "../../assets/bannerjoin.png";
 
-const BannerJoin = () => {
+const BannerJoin = ({ id }) => {
   const navigate = useNavigate();
   return (
     <div
@@ -11,6 +11,7 @@ const BannerJoin = () => {
       style={{
         paddingTop: 72,
       }}
+      id="contact"
     >
       <div className="d-flex d-md-none">
         <img src={bannerJoinIc} className="w-100" alt="banner-join" />

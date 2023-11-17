@@ -55,7 +55,11 @@ const Login = () => {
         toast.error("Gagal login. Silahkan coba lagi!");
       }
     } catch (e) {
-      if (!e?.response?.data?.is_verification) {
+      console.log("cek here >>>>>", e?.response?.data?.is_verification);
+      if (
+        e?.response?.data?.is_verification !== undefined &&
+        !e?.response?.data?.is_verification
+      ) {
         setIsLoading(false);
         toast.error("Anda belum verifikasi. Silahkan cek email anda!");
         setTimeout(() => {
