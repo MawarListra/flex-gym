@@ -121,13 +121,13 @@ const Homepage = () => {
       />
       <Hero id="home" />
       <div className="dot" id="dot1"></div>
-      <Location id="contact" />
+      <Location />
       <div className="dot" id="dot2"></div>
       <Facilities />
       {/* <Program id="program" /> */}
       <div className="dot" id="dot3"></div>
       <Pricing id="package" currType={currType} setCurrType={setCurrType} />
-      <BannerJoin />
+      <BannerJoin id="contact" />
       <Footer scrollToDiv={scrollToDiv} />
     </div>
   );
