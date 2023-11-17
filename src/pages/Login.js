@@ -55,8 +55,18 @@ const Login = () => {
         toast.error("Gagal login. Silahkan coba lagi!");
       }
     } catch (e) {
-      setIsLoading(false);
-      toast.error("Gagal login. Silahkan coba lagi!");
+      if (!e?.response?.data?.is_verification) {
+        setIsLoading(false);
+        toast.error("Anda belum verifikasi. Silahkan cek email anda!");
+        setTimeout(() => {
+          navigate("/verif-account", {
+            state: { email: dataUser?.email, notVerif: true },
+          });
+        }, 1000);
+      } else {
+        setIsLoading(false);
+        toast.error("Gagal login. Silahkan coba lagi!");
+      }
       console.log("cek err", e);
     }
   };
