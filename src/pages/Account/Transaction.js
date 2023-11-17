@@ -499,7 +499,8 @@ const Transaction = () => {
                     objectFit: "contain",
                   }}
                   src={
-                    data?.approval_photo.split(".").includes("PDF")
+                    data?.approval_photo.split(".").includes("PDF") ||
+                    data?.approval_photo.split(".").includes("pdf")
                       ? pdfIc
                       : `${baseUrl}${data?.approval_photo}`
                   }
@@ -508,7 +509,10 @@ const Transaction = () => {
                       "cek hereee>>>",
                       data?.approval_photo.split(".")
                     );
-                    if (data?.approval_photo.split(".").includes("PDF")) {
+                    if (
+                      data?.approval_photo.split(".").includes("PDF") ||
+                      data?.approval_photo.split(".").includes("pdf")
+                    ) {
                       let el = document.createElement("a");
                       el.href = `${baseUrl}${data?.approval_photo}`;
                       el.target = "_blank";
