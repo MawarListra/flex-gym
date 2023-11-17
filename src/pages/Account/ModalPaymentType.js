@@ -91,57 +91,73 @@ const ModalPaymentType = ({
           </span>
         </div>
         <div className="d-flex flex-column gap-3">
-          {dataAccountPayment.map((e, i) => {
-            return (
-              <div
-                className="d-flex flex-row justify-content-between align-items-center px-2 py-3"
-                style={{
-                  borderRadius: "5px",
-                  border: `0.5px solid ${currIdx === i ? `#53F60F` : `#999`}`,
-                  cursor: "pointer",
-                }}
-                onClick={() => {
-                  setCurrentData({ ...e });
-                  setCurrIdx(i);
-                }}
-              >
-                <div className="d-flex flex-column">
-                  <span
-                    style={{
-                      color: "#999",
-                      fontFamily: "Nunito Sans",
-                      fontSize: "12px",
-                      fontStyle: "normal",
-                      fontWeight: 400,
-                      lineHeight: "16px",
-                    }}
-                  >
-                    {e?.payment_type_id === 1
-                      ? bankOption.find(
-                          (el) => el?.id === parseInt(e?.bank_name)
-                        )?.name
-                      : walletOption.find(
-                          (el) => el?.id === parseInt(e?.ewallet)
-                        )?.name || "-"}
-                  </span>
-                  <span
-                    style={{
-                      color: "#fff",
-                      fontFamily: "Nunito Sans",
-                      fontSize: "14px",
-                      fontStyle: "normal",
-                      fontWeight: 700,
-                      lineHeight: "18px",
-                    }}
-                  >
-                    {e?.payment_type_id === 1
-                      ? e?.bank_number + " a/n " + e?.bank_account_name
-                      : e?.phone || "-"}
-                  </span>
+          {dataAccountPayment?.length ? (
+            dataAccountPayment.map((e, i) => {
+              return (
+                <div
+                  className="d-flex flex-row justify-content-between align-items-center px-2 py-3"
+                  style={{
+                    borderRadius: "5px",
+                    border: `0.5px solid ${currIdx === i ? `#53F60F` : `#999`}`,
+                    cursor: "pointer",
+                  }}
+                  onClick={() => {
+                    setCurrentData({ ...e });
+                    setCurrIdx(i);
+                  }}
+                >
+                  <div className="d-flex flex-column">
+                    <span
+                      style={{
+                        color: "#999",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "12px",
+                        fontStyle: "normal",
+                        fontWeight: 400,
+                        lineHeight: "16px",
+                      }}
+                    >
+                      {e?.payment_type_id === 1
+                        ? bankOption.find(
+                            (el) => el?.id === parseInt(e?.bank_name)
+                          )?.name
+                        : walletOption.find(
+                            (el) => el?.id === parseInt(e?.ewallet)
+                          )?.name || "-"}
+                    </span>
+                    <span
+                      style={{
+                        color: "#fff",
+                        fontFamily: "Nunito Sans",
+                        fontSize: "14px",
+                        fontStyle: "normal",
+                        fontWeight: 700,
+                        lineHeight: "18px",
+                      }}
+                    >
+                      {e?.payment_type_id === 1
+                        ? e?.bank_number + " a/n " + e?.bank_account_name
+                        : e?.phone || "-"}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div
+              className="d-flex flex-row justify-content-between align-items-center p-4"
+              style={{
+                borderRadius: "5px",
+                border: `0.5px solid #999`,
+                cursor: "pointer",
+              }}
+            >
+              <span style={{ color: "#999" }}>
+                Anda belum punya akun pembayaran. Silahkan kelola akun terlebih
+                dahulu
+              </span>
+            </div>
+          )}
         </div>
         <div className="d-flex flex-column gap-3">
           <Button

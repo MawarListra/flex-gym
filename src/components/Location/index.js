@@ -102,7 +102,7 @@ const Location = ({ id }) => {
               {listData?.[currIdx]?.title}
             </span>
           </div> */}
-          <div className="d-flex flex-column flex-md-row justify-content-between align-items-center">
+          <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
             {/* <div className="mt-1">
               <span className="text-desc-title">
                 {listData?.[currIdx]?.description}
@@ -114,7 +114,33 @@ const Location = ({ id }) => {
             >
               {listData?.[currIdx]?.title}
             </span>
-            <div className="d-flex flex-row align-items-end w-md-fit w-100 justify-content-end">
+            <div className="d-flex d-md-none w-100 flex-row align-items-end justify-content-end">
+              <ChevronLeft
+                className="cursor-pointer"
+                color="white"
+                onClick={() => {
+                  if (currIdx === 0) {
+                    return undefined;
+                  } else {
+                    return setCurrIdx(currIdx - 1);
+                  }
+                }}
+                style={{ cursor: "pointer" }}
+              />
+              <ChevronRight
+                className="cursor-pointer"
+                color="white"
+                onClick={() => {
+                  if (currIdx === listData?.length - 1) {
+                    return undefined;
+                  } else {
+                    return setCurrIdx(currIdx + 1);
+                  }
+                }}
+                style={{ cursor: "pointer" }}
+              />
+            </div>
+            <div className="d-md-flex d-none w-fit flex-row align-items-end justify-content-end">
               <ChevronLeft
                 className="cursor-pointer"
                 color="white"
@@ -147,14 +173,10 @@ const Location = ({ id }) => {
             return (
               <div
                 className="d-flex"
-                style={{ height: 192, width: "100%" }}
+                style={{ height: 192, width: "auto", maxWidth: "100%" }}
                 key={idxE}
               >
-                <img
-                  src={e}
-                  className="d-flex cover"
-                  alt={`image-loc-${idxE}`}
-                />
+                <img src={e} className="d-flex" alt={`image-loc-${idxE}`} />
               </div>
             );
           })}

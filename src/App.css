@@ -49,6 +49,13 @@ body {
     /* Top-right */ -1px 1px 0 #fff, /* Bottom-left */ 1px 1px 0 #fff; /* Bottom-right */
 }
 
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px; /* Adjust the max-width as needed */
+}
+
 @media (min-width: 768px) {
   .paddingComponentRight {
     padding-right: 52px;

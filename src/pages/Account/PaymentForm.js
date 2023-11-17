@@ -753,7 +753,7 @@ const PaymentForm = () => {
                   </div>
                 )}
                 {imageKtp?.fileName && imageKtp?.fileName !== "" && (
-                  <div>
+                  <div className="ellipsis">
                     <span
                       style={{
                         color: "#999",
@@ -882,24 +882,24 @@ const PaymentForm = () => {
                       </div>
                     </div>
                   )}
-                  {(imageBuktiTransfer?.fileName &&
+                  {((imageBuktiTransfer?.fileName &&
                     imageBuktiTransfer?.fileName !== "") ||
-                    (isEditData && imageBuktiTransfer?.raw && (
-                      <div>
-                        <span
-                          style={{
-                            color: "#999",
-                            fontFamily: "Nunito Sans",
-                            fontSize: "12px",
-                            fontStyle: "normal",
-                            fontWeight: 400,
-                            lineHeight: "0.5px",
-                          }}
-                        >
-                          {imageBuktiTransfer?.fileName}
-                        </span>
-                      </div>
-                    ))}
+                    (isEditData && imageBuktiTransfer?.raw)) && (
+                    <div className="ellipsis">
+                      <span
+                        style={{
+                          color: "#999",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "0.5px",
+                        }}
+                      >
+                        {imageBuktiTransfer?.fileName}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
