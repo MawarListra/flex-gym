@@ -90,6 +90,7 @@ const PaymentForm = () => {
       console.error("No file selected");
       return;
     }
+    console.log("cek here file >>>", file);
 
     // Validate file type (for example, allow only image files)
     const allowedTypes = ["image/jpeg", "image/png"];
@@ -501,6 +502,25 @@ const PaymentForm = () => {
                 )}
               </div>
             </div>
+          </div>
+          <div
+            className="d-flex flex-row p-2  align-items-center"
+            style={{ borderRadius: 5, background: "#FEE" }}
+          >
+            <img className="mr-2" src={infoAlert} />
+            <span
+              style={{
+                color: "#F15C59",
+                fontFamily: "Roboto",
+                fontSize: "12px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "16px",
+              }}
+            >
+              Harap memilih akun pembayaran pada Jenis Pembayaran terlebih
+              dahulu!
+            </span>
           </div>
           <div className="d-flex flex-column">
             {dataPayment?.paymentType?.payment_type_id ? (

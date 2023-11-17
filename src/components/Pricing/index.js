@@ -301,6 +301,7 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
                             item?.duration === 12 ? "black" : "#53F60F",
                           height: 39,
                         }}
+                        onClick={() => navigate("/registration")}
                       >
                         <span
                           className="text-daftar-member"
