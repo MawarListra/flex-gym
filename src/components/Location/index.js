@@ -142,11 +142,11 @@ const Location = ({ id }) => {
             </div>
           </div>
         </div>
-        <div className="d-flex d-md-none gap-4 mt-4 w-100 container-image-scroll">
+        <div className="d-flex d-md-none gap-4 mt-4 w-100 scrolling-container">
           {listImage.map((e, idxE) => {
             return (
               <div
-                className="d-flex imageScroll"
+                className="d-flex"
                 style={{ height: 192, width: "100%" }}
                 key={idxE}
               >

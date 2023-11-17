@@ -221,7 +221,7 @@ const ModalAccountPayment = ({
           </div>
           {checkedType ? (
             <div className="d-flex flex-column">
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column mb-2">
                 <small className="font-weight-bold pb-2 text-white d-block">
                   Nama Bank
                   <span style={{ color: "#F83245" }}> *</span>

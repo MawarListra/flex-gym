@@ -55,7 +55,6 @@ const EditProfile = () => {
     };
     const data = {
       ...dataUser,
-      sex: dataUser?.sex?.name,
     };
     try {
       const resp = await axios.put(
@@ -261,7 +260,7 @@ const EditProfile = () => {
                   height: 48,
                 }}
                 onClick={() => handleUbahData()}
-                disabled={!validateData() || isLoading}
+                disabled={isLoading}
               >
                 {isLoading ? (
                   <ReactLoading

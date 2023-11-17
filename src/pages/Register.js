@@ -51,7 +51,10 @@ const Registrasi = () => {
     // }
     if (
       Object.keys(tempData).some(
-        (key) => key === "" || key === {} || key === null
+        (key) =>
+          tempData?.[key] === "" ||
+          tempData?.[key] === {} ||
+          tempData?.[key] === null
       )
     ) {
       return false;
@@ -95,6 +98,12 @@ const Registrasi = () => {
       console.log("cek err", e);
     }
   };
+
+  useEffect(() => {
+    window.onload = function () {
+      window.scrollTo(0, 0);
+    };
+  }, []);
 
   return (
     <div
@@ -152,8 +161,7 @@ const Registrasi = () => {
               marginBottom: 16,
             }}
           >
-            Lorem ipsum dolor sit amet consectetur. Ultrices tellus gravida
-            egestas amet id pretium.
+            Silahkan isi data diri anda.
           </span>
           <div className="d-flex flex-column">
             <TextInput

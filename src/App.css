@@ -38,8 +38,8 @@
 }
 
 body {
-  font-family: "Nunito Sans", sans-serif;
-  overflow-y: scroll;
+  font-family: "Nunito Sans", sans-serif; /* Add this to enable smooth scrolling */
+  overflow: visible;
 }
 
 .text-outline {
@@ -291,6 +291,8 @@ body {
     font-size: 14px; /* Decrease font size for smaller screens */
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
   }
   .paddingComponentRight {
     padding-right: 0px;

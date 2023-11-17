@@ -87,11 +87,11 @@ const SendOTP = () => {
     }
   };
 
-  useEffect(() => {
-    if (otp?.length === 6 && isLoading) {
-      pause();
-    }
-  }, [isLoading, otp]);
+  // useEffect(() => {
+  //   if (otp?.length === 6 && isLoading) {
+  //     pause();
+  //   }
+  // }, [isLoading, otp]);
 
   useEffect(() => {
     startTimer({ seconds: expiredOTP });

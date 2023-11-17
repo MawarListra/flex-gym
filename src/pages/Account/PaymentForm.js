@@ -217,6 +217,7 @@ const PaymentForm = () => {
       console.log("cek err", e);
     }
   };
+  console.log("cek datatransactionprofile", dataProfileTransaction);
 
   const isFormDataEmpty = () => {
     if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
@@ -236,7 +237,7 @@ const PaymentForm = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     dataForm.set("identity_number", dataPayment?.ktpNumber);
-    dataForm.set("admin_fee", 0);
+    dataForm.set("admin_fee", dataProfileTransaction?.admin_fee);
     dataForm.set("payment_method_id", dataPayment?.paymentType?.id);
     dataForm.set("package_id", dataPayment?.packageId);
     dataForm.set("approval_photo", imageBuktiTransfer?.raw);
@@ -579,12 +580,14 @@ const PaymentForm = () => {
                         : dataPayment?.paymentType?.phone || "-"}
                     </span>
                   </div>
-                  <div className="d-flex flex-row justify-content-center align-items-center ">
-                    <ChevronRight
-                      color="white"
-                      style={{ width: 24, height: 24 }}
-                    />
-                  </div>
+                  {statusMapper(data?.is_accepted)?.status !== "failed" && (
+                    <div className="d-flex flex-row justify-content-center align-items-center ">
+                      <ChevronRight
+                        color="white"
+                        style={{ width: 24, height: 24 }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (

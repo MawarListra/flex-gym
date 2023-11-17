@@ -13,7 +13,7 @@ const SuccessOTP = () => {
       style={{ minHeight: "100vh" }}
     >
       <div
-        className="d-flex flex-column p-3 w-100 h-100 gap-4 justify-content-between"
+        className="d-flex flex-column p-3 w-100 h-100 gap-5 "
         style={{ minHeight: "100vh" }}
       >
         <div

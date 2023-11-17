@@ -21,7 +21,10 @@ const Login = () => {
   const validateData = () => {
     if (
       Object.keys(dataUser).some(
-        (key) => key === "" || key === {} || key === null
+        (key) =>
+          dataUser?.[key] === "" ||
+          dataUser?.[key] === {} ||
+          dataUser?.[key] === null
       )
     ) {
       return false;
@@ -65,7 +68,7 @@ const Login = () => {
     >
       <Toaster />
       <div
-        className="d-flex flex-column p-3 justify-content-between w-100 gap-2"
+        className="d-flex flex-column p-3 w-100 gap-2"
         style={{ minHeight: "100vh" }}
       >
         <div className="d-flex flex-column">
@@ -150,7 +153,7 @@ const Login = () => {
           </div>
         </div>
 
-        <div className="d-flex flex-column gap-4">
+        <div className="d-flex flex-column gap-4 mt-4">
           <div className="d-flex w-100">
             <Button
               className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"
