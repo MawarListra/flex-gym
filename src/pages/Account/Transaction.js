@@ -525,21 +525,23 @@ const Transaction = () => {
                   alt="bukti-transfer"
                 />
               </div>
-              <span
-                className="mt-2"
-                style={{
-                  color: "#999",
-                  fontFamily: "Nunito Sans",
-                  fontSize: "12px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "0.5px",
-                }}
-              >
-                {data?.approval_image_name
-                  ? data?.approval_image_name
-                  : "Bukti transfer.png"}
-              </span>
+              <div className="ellipsis">
+                <span
+                  className="mt-2"
+                  style={{
+                    color: "#999",
+                    fontFamily: "Nunito Sans",
+                    fontSize: "12px",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    lineHeight: "0.5px",
+                  }}
+                >
+                  {data?.approval_image_name
+                    ? data?.approval_image_name
+                    : "Bukti transfer.png"}
+                </span>
+              </div>
             </div>
             {statusMapper(data?.is_accepted)?.status === "failed" && (
               <div className="d-flex flex-column h-100 justify-content-end gap-4 mt-4">

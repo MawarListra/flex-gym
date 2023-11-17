@@ -97,7 +97,12 @@ const PaymentForm = () => {
     console.log("cek isPdf", isPdf);
 
     // Validate file type (for example, allow only image files)
-    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+    const allowedTypes = [];
+    if (type === "ktp") {
+      allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+    } else {
+      allowedTypes = ["image/jpeg", "image/png"];
+    }
     if (!allowedTypes.includes(file.type)) {
       console.error("Invalid file type. Please select a valid image file.");
       return;
@@ -854,7 +859,7 @@ const PaymentForm = () => {
                   ref={bukti?.foto}
                   onChange={(e) => handleChangeImage(e, "bukti")}
                   style={{ display: "none" }}
-                  accept="image/jpg, image/jpeg, image/png, application/pdf"
+                  accept="image/jpg, image/jpeg, image/png"
                   disabled={!dataPayment?.paymentType?.payment_type_id}
                 />
                 <div className="d-flex flex-column justify-content-between">
