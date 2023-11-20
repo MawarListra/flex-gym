@@ -175,7 +175,7 @@ const SendOTP = () => {
                 {localStorage.getItem("emailRegist")}
               </span>
               . Demi keamanan, jangan berikan kodenya ke siapapun termasuk pihak
-              GPI.
+              Flex Gym and Cafe.
             </span>
             <div className="d-flex w-100 justify-content-between">
               {isLoading ? (
