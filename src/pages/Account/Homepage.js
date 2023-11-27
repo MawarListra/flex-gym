@@ -175,8 +175,7 @@ const Homepage = () => {
               letterSpacing: 0.5,
             }}
           >
-            {data?.member_until &&
-            moment(data?.member_until) > moment().toDate() ? (
+            {data?.member_until ? (
               <div className="d-flex flex-column">
                 <span style={{ color: "#999" }}>
                   Membership kamu hingga tanggal
@@ -202,10 +201,7 @@ const Homepage = () => {
                 }}
                 onClick={() => navigate("/renew-membership")}
               >
-                {data?.member_until &&
-                moment(data?.member_until) > moment().toDate()
-                  ? "Perpanjang Member"
-                  : "Beli Paket Gym"}
+                {data?.member_until ? "Perpanjang Member" : "Beli Paket Gym"}
               </span>
             </div>
           </div>
