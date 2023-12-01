@@ -282,30 +282,12 @@ const Transaction = () => {
                 lineHeight: "18px",
               }}
             >
-              Dari
+              Jenis Pembayaran
             </span>
             <div
               className="d-flex flex-column p-3 gap-2"
               style={{ borderRadius: "5px", border: "0.5px solid #999" }}
             >
-              <span
-                style={{
-                  color: "#999",
-                  fontFamily: "Nunito Sans",
-                  fontSize: "12px",
-                  fontStyle: "normal",
-                  fontWeight: 400,
-                  lineHeight: "16px",
-                }}
-              >
-                {dataAccountPayment?.payment_type_id === 1
-                  ? bankOption.find(
-                      (v) => v?.id === parseInt(dataAccountPayment?.bank_name)
-                    )?.name
-                  : walletOption.find(
-                      (v) => v?.id === parseInt(dataAccountPayment?.ewallet)
-                    )?.name}
-              </span>
               <span
                 style={{
                   color: "#fff",
@@ -316,74 +298,67 @@ const Transaction = () => {
                   lineHeight: "18px",
                 }}
               >
-                {dataAccountPayment?.payment_type_id === 1
-                  ? dataAccountPayment?.bank_number +
-                    " a/n " +
-                    dataAccountPayment?.bank_account_name
-                  : dataAccountPayment?.phone}
+                {data?.payment_type_admin === 3 ? "Tunai" : "Non Tunai"}
               </span>
             </div>
           </div>
-          <div className="d-flex flex-column gap-2">
-            <span
-              style={{
-                color: "#999",
-                fontFamily: "Nunito Sans",
-                fontSize: "14px",
-                fontStyle: "normal",
-                fontWeight: 400,
-                lineHeight: "18px",
-              }}
-            >
-              Ke
-            </span>
-            {rekeningOption.map((el) => {
-              return (
+          {!data?.payment_type_admin && (
+            <>
+              <div className="d-flex flex-column gap-2">
+                <span
+                  style={{
+                    color: "#999",
+                    fontFamily: "Nunito Sans",
+                    fontSize: "14px",
+                    fontStyle: "normal",
+                    fontWeight: 400,
+                    lineHeight: "18px",
+                  }}
+                >
+                  Dari
+                </span>
                 <div
-                  className="d-flex flex-row p-3 gap-2"
+                  className="d-flex flex-column p-3 gap-2"
                   style={{ borderRadius: "5px", border: "0.5px solid #999" }}
                 >
-                  <div className="d-flex justify-content-center align-items-center">
-                    <img
-                      src={`${baseUrl}${el?.icon}`}
-                      style={{ width: 24, height: 24 }}
-                    />
-                  </div>
-                  <div className="d-flex flex-column gap-2 justify-content-between">
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "12px",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        lineHeight: "16px",
-                      }}
-                    >
-                      {el?.bank_account || "-"}
-                    </span>
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        lineHeight: "18px",
-                      }}
-                    >
-                      {el?.bank_account_number || "-"} a/n{" "}
-                      {el?.bank_account_name || "-"}{" "}
-                    </span>
-                  </div>
+                  <span
+                    style={{
+                      color: "#999",
+                      fontFamily: "Nunito Sans",
+                      fontSize: "12px",
+                      fontStyle: "normal",
+                      fontWeight: 400,
+                      lineHeight: "16px",
+                    }}
+                  >
+                    {dataAccountPayment?.payment_type_id === 1
+                      ? bankOption.find(
+                          (v) =>
+                            v?.id === parseInt(dataAccountPayment?.bank_name)
+                        )?.name
+                      : walletOption.find(
+                          (v) => v?.id === parseInt(dataAccountPayment?.ewallet)
+                        )?.name}
+                  </span>
+                  <span
+                    style={{
+                      color: "#fff",
+                      fontFamily: "Nunito Sans",
+                      fontSize: "14px",
+                      fontStyle: "normal",
+                      fontWeight: 700,
+                      lineHeight: "18px",
+                    }}
+                  >
+                    {dataAccountPayment?.payment_type_id === 1
+                      ? dataAccountPayment?.bank_number +
+                        " a/n " +
+                        dataAccountPayment?.bank_account_name
+                      : dataAccountPayment?.phone}
+                  </span>
                 </div>
-              );
-            })}
-            <div
-              className="d-flex flex-column justify-content-between p-3 gap-3 mt-2"
-              style={{ borderRadius: "5px", border: "0.5px solid #C0C3CF" }}
-            >
-              <div className="d-flex flex-row justify-content-between">
+              </div>
+              <div className="d-flex flex-column gap-2">
                 <span
                   style={{
                     color: "#999",
@@ -394,81 +369,61 @@ const Transaction = () => {
                     lineHeight: "18px",
                   }}
                 >
-                  Jenis Paket
+                  Ke
                 </span>
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "18px",
-                    textAlign: "right",
-                  }}
-                >
-                  {data?.package?.name +
-                    " " +
-                    currencyFormatter(data?.package?.price)}
-                </span>
+                {rekeningOption.map((el) => {
+                  return (
+                    <div
+                      className="d-flex flex-row p-3 gap-2"
+                      style={{
+                        borderRadius: "5px",
+                        border: "0.5px solid #999",
+                      }}
+                    >
+                      <div className="d-flex justify-content-center align-items-center">
+                        <img
+                          src={`${baseUrl}${el?.icon}`}
+                          style={{ width: 24, height: 24 }}
+                        />
+                      </div>
+                      <div className="d-flex flex-column gap-2 justify-content-between">
+                        <span
+                          style={{
+                            color: "#fff",
+                            fontFamily: "Nunito Sans",
+                            fontSize: "12px",
+                            fontStyle: "normal",
+                            fontWeight: 400,
+                            lineHeight: "16px",
+                          }}
+                        >
+                          {el?.bank_account || "-"}
+                        </span>
+                        <span
+                          style={{
+                            color: "#fff",
+                            fontFamily: "Nunito Sans",
+                            fontSize: "14px",
+                            fontStyle: "normal",
+                            fontWeight: 700,
+                            lineHeight: "18px",
+                          }}
+                        >
+                          {el?.bank_account_number || "-"} a/n{" "}
+                          {el?.bank_account_name || "-"}{" "}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-              <div className="d-flex flex-row justify-content-between">
-                <span
-                  style={{
-                    color: "#999",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "18px",
-                  }}
-                >
-                  Biaya Admin
-                </span>
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "14px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "18px",
-                    textAlign: "right",
-                  }}
-                >
-                  {currencyFormatter(data?.admin_fee)}
-                </span>
-              </div>
-              <div style={{ borderBottom: "0.5px solid #999" }}></div>
-              <div className="d-flex flex-row justify-content-between">
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "16px",
-                    fontStyle: "normal",
-                    fontWeight: 400,
-                    lineHeight: "18px",
-                  }}
-                >
-                  Total Pembayaran
-                </span>
-                <span
-                  style={{
-                    color: "#fff",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "16px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "18px",
-                    textAlign: "right",
-                  }}
-                >
-                  {currencyFormatter(hitungTotal())}
-                </span>
-              </div>
-            </div>
-            <div className="d-flex flex-column gap-2 mt-2">
+            </>
+          )}
+          <div
+            className="d-flex flex-column justify-content-between p-3 gap-3 mt-2"
+            style={{ borderRadius: "5px", border: "0.5px solid #C0C3CF" }}
+          >
+            <div className="d-flex flex-row justify-content-between">
               <span
                 style={{
                   color: "#999",
@@ -479,52 +434,135 @@ const Transaction = () => {
                   lineHeight: "18px",
                 }}
               >
-                Bukti Transfer
+                Jenis Paket
               </span>
-              <div
+              <span
                 style={{
-                  display: "flex",
-                  width: "163px",
-                  height: "93px",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexShrink: 0,
+                  color: "#fff",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "14px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "18px",
+                  textAlign: "right",
                 }}
               >
-                <img
-                  className="d-flex"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
-                  src={
+                {data?.package?.name +
+                  " " +
+                  currencyFormatter(data?.package?.price)}
+              </span>
+            </div>
+            <div className="d-flex flex-row justify-content-between">
+              <span
+                style={{
+                  color: "#999",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "14px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "18px",
+                }}
+              >
+                Biaya Admin
+              </span>
+              <span
+                style={{
+                  color: "#fff",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "14px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "18px",
+                  textAlign: "right",
+                }}
+              >
+                {currencyFormatter(data?.admin_fee)}
+              </span>
+            </div>
+            <div style={{ borderBottom: "0.5px solid #999" }}></div>
+            <div className="d-flex flex-row justify-content-between">
+              <span
+                style={{
+                  color: "#fff",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "18px",
+                }}
+              >
+                Total Pembayaran
+              </span>
+              <span
+                style={{
+                  color: "#fff",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "18px",
+                  textAlign: "right",
+                }}
+              >
+                {currencyFormatter(hitungTotal())}
+              </span>
+            </div>
+          </div>
+          <div className="d-flex flex-column gap-2 mt-2">
+            <span
+              style={{
+                color: "#999",
+                fontFamily: "Nunito Sans",
+                fontSize: "14px",
+                fontStyle: "normal",
+                fontWeight: 400,
+                lineHeight: "18px",
+              }}
+            >
+              Bukti Transfer
+            </span>
+            <div
+              style={{
+                display: "flex",
+                width: "163px",
+                height: "93px",
+                justifyContent: "center",
+                alignItems: "center",
+                flexShrink: 0,
+              }}
+            >
+              <img
+                className="d-flex"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
+                src={
+                  data?.approval_photo.split(".").includes("PDF") ||
+                  data?.approval_photo.split(".").includes("pdf")
+                    ? pdfIc
+                    : `${baseUrl}${data?.approval_photo}`
+                }
+                onClick={() => {
+                  console.log("cek hereee>>>", data?.approval_photo.split("."));
+                  if (
                     data?.approval_photo.split(".").includes("PDF") ||
                     data?.approval_photo.split(".").includes("pdf")
-                      ? pdfIc
-                      : `${baseUrl}${data?.approval_photo}`
+                  ) {
+                    let el = document.createElement("a");
+                    el.href = `${baseUrl}${data?.approval_photo}`;
+                    el.target = "_blank";
+                    el.download = "bukti_transfer.pdf";
+                    el.click();
+                  } else {
+                    setShowFile(true);
                   }
-                  onClick={() => {
-                    console.log(
-                      "cek hereee>>>",
-                      data?.approval_photo.split(".")
-                    );
-                    if (
-                      data?.approval_photo.split(".").includes("PDF") ||
-                      data?.approval_photo.split(".").includes("pdf")
-                    ) {
-                      let el = document.createElement("a");
-                      el.href = `${baseUrl}${data?.approval_photo}`;
-                      el.target = "_blank";
-                      el.download = "bukti_transfer.pdf";
-                      el.click();
-                    } else {
-                      setShowFile(true);
-                    }
-                  }}
-                  alt="bukti-transfer"
-                />
-              </div>
+                }}
+                alt="bukti-transfer"
+              />
+            </div>
+            <div className="ellipsis">
               <span
                 className="mt-2"
                 style={{
@@ -541,41 +579,41 @@ const Transaction = () => {
                   : "Bukti transfer.png"}
               </span>
             </div>
-            {statusMapper(data?.is_accepted)?.status === "failed" && (
-              <div className="d-flex flex-column h-100 justify-content-end gap-4 mt-4">
-                <div className="d-flex w-100">
-                  <Button
-                    className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"
+          </div>
+          {statusMapper(data?.is_accepted)?.status === "failed" && (
+            <div className="d-flex flex-column h-100 justify-content-end gap-4 mt-4">
+              <div className="d-flex w-100">
+                <Button
+                  className="d-flex w-100 gap-8 justify-content-center align-items-center text-center"
+                  style={{
+                    backgroundColor: "#53f60f",
+                    borderTopLeftRadius: 0,
+                    borderBottomRightRadius: 0,
+                    height: 48,
+                  }}
+                  onClick={() => {
+                    localStorage.setItem("dataToEdit", JSON.stringify(data));
+                    navigate(`/edit-detail-transaction/${id}`);
+                  }}
+                >
+                  <span
+                    className="text-black"
                     style={{
-                      backgroundColor: "#53f60f",
-                      borderTopLeftRadius: 0,
-                      borderBottomRightRadius: 0,
-                      height: 48,
-                    }}
-                    onClick={() => {
-                      localStorage.setItem("dataToEdit", JSON.stringify(data));
-                      navigate(`/edit-detail-transaction/${id}`);
+                      color: "#030304",
+                      textAlign: "center",
+                      fontFamily: "Nunito Sans",
+                      fontSize: 14,
+                      fontStyle: "normal",
+                      fontweight: 700,
+                      lineheight: "18px" /* 128.571% */,
                     }}
                   >
-                    <span
-                      className="text-black"
-                      style={{
-                        color: "#030304",
-                        textAlign: "center",
-                        fontFamily: "Nunito Sans",
-                        fontSize: 14,
-                        fontStyle: "normal",
-                        fontweight: 700,
-                        lineheight: "18px" /* 128.571% */,
-                      }}
-                    >
-                      Pergi ke Ubah Data
-                    </span>
-                  </Button>
-                </div>
+                    Pergi ke Ubah Data
+                  </span>
+                </Button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

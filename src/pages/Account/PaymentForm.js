@@ -36,15 +36,9 @@ const PaymentForm = () => {
   const [rekeningOption, setRekeningOption] = useState([]);
   const [showFile, setShowFile] = useState(false);
   const [clickedFile, setClickedFile] = useState("");
+  const [checkedType, setCheckedType] = useState("");
 
   const dataForm = new FormData();
-  dataForm.append("identity_number", "");
-  dataForm.append("admin_fee", 0);
-  dataForm.append("payment_method_id", "");
-  dataForm.append("package_id", "");
-  dataForm.append("approval_photo", "");
-  dataForm.append("identity", "");
-  dataForm.append("approval_image_name", "");
 
   const config = {
     headers: {
@@ -97,8 +91,13 @@ const PaymentForm = () => {
     console.log("cek isPdf", isPdf);
 
     // Validate file type (for example, allow only image files)
-    const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
-    if (!allowedTypes.includes(file.type)) {
+    let allowedTypes = [];
+    if (type === "ktp") {
+      allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+    } else {
+      allowedTypes = ["image/jpeg", "image/png"];
+    }
+    if (!allowedTypes.includes(file?.type)) {
       console.error("Invalid file type. Please select a valid image file.");
       return;
     }
@@ -154,7 +153,6 @@ const PaymentForm = () => {
     try {
       const resp = await axios.get(`${baseUrl}v1/package_data/getall`, config);
       if (resp?.status === 200 && resp?.data?.status === "success") {
-        console.log("cek heree >>>", resp?.data?.data);
         let temp = resp?.data?.data?.map((e) => {
           return {
             ...e,
@@ -205,8 +203,6 @@ const PaymentForm = () => {
         config
       );
       if (resp?.status === 200 && resp?.data?.status === "success") {
-        console.log("cek response >>>", resp?.data?.data);
-
         setDataPayment({
           ktpNumber: resp?.data?.data?.identity_number,
           packageId: resp?.data?.data?.package?.id,
@@ -226,12 +222,18 @@ const PaymentForm = () => {
           packagePrice: resp?.data?.data?.package?.price,
           packageName: resp?.data?.data?.package?.name,
         });
+        setCheckedType(
+          resp?.data?.data?.payment_type_admin === 3
+            ? true
+            : resp?.data?.data?.payment_method !== null
+            ? false
+            : ""
+        );
       }
     } catch (e) {
       console.log("cek err", e);
     }
   };
-  console.log("cek datatransactionprofile", dataProfileTransaction);
 
   const isFormDataEmpty = () => {
     if (!imageKtp?.raw || !imageBuktiTransfer?.raw) {
@@ -241,7 +243,13 @@ const PaymentForm = () => {
     if (!dataPayment?.ktpNumber || dataPayment?.ktpNumber === "") {
       return true;
     }
-    if (!dataPayment?.packageId || !dataPayment?.paymentType?.id) {
+    if (
+      !dataPayment?.packageId ||
+      checkedType === "" ||
+      (!checkedType &&
+        checkedType !== "" &&
+        !dataPayment?.paymentType?.payment_type_id)
+    ) {
       return true;
     }
 
@@ -250,14 +258,20 @@ const PaymentForm = () => {
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    dataForm.set("identity_number", dataPayment?.ktpNumber);
-    dataForm.set("admin_fee", dataProfileTransaction?.admin_fee);
-    dataForm.set("payment_method_id", dataPayment?.paymentType?.id);
-    dataForm.set("package_id", dataPayment?.packageId);
-    dataForm.set("approval_photo", imageBuktiTransfer?.raw);
-    dataForm.set("identity", imageKtp?.raw);
-    dataForm.set("approval_image_name", imageBuktiTransfer?.fileName);
-    dataForm.set("id_before", id);
+    dataForm.append("identity_number", dataPayment?.ktpNumber);
+    dataForm.append("admin_fee", dataProfileTransaction?.admin_fee);
+    if (checkedType && checkedType !== "") {
+      /// Jika pilih tunai, ganti dengan payment_type_admin dan diisi 3
+      console.log("cek here checkedtype", checkedType);
+      dataForm.append("payment_type_admin", 3);
+    } else {
+      dataForm.append("payment_method_id", dataPayment?.paymentType?.id);
+    }
+    dataForm.append("package_id", dataPayment?.packageId);
+    dataForm.append("approval_photo", imageBuktiTransfer?.raw);
+    dataForm.append("identity", imageKtp?.raw);
+    dataForm.append("approval_image_name", imageBuktiTransfer?.fileName);
+    dataForm.append("id_before", id);
 
     try {
       const resp = await axios.post(
@@ -308,7 +322,6 @@ const PaymentForm = () => {
   }, [id]);
 
   useEffect(() => {
-    console.log("cek here>>>>", dataPayment);
     if (dataPayment !== {}) {
       localStorage.setItem("currDataForm", JSON.stringify(dataPayment));
     }
@@ -319,7 +332,6 @@ const PaymentForm = () => {
     let tanggal2 = moment(member_until);
 
     const selisih = tanggal2.diff(tanggal1, "days");
-    console.log("cek selisih");
     return selisih;
   };
 
@@ -454,21 +466,27 @@ const PaymentForm = () => {
                   letterSpacing: "0.5px",
                 }}
               >
-                {dataProfileTransaction?.member_until
+                {dataProfileTransaction?.member_until &&
+                calculateMembershipDuration(
+                  dataProfileTransaction.member_until
+                ) > 0
                   ? "Membership Kamu tersisa "
                   : "Kamu belum memiliki paket"}
-                {dataProfileTransaction?.member_until && (
-                  <span
-                    style={{
-                      color: "#F15C59",
-                    }}
-                  >
-                    {calculateMembershipDuration(
-                      dataProfileTransaction.member_until
-                    )}{" "}
-                    hari lagi
-                  </span>
-                )}
+                {dataProfileTransaction?.member_until &&
+                  calculateMembershipDuration(
+                    dataProfileTransaction.member_until
+                  ) > 0 && (
+                    <span
+                      style={{
+                        color: "#F15C59",
+                      }}
+                    >
+                      {calculateMembershipDuration(
+                        dataProfileTransaction.member_until
+                      )}{" "}
+                      hari lagi
+                    </span>
+                  )}
               </span>
             </div>
           )}
@@ -557,105 +575,164 @@ const PaymentForm = () => {
             </span>
           </div>
           <div className="d-flex flex-column">
-            {dataPayment?.paymentType?.payment_type_id ? (
-              <div className="d-flex flex-column gap-2 mt-2">
-                <span
-                  style={{
-                    color: "#FFF",
-                    fontFamily: "Nunito Sans",
-                    fontSize: "12px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "12px",
-                  }}
-                >
-                  Jenis Pembayaran<span style={{ color: "#F15C59" }}>*</span>
-                </span>
-                <div
-                  className="d-flex flex-row justify-content-between align-items-center px-2 py-3"
-                  style={{
-                    borderRadius: "5px",
-                    border: "0.5px solid #999",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => {
-                    if (statusMapper(data?.is_accepted)?.status === "failed") {
-                      return undefined;
-                    } else {
-                      setOpenModal(!openModal);
-                      let temp = localStorage.getItem("currDataForm");
-                      console.log("cek temp", JSON.parse(temp));
-                    }
-                  }}
-                >
-                  <div className="d-flex flex-column">
-                    <span
-                      style={{
-                        color: "#999",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "12px",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        lineHeight: "16px",
-                      }}
-                    >
-                      {dataPayment?.paymentType?.payment_type_id === 1
-                        ? bankOption.find(
-                            (el) =>
-                              el?.id ===
-                              parseInt(dataPayment?.paymentType?.bank_name)
-                          )?.name
-                        : walletOption.find(
-                            (el) =>
-                              el?.id ===
-                              parseInt(dataPayment?.paymentType?.ewallet)
-                          )?.name || "-"}
-                    </span>
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        lineHeight: "18px",
-                      }}
-                    >
-                      {dataPayment?.paymentType?.payment_type_id === 1
-                        ? dataPayment?.paymentType?.bank_number +
-                          " a/n " +
-                          dataPayment?.paymentType?.bank_account_name
-                        : dataPayment?.paymentType?.phone || "-"}
-                    </span>
-                  </div>
-                  {statusMapper(data?.is_accepted)?.status !== "failed" && (
-                    <div className="d-flex flex-row justify-content-center align-items-center ">
-                      <ChevronRight
-                        color="white"
-                        style={{ width: 24, height: 24 }}
-                      />
-                    </div>
-                  )}
+            <div className="d-flex flex-column gap-2 my-2">
+              <span
+                style={{
+                  color: "#FFF",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "12px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "12px",
+                }}
+              >
+                Jenis Pembayaran<span style={{ color: "#F15C59" }}>*</span>
+              </span>
+              <div
+                className="d-flex flex-row gap-4"
+                style={{
+                  color: "#FFF",
+                  fontFeatureSettings: "clig off liga off",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "14px",
+                  fontStyle: "normal",
+                  fontWeight: 400,
+                  lineHeight: "normal",
+                  letterSpacing: "0.5px",
+                }}
+              >
+                <div className="d-flex flex-row gap-1 justify-content-between align-items-center">
+                  <input
+                    name="radio1"
+                    type={"radio"}
+                    checked={checkedType === true}
+                    onChange={() => {
+                      setCheckedType(true);
+                      setDataPayment({
+                        ...dataPayment,
+                        paymentType: {},
+                      });
+                    }}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      flexShrink: 0,
+                    }}
+                    // disabled={action === "edit"}
+                  />
+                  <span>Tunai</span>
+                </div>
+                <div className="d-flex flex-row gap-1 justify-content-between align-items-center">
+                  <input
+                    name="radio2"
+                    type={"radio"}
+                    checked={checkedType === false}
+                    onChange={() => {
+                      setCheckedType(false);
+                    }}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      flexShrink: 0,
+                    }}
+                    // disabled={action === "edit"}
+                  />
+                  <span>Non Tunai</span>
                 </div>
               </div>
-            ) : (
-              <TextInput
-                labelClassName="label-text-input"
-                name="paymentType"
-                label="Jenis Pembayaran"
-                placeholder="Jenis Pembayaran"
-                isRequired={true}
-                disabled={true}
-                type="text"
-                endTextAddOn={
-                  <img
-                    onClick={() => setOpenModal(!openModal)}
-                    src={Edit}
-                    alt="edit"
-                  />
-                }
-              />
-            )}
+              {!checkedType &&
+              checkedType !== "" &&
+              !dataPayment?.paymentType?.payment_type_id ? (
+                <TextInput
+                  labelClassName=""
+                  name="paymentType"
+                  label=""
+                  placeholder="Jenis Pembayaran"
+                  isRequired={true}
+                  disabled={true}
+                  type="text"
+                  endTextAddOn={
+                    <img
+                      onClick={() => setOpenModal(!openModal)}
+                      src={Edit}
+                      alt="edit"
+                    />
+                  }
+                />
+              ) : !checkedType &&
+                checkedType !== "" &&
+                dataPayment?.paymentType?.payment_type_id ? (
+                <div className="d-flex flex-column gap-2 mt-2">
+                  <div
+                    className="d-flex flex-row justify-content-between align-items-center px-2 py-3"
+                    style={{
+                      borderRadius: "5px",
+                      border: "0.5px solid #999",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      if (
+                        statusMapper(data?.is_accepted)?.status === "failed"
+                      ) {
+                        return undefined;
+                      } else {
+                        setOpenModal(!openModal);
+                        let temp = localStorage.getItem("currDataForm");
+                      }
+                    }}
+                  >
+                    <div className="d-flex flex-column">
+                      <span
+                        style={{
+                          color: "#999",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "16px",
+                        }}
+                      >
+                        {dataPayment?.paymentType?.payment_type_id === 1
+                          ? bankOption.find(
+                              (el) =>
+                                el?.id ===
+                                parseInt(dataPayment?.paymentType?.bank_name)
+                            )?.name
+                          : walletOption.find(
+                              (el) =>
+                                el?.id ===
+                                parseInt(dataPayment?.paymentType?.ewallet)
+                            )?.name || "-"}
+                      </span>
+                      <span
+                        style={{
+                          color: "#fff",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {dataPayment?.paymentType?.payment_type_id === 1
+                          ? dataPayment?.paymentType?.bank_number +
+                            " a/n " +
+                            dataPayment?.paymentType?.bank_account_name
+                          : dataPayment?.paymentType?.phone || "-"}
+                      </span>
+                    </div>
+                    {statusMapper(data?.is_accepted)?.status !== "failed" && (
+                      <div className="d-flex flex-row justify-content-center align-items-center ">
+                        <ChevronRight
+                          color="white"
+                          style={{ width: 24, height: 24 }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : null}
+            </div>
             <div className="d-flex flex-column my-2">
               <small
                 className="font-weight-bold text-white d-block"
@@ -672,7 +749,10 @@ const PaymentForm = () => {
                 height={48}
                 isDisabled={
                   statusMapper(data?.is_accepted)?.status === "failed" ||
-                  !dataPayment?.paymentType?.payment_type_id
+                  checkedType === "" ||
+                  (!checkedType &&
+                    checkedType !== "" &&
+                    !dataPayment?.paymentType?.payment_type_id)
                 }
                 placeholder={"Pilih Paket"}
                 // isSearchable={search}
@@ -719,7 +799,12 @@ const PaymentForm = () => {
                   ktpNumber: value.replace(/\D/g, ""),
                 })
               }
-              disabled={!dataPayment?.paymentType?.payment_type_id}
+              disabled={
+                checkedType === "" ||
+                (!checkedType &&
+                  checkedType !== "" &&
+                  !dataPayment?.paymentType?.payment_type_id)
+              }
             />
             {/* upload ktp */}
             <div style={{ marginBottom: "16px" }}>
@@ -730,7 +815,12 @@ const PaymentForm = () => {
                 onChange={(e) => handleChangeImage(e, "ktp")}
                 style={{ display: "none" }}
                 accept="image/jpg, image/jpeg, image/png, application/pdf"
-                disabled={!dataPayment?.paymentType?.payment_type_id}
+                disabled={
+                  checkedType === "" ||
+                  (!checkedType &&
+                    checkedType !== "" &&
+                    !dataPayment?.paymentType?.payment_type_id)
+                }
               />
 
               <div className="d-flex flex-column justify-content-between">
@@ -844,7 +934,7 @@ const PaymentForm = () => {
                 className="font-weight-bold text-white d-block"
                 style={{ fontSize: 12 }}
               >
-                Upload Bukti Transfer
+                Upload Bukti Pembayaran
                 <span style={{ color: "#F83245" }}> *</span>
               </small>
               <div className="mt-2" style={{ marginBottom: "24px" }}>
@@ -854,8 +944,13 @@ const PaymentForm = () => {
                   ref={bukti?.foto}
                   onChange={(e) => handleChangeImage(e, "bukti")}
                   style={{ display: "none" }}
-                  accept="image/jpg, image/jpeg, image/png, application/pdf"
-                  disabled={!dataPayment?.paymentType?.payment_type_id}
+                  accept="image/jpg, image/jpeg, image/png"
+                  disabled={
+                    checkedType === "" ||
+                    (!checkedType &&
+                      checkedType !== "" &&
+                      !dataPayment?.paymentType?.payment_type_id)
+                  }
                 />
                 <div className="d-flex flex-column justify-content-between">
                   {(imageBuktiTransfer?.fileName &&
@@ -943,7 +1038,7 @@ const PaymentForm = () => {
                             lineHeight: "18px",
                           }}
                         >
-                          Upload Bukti Transfer
+                          Bukti Pembayaran
                         </span>
                       </div>
                     </div>
@@ -970,62 +1065,64 @@ const PaymentForm = () => {
               </div>
             </div>
           </div>
-          <div className="d-flex flex-column gap-2">
-            <span
-              style={{
-                color: "#fff",
-                fontFamily: "Nunito Sans",
-                fontSize: "16px",
-                fontStyle: "normal",
-                fontWeight: 700,
-                lineHeight: "22px",
-              }}
-            >
-              Bank Transfer
-            </span>
-            {rekeningOption.map((el) => {
-              return (
-                <div
-                  className="d-flex flex-row p-3 gap-2"
-                  style={{ borderRadius: "5px", border: "0.5px solid #999" }}
-                >
-                  <div className="d-flex justify-content-center align-items-center">
-                    <img
-                      src={`${baseUrl}${el?.icon}`}
-                      style={{ width: 24, height: 24 }}
-                    />
+          {!checkedType && checkedType !== "" && (
+            <div className="d-flex flex-column gap-2">
+              <span
+                style={{
+                  color: "#fff",
+                  fontFamily: "Nunito Sans",
+                  fontSize: "16px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "22px",
+                }}
+              >
+                Bank Transfer
+              </span>
+              {rekeningOption.map((el) => {
+                return (
+                  <div
+                    className="d-flex flex-row p-3 gap-2"
+                    style={{ borderRadius: "5px", border: "0.5px solid #999" }}
+                  >
+                    <div className="d-flex justify-content-center align-items-center">
+                      <img
+                        src={`${baseUrl}${el?.icon}`}
+                        style={{ width: 24, height: 24 }}
+                      />
+                    </div>
+                    <div className="d-flex flex-column gap-2 justify-content-between">
+                      <span
+                        style={{
+                          color: "#fff",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "12px",
+                          fontStyle: "normal",
+                          fontWeight: 400,
+                          lineHeight: "16px",
+                        }}
+                      >
+                        {el?.bank_account || "-"}
+                      </span>
+                      <span
+                        style={{
+                          color: "#fff",
+                          fontFamily: "Nunito Sans",
+                          fontSize: "14px",
+                          fontStyle: "normal",
+                          fontWeight: 700,
+                          lineHeight: "18px",
+                        }}
+                      >
+                        {el?.bank_account_number || "-"} a/n{" "}
+                        {el?.bank_account_name || "-"}{" "}
+                      </span>
+                    </div>
                   </div>
-                  <div className="d-flex flex-column gap-2 justify-content-between">
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "12px",
-                        fontStyle: "normal",
-                        fontWeight: 400,
-                        lineHeight: "16px",
-                      }}
-                    >
-                      {el?.bank_account || "-"}
-                    </span>
-                    <span
-                      style={{
-                        color: "#fff",
-                        fontFamily: "Nunito Sans",
-                        fontSize: "14px",
-                        fontStyle: "normal",
-                        fontWeight: 700,
-                        lineHeight: "18px",
-                      }}
-                    >
-                      {el?.bank_account_number || "-"} a/n{" "}
-                      {el?.bank_account_name || "-"}{" "}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
           <div className="d-flex flex-column gap-2 mt-2">
             <span
               style={{
@@ -1037,7 +1134,8 @@ const PaymentForm = () => {
                 lineHeight: "22px",
               }}
             >
-              Total Transfer
+              Total{" "}
+              {!checkedType && checkedType !== "" ? "Transfer" : "Pembayaran"}
             </span>
             <div
               className="d-flex flex-column justify-content-between p-3 gap-3"
