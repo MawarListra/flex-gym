@@ -469,8 +469,15 @@ const PaymentForm = () => {
                 {dataProfileTransaction?.member_until &&
                 calculateMembershipDuration(
                   dataProfileTransaction.member_until
+                ) <= 7 &&
+                calculateMembershipDuration(
+                  dataProfileTransaction.member_until
                 ) > 0
-                  ? "Membership Kamu tersisa "
+                  ? "Membership kamu tersisa"
+                  : calculateMembershipDuration(
+                      dataProfileTransaction.member_until
+                    ) > 7
+                  ? "Membership kamu hingga tanggal "
                   : "Kamu belum memiliki paket"}
                 {dataProfileTransaction?.member_until &&
                   calculateMembershipDuration(
@@ -478,13 +485,27 @@ const PaymentForm = () => {
                   ) > 0 && (
                     <span
                       style={{
-                        color: "#F15C59",
+                        color:
+                          calculateMembershipDuration(
+                            dataProfileTransaction.member_until
+                          ) <= 7 &&
+                          calculateMembershipDuration(
+                            dataProfileTransaction.member_until
+                          ) > 0
+                            ? "#F15C59"
+                            : "#53F60F",
                       }}
                     >
                       {calculateMembershipDuration(
                         dataProfileTransaction.member_until
-                      )}{" "}
-                      hari lagi
+                      )}
+                      {calculateMembershipDuration(
+                        dataProfileTransaction.member_until
+                      ) <= 7 &&
+                        calculateMembershipDuration(
+                          dataProfileTransaction.member_until
+                        ) > 0 &&
+                        " hari lagi"}
                     </span>
                   )}
               </span>

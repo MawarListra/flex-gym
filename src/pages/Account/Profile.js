@@ -145,10 +145,28 @@ const Profile = () => {
                     <span style={{ color: "#999" }}>
                       Membership kamu hingga tanggal
                     </span>
-                    <span style={{ color: "#F15C59" }}>
-                      {moment(new Date(dataUser?.member_until)).format(
-                        "DD MMMM YYYY"
-                      )}
+                    <span
+                      style={{
+                        color:
+                          moment(dataUser?.member_until).diff(
+                            moment().toDate(),
+                            "days"
+                          ) <= 7
+                            ? "#F15C59"
+                            : "#53F60F",
+                      }}
+                    >
+                      {moment(dataUser?.member_until).diff(
+                        moment().toDate(),
+                        "days"
+                      ) > 7
+                        ? moment(new Date(dataUser?.member_until)).format(
+                            "DD MMMM YYYY"
+                          )
+                        : `${moment(dataUser?.member_until).diff(
+                            moment().toDate(),
+                            "days"
+                          )} hari lagi.`}
                     </span>
                   </>
                 ) : (

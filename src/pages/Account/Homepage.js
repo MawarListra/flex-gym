@@ -178,10 +178,32 @@ const Homepage = () => {
             {data?.member_until ? (
               <div className="d-flex flex-column">
                 <span style={{ color: "#999" }}>
-                  Membership kamu hingga tanggal
+                  Membership kamu{" "}
+                  {moment(data?.member_until).diff(moment().toDate(), "days") <=
+                  7
+                    ? "tersisa"
+                    : "hingga tanggal"}
                 </span>
-                <span style={{ color: "#F15C59" }}>
-                  {moment(new Date(data?.member_until)).format("DD MMMM YYYY")}
+                <span
+                  style={{
+                    color:
+                      moment(data?.member_until).diff(
+                        moment().toDate(),
+                        "days"
+                      ) <= 7
+                        ? "#F15C59"
+                        : "#53F60F",
+                  }}
+                >
+                  {moment(data?.member_until).diff(moment().toDate(), "days") >
+                  7
+                    ? moment(new Date(data?.member_until)).format(
+                        "DD MMMM YYYY"
+                      )
+                    : `${moment(data?.member_until).diff(
+                        moment().toDate(),
+                        "days"
+                      )} hari lagi.`}
                 </span>
               </div>
             ) : (
