@@ -20,7 +20,7 @@ const Hero = ({ id }) => {
       </div>
       <div className="d-flex justify-content-md-start justify-content-center">
         <span className="text-title-green">
-          ##1 Fitness Terlengkap di Yogyakarta
+          #1 Fitness Terlengkap di Yogyakarta
         </span>
       </div>
       <div className="title-hero-box mb-2">

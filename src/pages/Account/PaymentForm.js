@@ -472,7 +472,7 @@ const PaymentForm = () => {
                 ) <= 7 &&
                 calculateMembershipDuration(
                   dataProfileTransaction.member_until
-                ) > 0
+                ) >= 0
                   ? "Membership kamu tersisa"
                   : calculateMembershipDuration(
                       dataProfileTransaction.member_until
@@ -482,7 +482,7 @@ const PaymentForm = () => {
                 {dataProfileTransaction?.member_until &&
                   calculateMembershipDuration(
                     dataProfileTransaction.member_until
-                  ) > 0 && (
+                  ) >= 0 && (
                     <span
                       style={{
                         color:
@@ -491,7 +491,7 @@ const PaymentForm = () => {
                           ) <= 7 &&
                           calculateMembershipDuration(
                             dataProfileTransaction.member_until
-                          ) > 0
+                          ) >= 0
                             ? "#F15C59"
                             : "#53F60F",
                       }}
@@ -504,7 +504,7 @@ const PaymentForm = () => {
                       ) <= 7 &&
                         calculateMembershipDuration(
                           dataProfileTransaction.member_until
-                        ) > 0 &&
+                        ) >= 0 &&
                         " hari lagi"}
                     </span>
                   )}
