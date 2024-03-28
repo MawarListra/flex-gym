@@ -107,6 +107,8 @@ const Homepage = () => {
     }
   });
 
+  useEffect(() => {}, []);
+
   return (
     <div
       className="container-fluid d-flex w-100 flex-column bg-black px-3 px-md-0"

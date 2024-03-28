@@ -8,6 +8,7 @@ import { Button } from "reactstrap";
 import ProfPic from "../../assets/sporty girl workout.png";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
+import { calculateMembershipDuration } from "../../utils/calculateMembershipDuration";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -148,24 +149,18 @@ const Profile = () => {
                     <span
                       style={{
                         color:
-                          moment(dataUser?.member_until).diff(
-                            moment().toDate(),
-                            "days"
-                          ) <= 7
+                          calculateMembershipDuration(dataUser?.member_until) <=
+                          7
                             ? "#F15C59"
                             : "#53F60F",
                       }}
                     >
-                      {moment(dataUser?.member_until).diff(
-                        moment().toDate(),
-                        "days"
-                      ) > 7
+                      {calculateMembershipDuration(dataUser?.member_until) > 7
                         ? moment(new Date(dataUser?.member_until)).format(
                             "DD MMMM YYYY"
                           )
-                        : `${moment(dataUser?.member_until).diff(
-                            moment().toDate(),
-                            "days"
+                        : `${calculateMembershipDuration(
+                            dataUser?.member_until
                           )} hari lagi.`}
                     </span>
                   </>

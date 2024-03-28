@@ -15,6 +15,7 @@ import Select from "react-select";
 import { currencyFormatter } from "../../utils/currencyFormatter";
 import { statusMapper } from "../../utils/statusMapper";
 import pdfIc from "../../assets/pdf-icon.jpeg";
+import { calculateMembershipDuration } from "../../utils/calculateMembershipDuration";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -327,14 +328,6 @@ const PaymentForm = () => {
     }
   }, [dataPayment]);
 
-  const calculateMembershipDuration = (member_until) => {
-    let tanggal1 = moment(new Date());
-    let tanggal2 = moment(member_until);
-
-    const selisih = tanggal2.diff(tanggal1, "days");
-    return selisih;
-  };
-
   useEffect(() => {
     if (!token || token === "") {
       toast.error("Session anda habis. Silahkan login kembali");
@@ -473,7 +466,7 @@ const PaymentForm = () => {
                 calculateMembershipDuration(
                   dataProfileTransaction.member_until
                 ) >= 0
-                  ? "Membership kamu tersisa"
+                  ? "Membership kamu tersisa "
                   : calculateMembershipDuration(
                       dataProfileTransaction.member_until
                     ) > 7

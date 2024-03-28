@@ -10,6 +10,7 @@ import ReactLoading from "react-loading";
 import toast, { Toaster } from "react-hot-toast";
 import moment from "moment";
 import { statusMapper } from "../../utils/statusMapper";
+import { calculateMembershipDuration } from "../../utils/calculateMembershipDuration";
 
 const baseUrl = process.env.REACT_APP_PUBLIC_URL;
 
@@ -179,30 +180,24 @@ const Homepage = () => {
               <div className="d-flex flex-column">
                 <span style={{ color: "#999" }}>
                   Membership kamu{" "}
-                  {moment(data?.member_until).diff(moment().toDate(), "days") <=
-                  7
+                  {calculateMembershipDuration(data?.member_until) <= 7
                     ? "tersisa"
                     : "hingga tanggal"}
                 </span>
                 <span
                   style={{
                     color:
-                      moment(data?.member_until).diff(
-                        moment().toDate(),
-                        "days"
-                      ) <= 7
+                      calculateMembershipDuration(data?.member_until) <= 7
                         ? "#F15C59"
                         : "#53F60F",
                   }}
                 >
-                  {moment(data?.member_until).diff(moment().toDate(), "days") >
-                  7
+                  {calculateMembershipDuration(data?.member_until) > 7
                     ? moment(new Date(data?.member_until)).format(
                         "DD MMMM YYYY"
                       )
-                    : `${moment(data?.member_until).diff(
-                        moment().toDate(),
-                        "days"
+                    : `${calculateMembershipDuration(
+                        data?.member_until
                       )} hari lagi.`}
                 </span>
               </div>
