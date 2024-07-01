@@ -18,6 +18,7 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
   };
   const [typeList, setTypeList] = useState([]);
   const [listPricing, setListPricing] = useState([]);
+  const [openAll,setOpenAll]=useState(false)
 
   const getTypeList = async () => {
     try {
@@ -39,7 +40,10 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
         config
       );
       if (resp?.status === 200 && resp?.data?.status === "success") {
-        setListPricing(resp?.data?.data);
+        let result = [];
+        for (let i = 0; i < resp?.data?.data?.length; i += 4) {
+            result.push(resp?.data?.data?.slice(i, i + 4));
+        }        setListPricing(result);
       } else {
         toast.error("Gagal mendapatkan data. Silahkan reload page");
       }
@@ -55,6 +59,8 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
   useEffect(() => {
     getDataPricing();
   }, [getDataPricing]);
+
+  console.log('cek list',listPricing);
 
   return (
     <div
@@ -153,8 +159,10 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
           );
         })}
       </div>
-      <div className="d-flex flex-row flex-wrap  justify-content-center h-auto mt-4 w-100 gap-md-25 gap-3">
-        {listPricing.map((item, i) => (
+      <div className="d-flex flex-column">
+      {listPricing.map((list,idx)=>{
+        return (idx < 2 || openAll) && <div className="d-flex flex-row flex-wrap  justify-content-center h-auto mt-4 w-100 gap-md-25 gap-3">
+        {list.map((item, i) => (
           <div
             className="d-flex flex-column w-md-25 w-auto"
             style={{
@@ -319,6 +327,26 @@ const Pricing = ({ id, currType, setCurrType = () => {} }) => {
             </div>
           </div>
         ))}
+      </div>
+      })}
+      <div className="d-flex w-100 justify-content-center align-items-center mt-4 p-2">
+        <Button
+          className="d-flex justify-content-center align-items-center"
+          style={{
+            backgroundColor:"#53F60F",
+            borderColor: "#53F60F",
+            height: 39,
+          }}
+          onClick={()=>setOpenAll(!openAll)}                      >
+          <span
+            className="text-daftar-member"
+            style={{
+              color: 'black'
+            }}
+          >{!openAll ? 'View More':'View Less'}
+          </span>
+        </Button>
+      </div>
       </div>
     </div>
   );
