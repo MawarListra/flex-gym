@@ -235,7 +235,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 278px;
-    height: 282px;
+    height: 420px;
     flex-shrink: 0;
     background-color: #18181c;
     border: 1px solid #999;
@@ -489,7 +489,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 163px;
-    height: 225px;
+    height: 300px;
     flex-shrink: 0;
     background-color: #18181c;
     border: 1px solid #999;
